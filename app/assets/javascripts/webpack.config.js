@@ -8,7 +8,7 @@ const babelEnvPreset = ['env', {
 module.exports = {
   entry: './src/index.jsx',
   output: {
-    filename: 'bundle.js'
+    filename: '../../public/javascripts/bundle.js'
   },
   module: {
     loaders: [

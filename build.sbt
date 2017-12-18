@@ -1,3 +1,6 @@
+import com.typesafe.sbt.packager.MappingsHelper.{directory, _}
+import sbt.Keys.mappings
+
 name := """neon-pics"""
 organization := "sonac"
 
@@ -6,6 +9,9 @@ version := "1.0-SNAPSHOT"
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.12.3"
+
+mappings in Universal ++= directory(baseDirectory.value / "public")
+
 
 libraryDependencies ++= Seq(
   guice,
