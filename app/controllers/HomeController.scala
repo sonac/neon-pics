@@ -1,8 +1,16 @@
 package controllers
 
 import javax.inject._
+
 import play.api._
 import play.api.mvc._
+import play.api.libs.json._
+
+
+import models._
+import services._
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -21,4 +29,11 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
   def index() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index())
   }
+
+  def getPics = Action.async { implicit request =>
+    PictureService.getAllPictures.map { pic =>
+      Ok(Json.toJson(pic))
+    }
+  }
+
 }
