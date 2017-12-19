@@ -12,3 +12,8 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 GET     /api/pictures               controllers.HomeController.getPics
 
 GET     /compare                    controllers.HomeController.compare
+
+POST    /compare/result            controllers.HomeController.compareResult
+
+
+
