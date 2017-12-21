@@ -25,7 +25,7 @@ POST        /compare/result                             controllers.HomeControll
 POST        /comparison                                 services.comparison.ComparisonController.addQuestionnaire
 
 # Gets a questionnaire with pics
-#GET         /comparison/:questionnaireId                controllers.HomeController.getPics
+GET         /comparison/:questionnaireId                services.comparison.ComparisonController.getQuestionnaire(questionnaireId: Int)
 
 # Ads an answer including all evaluated things
 #POST        /comparison/answer/:questionnaireId/        controllers.HomeController.getPics

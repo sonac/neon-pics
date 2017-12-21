@@ -1,13 +1,12 @@
 package services.comparison
 
 import com.google.inject.Inject
-import play.api.http.FileMimeTypes
-import play.api.i18n.{Langs, MessagesApi}
+import play.api.i18n.MessagesApi
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ComparisonRequest[A](request: Request[A], val messagesApi: MessagesApi) extends WrappedRequest(request)
+class ComparisonRequest[A](request: Request[A], val messagesApi: MessagesApi) extends WrappedRequest(request) with MessagesRequestHeader with PreferredMessagesProvider
 
 class ComparisonActionBuilder @Inject()(messagesApi: MessagesApi, playBodyParsers: PlayBodyParsers)
                                        (implicit val executionContext: ExecutionContext)
@@ -20,9 +19,6 @@ class ComparisonActionBuilder @Inject()(messagesApi: MessagesApi, playBodyParser
     block(new ComparisonRequest(request, messagesApi))
   }
 }
-
-
-
 
 
 //

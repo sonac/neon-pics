@@ -8,7 +8,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class ComparisonResource(id: Int, text: String, pictures: Seq[Picture])
 
-object ComparisonResource{
+object ComparisonResource {
 
   import models.Pictures.pictureWrites
 
@@ -28,12 +28,14 @@ object ComparisonResource{
 
 class ComparisonResourceHandler @Inject()(questionnaireRepository: QuestionnaireRepository)(implicit ec: ExecutionContext) {
   def create(questionnaire: QuestionnaireFormInput): Future[ComparisonResource] = {
+    questionnaireRepository.addQuestionnaire(questionnaire.text, questionnaire.pictureIds).flatMap(get)
+  }
+
+  def get(questionnaireId: Int): Future[ComparisonResource] = {
     for {
-      id <- questionnaireRepository.addQuestionnaire(questionnaire.text, questionnaire.pictureIds)
-      maybeQuest <- questionnaireRepository.getQuestionnaireById(id)
+      maybeQuest <- questionnaireRepository.getQuestionnaireById(questionnaireId)
       q = maybeQuest.get
     } yield ComparisonResource(q.base.id, q.base.text, q.pictures)
-
   }
 }
 

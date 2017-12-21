@@ -1,7 +1,7 @@
 package services.comparison
 
 import com.google.inject.Inject
-import play.api.data.Form
+import play.api.data.{Form, Mapping}
 import play.api.http.FileMimeTypes
 import play.api.i18n.{Langs, MessagesApi}
 import play.api.libs.json.Json
@@ -11,9 +11,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class QuestionnaireFormInput(text: String, pictureIds: Seq[Int] = Seq())
 
+case class PictureIdScoreFormInput(pictureId: Int, score: BigDecimal)
+
+case class UserScoresFormInput(questionnaireId: Int, userId: Int, pictureIdScores: Seq[PictureIdScoreFormInput])
+
 class ComparisonController @Inject()(ccc: ComparisonControllerComponents)(implicit ec: ExecutionContext) extends ComparisonBaseController(ccc) {
 
-  private val form: Form[QuestionnaireFormInput] = {
+  private val questionnaireFormInput: Form[QuestionnaireFormInput] = {
     import play.api.data.Forms._
 
     Form(
@@ -24,11 +28,59 @@ class ComparisonController @Inject()(ccc: ComparisonControllerComponents)(implic
     )
   }
 
+  private val pictureIdScoreFormInput: Mapping[PictureIdScoreFormInput] = {
+    import play.api.data.Forms._
+    mapping(
+      "pictureId" -> number,
+      "score" -> bigDecimal
+    )(PictureIdScoreFormInput.apply)(PictureIdScoreFormInput.unapply)
+  }
+
+  private val userScoresFormInput: Form[UserScoresFormInput] = {
+    import play.api.data.Forms._
+
+    Form(
+      mapping(
+        "questionnaireId" -> number,
+        "userId" -> number,
+        "pictureIdScores" -> seq(pictureIdScoreFormInput)
+      )
+      (UserScoresFormInput.apply)(UserScoresFormInput.unapply)
+    )
+  }
+
+//  def addUserAnswer(): Action[AnyContent] = {
+//
+//    def failure(badForm: Form[QuestionnaireFormInput])(implicit request: ComparisonRequest[AnyContent]) = {
+//      Future.successful(BadRequest(badForm.errorsAsJson))
+//    }
+//
+//    def success(input: QuestionnaireFormInput) = {
+//      ccc.comparisonResourceHandler.create(input).map { q =>
+//        Created(Json.toJson(q))
+//      }
+//    }
+//
+//    ComparisonActionBuilder.async { implicit request: ComparisonRequest[AnyContent] =>
+//      questionnaireFormInput.bindFromRequest().fold(failure, success)
+//    }
+//
+//    ???
+//  }
+
+  def getQuestionnaire(questionnaireId: Int): Action[AnyContent] = {
+
+    ComparisonActionBuilder.async { implicit request: ComparisonRequest[AnyContent] =>
+      ccc.comparisonResourceHandler.get(questionnaireId).map { q =>
+        Ok(Json.toJson(q))
+      }
+    }
+  }
+
   def addQuestionnaire(): Action[AnyContent] = {
 
-    def failure(badForm: Form[QuestionnaireFormInput]) = {
-      //      Future.successful(BadRequest(badForm.errorsAsJson))
-      Future.successful(BadRequest(""))
+    def failure(badForm: Form[QuestionnaireFormInput])(implicit request: ComparisonRequest[AnyContent]) = {
+      Future.successful(BadRequest(badForm.errorsAsJson))
     }
 
     def success(input: QuestionnaireFormInput) = {
@@ -37,8 +89,8 @@ class ComparisonController @Inject()(ccc: ComparisonControllerComponents)(implic
       }
     }
 
-    ComparisonActionBuilder.async { implicit request =>
-      form.bindFromRequest().fold(failure, success)
+    ComparisonActionBuilder.async { implicit request: ComparisonRequest[AnyContent] =>
+      questionnaireFormInput.bindFromRequest().fold(failure, success)
     }
   }
 
