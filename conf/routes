@@ -4,13 +4,31 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
+GET         /                                           controllers.HomeController.index
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
-GET     /javascripts/*file          controllers.Assets.at(path="/public/javascripts", file)
+GET         /assets/*file                               controllers.Assets.versioned(path="/public", file: Asset)
+GET         /javascripts/*file                          controllers.Assets.at(path="/public/javascripts", file)
 
 
-GET     /api/pictures               controllers.HomeController.getPics
+GET         /api/pictures                               controllers.HomeController.getPics
 
-GET     /compare                    controllers.HomeController.compare
+GET         /compare                                    controllers.HomeController.compare
+
+POST        /compare/result                             controllers.HomeController.compareResult
+
+
+
+
+
+# Questionnaire service
+
+# Ads a questionnaire with pics
+POST        /comparison                                 services.comparison.ComparisonController.addQuestionnaire
+
+# Gets a questionnaire with pics
+GET         /comparison/:questionnaireId                services.comparison.ComparisonController.getQuestionnaire(questionnaireId: Int)
+
+# Ads an answer including all evaluated things
+#POST        /comparison/answer/:questionnaireId/        controllers.HomeController.getPics
+
