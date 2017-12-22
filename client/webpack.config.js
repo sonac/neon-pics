@@ -17,6 +17,7 @@ module.exports = {
     resolve: {
         alias: {
             constants: path.resolve(__dirname, 'src/constants'),
+            state: path.resolve(__dirname, 'src/state'),
             utils: path.resolve(__dirname, 'src/utils'),
             components: path.resolve(__dirname, 'src/components')
         }
@@ -28,7 +29,10 @@ module.exports = {
                 exclude: [/node_modules/],
                 use: [{
                     loader: 'babel-loader',
-                    options: { presets: [babelEnvPreset, 'react'], plugins: ['transform-object-rest-spread'] },
+                    options: {
+                        presets: [babelEnvPreset, 'react'],
+                        plugins: ['transform-object-rest-spread', 'transform-class-properties']
+                    },
                 }]
             },
             {
