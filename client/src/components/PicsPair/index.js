@@ -1,37 +1,54 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { fetchComparison } from 'state/comparison/actions';
 import styles from './styles.css';
 
-export default class PicCompare extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isLoading: true,
-      urls: []
-    };
+class PicsPair extends Component {
+  static propTypes = {
+    data: PropTypes.shape({
+      isLoading: PropTypes.boolean,
+      pics: PropTypes.array
+    }),
+    actions: PropTypes.shape({
+      fetchComparison: PropTypes.func
+    }),
   };
 
   componentDidMount() {
-    fetch('/api/pictures')
-      .then(response => response.json())
-      .then(urls => this.setState(state => ({urls, isLoading: false})));
+    this.props.actions.fetchComparison();
   }
 
-
   render() {
-    const { urls, isLoading } = this.state;
+    const { pics, isLoading } = this.props.data;
 
     return (
       <div className={styles.picsPair}>
-        {isLoading
+        {isLoading || pics.length < 2
           ? <div>Loading...</div>
           : <div className={styles.wrapper}>
-              <img src={urls[0]} alt="First pic"/>
+              <img src={pics[0].url} alt="First pic"/>
               <div className={styles.versus}><span>VS</span></div>
-              <img src={urls[1]} alt="Second pic"/>
+              <img src={pics[1].url} alt="Second pic"/>
             </div>
         }
       </div>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  isLoading: state.comparison.isLoading,
+  pics: state.comparison.entity.pics
+});
+
+const mapDispatchToProps = {
+  fetchComparison
+};
+
+const mergeProps = (data, actions) => ({
+  data,
+  actions
+});
+
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(PicsPair);
