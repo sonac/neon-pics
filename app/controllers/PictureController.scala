@@ -17,9 +17,6 @@ case class CompareResult(gt: Boolean)
 @Singleton
 class PictureController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
-  implicit val pictureReads: Reads[CompareResult] = Json.reads[CompareResult]
-  implicit val pictureWrites: OWrites[CompareResult] = Json.writes[CompareResult]
-
   def getPics: Action[AnyContent] = Action.async { implicit request =>
     PictureService.getAllPictures.map { pic =>
       Ok(Json.toJson(pic))
