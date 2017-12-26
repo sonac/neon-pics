@@ -11,10 +11,6 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class QuestionnaireFormInput(text: String, pictureIds: Seq[Int] = Seq())
 
-case class PictureIdScoreFormInput(pictureId: Int, score: BigDecimal)
-
-case class UserScoresFormInput(questionnaireId: Int, userId: Int, pictureIdScores: Seq[PictureIdScoreFormInput])
-
 class ComparisonController @Inject()(ccc: ComparisonControllerComponents)(implicit ec: ExecutionContext) extends ComparisonBaseController(ccc) {
 
   private val questionnaireFormInput: Form[QuestionnaireFormInput] = {
@@ -27,46 +23,6 @@ class ComparisonController @Inject()(ccc: ComparisonControllerComponents)(implic
       )(QuestionnaireFormInput.apply)(QuestionnaireFormInput.unapply)
     )
   }
-
-  private val pictureIdScoreFormInput: Mapping[PictureIdScoreFormInput] = {
-    import play.api.data.Forms._
-    mapping(
-      "pictureId" -> number,
-      "score" -> bigDecimal
-    )(PictureIdScoreFormInput.apply)(PictureIdScoreFormInput.unapply)
-  }
-
-  private val userScoresFormInput: Form[UserScoresFormInput] = {
-    import play.api.data.Forms._
-
-    Form(
-      mapping(
-        "questionnaireId" -> number,
-        "userId" -> number,
-        "pictureIdScores" -> seq(pictureIdScoreFormInput)
-      )
-      (UserScoresFormInput.apply)(UserScoresFormInput.unapply)
-    )
-  }
-
-//  def addUserAnswer(): Action[AnyContent] = {
-//
-//    def failure(badForm: Form[QuestionnaireFormInput])(implicit request: ComparisonRequest[AnyContent]) = {
-//      Future.successful(BadRequest(badForm.errorsAsJson))
-//    }
-//
-//    def success(input: QuestionnaireFormInput) = {
-//      ccc.comparisonResourceHandler.create(input).map { q =>
-//        Created(Json.toJson(q))
-//      }
-//    }
-//
-//    ComparisonActionBuilder.async { implicit request: ComparisonRequest[AnyContent] =>
-//      questionnaireFormInput.bindFromRequest().fold(failure, success)
-//    }
-//
-//    ???
-//  }
 
   def getQuestionnaire(questionnaireId: Int): Action[AnyContent] = {
 
