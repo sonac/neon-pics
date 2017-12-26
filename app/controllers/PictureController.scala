@@ -15,7 +15,7 @@ case class CompareResult(gt: Boolean)
   * application's home page.
   */
 @Singleton
-class HomeController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class PictureController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
   implicit val pictureReads: Reads[CompareResult] = Json.reads[CompareResult]
   implicit val pictureWrites: OWrites[CompareResult] = Json.writes[CompareResult]
