@@ -13,5 +13,7 @@ cache:
   - "$HOME/.ivy2"
   - "$HOME/.m2"
   - "$HOME/.sbt"
+notifications:
+  webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
 
 
