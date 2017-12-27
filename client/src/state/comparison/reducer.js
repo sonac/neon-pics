@@ -4,7 +4,8 @@ import { fetchComparison, fetchComparisonSuccess, fetchComparisonError, pictureC
 const initState = {
   isLoading: true,
   error: null,
-  pics: [{url: "none", rtng: 0}]
+  pics: [],
+  question: null
 };
 
 export default createReducerFromDescriptor({
@@ -13,7 +14,8 @@ export default createReducerFromDescriptor({
   [fetchComparisonSuccess.type]: (state, action) => ({
     ...state,
     isLoading: false,
-    pics: action.pics
+    pics: action.pics,
+    question: action.que
   }),
   [pictureClick.type]: (state, action) => ({
     ...state,

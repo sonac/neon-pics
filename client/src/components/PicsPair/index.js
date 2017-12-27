@@ -8,7 +8,8 @@ class PicsPair extends Component {
   static propTypes = {
     data: PropTypes.shape({
       isLoading: PropTypes.boolean,
-      pics: PropTypes.array
+      pics: PropTypes.array,
+      question: PropTypes.string
     }),
     actions: PropTypes.shape({
       fetchComparison: PropTypes.func,
@@ -26,10 +27,11 @@ class PicsPair extends Component {
   }
 
   render() {
-    const { pics, isLoading } = this.props.data;
+    const { pics, isLoading, question } = this.props.data;
 
     return (
       <div className={styles.picsPair}>
+        <h1>{question}</h1>
         {isLoading || pics.length < 2
           ? <div>Loading...</div>
           : <div className={styles.wrapper}>
@@ -45,7 +47,8 @@ class PicsPair extends Component {
 
 const mapStateToProps = state => ({
   isLoading: state.comparison.isLoading,
-  pics: state.comparison.pics
+  pics: state.comparison.pics,
+  question: state.comparison.question
 });
 
 const mapDispatchToProps = {
