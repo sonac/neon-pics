@@ -6,7 +6,7 @@ export function isFunction(val) {
 
 function buildTreeFromPath(path, val) {
   if (path.length === 0) {
-    return value;
+    return val;
   }
 
   return {
