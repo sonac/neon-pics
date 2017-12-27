@@ -791,7 +791,7 @@ function isPlainObject(value) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchComparison = exports.fetchComparisonError = exports.fetchComparisonSuccess = undefined;
+exports.pictureClick = exports.fetchComparison = exports.fetchComparisonError = exports.fetchComparisonSuccess = undefined;
 
 var _utils = __webpack_require__(32);
 
@@ -808,6 +808,13 @@ var fetchComparisonError = exports.fetchComparisonError = (0, _utils.createActio
 });
 
 var fetchComparison = exports.fetchComparison = (0, _utils.createActionCreator)('FETCH_COMPARISON');
+
+//second arg isn't being sent?
+var pictureClick = exports.pictureClick = (0, _utils.createActionCreator)('PICTURE_CLICK', function (pics, url) {
+  return {
+    pics: pics
+  };
+});
 
 /***/ }),
 /* 13 */
@@ -2444,6 +2451,7 @@ function createReducerFromDescriptor(descriptor, initState) {
 function createActionCreator(type, creator) {
   var typedCreator = function typedCreator() {
     var action = (0, _common.isFunction)(creator) ? creator.apply(undefined, arguments) : {};
+    console.log(creator);
     action.type = type;
     return action;
   };
@@ -21770,8 +21778,16 @@ var PicsPair = function (_Component) {
       this.props.actions.fetchComparison();
     }
   }, {
+    key: 'click',
+    value: function click(pics, url) {
+      this.props.actions.pictureClick(pics, url);
+      console.log(this.props.data.pics);
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var _props$data = this.props.data,
           pics = _props$data.pics,
           isLoading = _props$data.isLoading;
@@ -21787,7 +21803,9 @@ var PicsPair = function (_Component) {
         ) : _react2.default.createElement(
           'div',
           { className: _styles2.default.wrapper },
-          _react2.default.createElement('img', { src: pics[0].url, alt: 'First pic' }),
+          _react2.default.createElement('img', { src: pics[0].url, alt: 'First pic', onClick: function onClick() {
+              return _this2.click(pics, pics[0].url);
+            } }),
           _react2.default.createElement(
             'div',
             { className: _styles2.default.versus },
@@ -21812,7 +21830,8 @@ PicsPair.propTypes = {
     pics: _propTypes2.default.array
   }),
   actions: _propTypes2.default.shape({
-    fetchComparison: _propTypes2.default.func
+    fetchComparison: _propTypes2.default.func,
+    pictureClick: _propTypes2.default.func
   })
 };
 
@@ -21820,12 +21839,13 @@ PicsPair.propTypes = {
 var mapStateToProps = function mapStateToProps(state) {
   return {
     isLoading: state.comparison.isLoading,
-    pics: state.comparison.entity.pics
+    pics: state.comparison.pics
   };
 };
 
 var mapDispatchToProps = {
-  fetchComparison: _actions.fetchComparison
+  fetchComparison: _actions.fetchComparison,
+  pictureClick: _actions.pictureClick
 };
 
 var mergeProps = function mergeProps(data, actions) {
@@ -22096,12 +22116,21 @@ exports.default = function (_ref) {
         fetch('api/pictures').then(function (response) {
           return response.json();
         }).then(function (urls) {
-          return dispatch((0, _actions.fetchComparisonSuccess)(urls.map(function (url) {
-            return { url: url };
+          dispatch((0, _actions.fetchComparisonSuccess)(urls.map(function (url) {
+            return { url: url, rating: 0 };
           })));
         }).catch(function (error) {
           return dispatch((0, _actions.fetchComparisonError)(error));
         });
+      } else if (action.type === _actions.pictureClick.type) {
+        var hcUrl = "http://www.lovethispic.com/uploaded_images/22349-Neon-Lights-Coca-cola.jpg";
+        var i = 0;
+        for (i = 0; i < action.pics.length; i++) {
+          if (action.pics[i].url == hcUrl) {
+            action.pics[i].rating += 1;
+          }
+        }
+        return action.pics;
       }
 
       return next(action);
@@ -22133,9 +22162,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var initState = {
   isLoading: true,
   error: null,
-  entity: {
-    pics: []
-  }
+  pics: [{ url: "none", rtng: 0 }]
 };
 
 exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes = {}, _defineProperty(_createReducerFromDes, _actions.fetchComparison.type, function (state) {
@@ -22145,9 +22172,11 @@ exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes
 }), _defineProperty(_createReducerFromDes, _actions.fetchComparisonSuccess.type, function (state, action) {
   return _extends({}, state, {
     isLoading: false,
-    entity: {
-      pics: action.pics
-    }
+    pics: action.pics
+  });
+}), _defineProperty(_createReducerFromDes, _actions.pictureClick.type, function (state, action) {
+  return _extends({}, state, {
+    pics: action.pics
   });
 }), _createReducerFromDes), initState);
 

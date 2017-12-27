@@ -1,12 +1,10 @@
 import { createReducerFromDescriptor } from 'state/utils';
-import { fetchComparison, fetchComparisonSuccess, fetchComparisonError } from './actions'
+import { fetchComparison, fetchComparisonSuccess, fetchComparisonError, pictureClick } from './actions'
 
 const initState = {
   isLoading: true,
   error: null,
-  entity: {
-    pics: []
-  }
+  pics: [{url: "none", rtng: 0}]
 };
 
 export default createReducerFromDescriptor({
@@ -15,8 +13,10 @@ export default createReducerFromDescriptor({
   [fetchComparisonSuccess.type]: (state, action) => ({
     ...state,
     isLoading: false,
-    entity: {
-      pics: action.pics
-    }
+    pics: action.pics
+  }),
+  [pictureClick.type]: (state, action) => ({
+    ...state,
+    pics: action.pics
   })
 }, initState);

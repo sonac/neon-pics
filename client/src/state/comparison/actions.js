@@ -10,3 +10,8 @@ export const fetchComparisonError = createActionCreator('FETCH_COMPARISON_ERROR'
 }));
 
 export const fetchComparison = createActionCreator('FETCH_COMPARISON');
+
+//second arg isn't being sent?
+export const pictureClick = createActionCreator('PICTURE_CLICK', (pics, url) => ({
+  pics
+}));

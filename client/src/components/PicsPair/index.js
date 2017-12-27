@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchComparison } from 'state/comparison/actions';
+import { fetchComparison, fetchComparisonSuccess, fetchComparisonError, pictureClick } from 'state/comparison/actions';
 import styles from './styles.css';
 
 class PicsPair extends Component {
@@ -11,12 +11,18 @@ class PicsPair extends Component {
       pics: PropTypes.array
     }),
     actions: PropTypes.shape({
-      fetchComparison: PropTypes.func
+      fetchComparison: PropTypes.func,
+      pictureClick: PropTypes.func
     }),
   };
 
   componentDidMount() {
     this.props.actions.fetchComparison();
+  }
+
+  click(pics, url) {
+    this.props.actions.pictureClick(pics, url);
+    console.log(this.props.data.pics);
   }
 
   render() {
@@ -27,7 +33,7 @@ class PicsPair extends Component {
         {isLoading || pics.length < 2
           ? <div>Loading...</div>
           : <div className={styles.wrapper}>
-              <img src={pics[0].url} alt="First pic"/>
+              <img src={pics[0].url} alt="First pic" onClick = {() => this.click(pics, pics[0].url)}/>
               <div className={styles.versus}><span>VS</span></div>
               <img src={pics[1].url} alt="Second pic"/>
             </div>
@@ -39,11 +45,12 @@ class PicsPair extends Component {
 
 const mapStateToProps = state => ({
   isLoading: state.comparison.isLoading,
-  pics: state.comparison.entity.pics
+  pics: state.comparison.pics
 });
 
 const mapDispatchToProps = {
-  fetchComparison
+  fetchComparison,
+  pictureClick
 };
 
 const mergeProps = (data, actions) => ({
