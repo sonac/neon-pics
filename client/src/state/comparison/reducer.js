@@ -1,4 +1,5 @@
-import { evolve, inc } from 'ramda';
+import { inc } from 'ramda';
+import { evolvePath } from 'utils/common';
 import { createReducerFromDescriptor } from 'state/utils';
 import { fetchComparison, fetchComparisonSuccess, fetchComparisonError, pictureClick } from './actions'
 
@@ -18,5 +19,5 @@ export default createReducerFromDescriptor({
     question: action.question,
     pics: action.pictures.reduce((acc, pic) => ({...acc, [pic.id]: {...pic, rating: 0} }), {}),
   }),
-  [pictureClick.type]: (state, action) => evolve({ pics: { [action.id]: { rating: inc } } }, state)
+  [pictureClick.type]: (state, action) => evolvePath(['pics', action.id, 'rating'], inc, state)
 }, initState);
