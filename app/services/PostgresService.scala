@@ -10,5 +10,10 @@ trait PostgresService {
 
 @Singleton
 class PostgresServiceProduction extends PostgresService {
+  val db: PostgresProfile.backend.Database = Database.forConfig("productionDb")
+}
+
+@Singleton
+class PostgresServiceTest extends PostgresService {
   val db: PostgresProfile.backend.Database = Database.forConfig("neonDb")
 }
