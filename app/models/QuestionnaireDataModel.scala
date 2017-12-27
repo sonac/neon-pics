@@ -1,4 +1,4 @@
-package services.comparison
+package models
 
 import slick.jdbc.PostgresProfile.api._
 

@@ -2,6 +2,7 @@ package services.comparison
 
 import com.google.inject.{Inject, Singleton}
 import models._
+import play.api.libs.json.{JsValue, Json, Writes}
 import services.PostgresService
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.QueryBase
@@ -14,6 +15,19 @@ case class QuestionnaireWithPictures(base: Questionnaire, pictures: Seq[Picture]
 
 case class PictureIdScore(id: Int, score: Double)
 
+object PictureIdScore {
+  implicit val implicitWrites: Writes[PictureIdScore] {
+    def writes(o: PictureIdScore): JsValue
+  } = new Writes[PictureIdScore] {
+    override def writes(o: PictureIdScore): JsValue = {
+      Json.obj(
+        "pictureId" -> o.id,
+        "score" -> o.score
+      )
+    }
+  }
+}
+
 case class QuestionnaireScores(questionnaire: QuestionnaireWithPictures, userId: Int, pictureIdScores: Seq[PictureIdScore])
 
 trait QuestionnaireRepository {
@@ -24,8 +38,14 @@ trait QuestionnaireRepository {
   def getAllQuestionnaires: Future[Seq[QuestionnaireWithPictures]]
 }
 
+trait QuestionnaireAnswerRepository {
+  def addQuestionnaireAnswer(questId: Int, userId: Int, pictureIdScores: Seq[PictureIdScore]): Future[Unit.type]
+
+  def getQuestionnaireAnswer(questId: Int, userId: Int): Future[Option[QuestionnaireScores]]
+}
+
 @Singleton
-class QuestionnaireRepositoryImpl @Inject()(dbWrapper: PostgresService) extends QuestionnaireRepository {
+class QuestionnaireRepositoryImpl @Inject()(dbWrapper: PostgresService) extends QuestionnaireRepository with QuestionnaireAnswerRepository {
 
   import dbWrapper.db
 
@@ -63,7 +83,7 @@ class QuestionnaireRepositoryImpl @Inject()(dbWrapper: PostgresService) extends 
     } yield ans.toSeq
   }
 
-  def addScore(questId: Int, userId: Int, pictureIdScores: Seq[PictureIdScore]): Future[Unit.type] = {
+  def addQuestionnaireAnswer(questId: Int, userId: Int, pictureIdScores: Seq[PictureIdScore]): Future[Unit.type] = {
     val qss = pictureIdScores.map { case PictureIdScore(pid, s) =>
       QuestionnaireScore(questId, userId, pid, s)
     }
@@ -72,7 +92,7 @@ class QuestionnaireRepositoryImpl @Inject()(dbWrapper: PostgresService) extends 
     } yield Unit
   }
 
-  def getQuestionnaireScores(questId: Int, userId: Int): Future[Option[QuestionnaireScores]] = {
+  def getQuestionnaireAnswer(questId: Int, userId: Int): Future[Option[QuestionnaireScores]] = {
     val questWithPics: Future[Option[QuestionnaireWithPictures]] = getQuestionnaireById(questId)
     val qPicIdScores = questionnaireScoreTable
       .filter(_.questId === questId)
