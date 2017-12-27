@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { values } from 'ramda';
 import { fetchComparison, fetchComparisonSuccess, fetchComparisonError, pictureClick } from 'state/comparison/actions';
 import styles from './styles.css';
 
@@ -18,26 +19,26 @@ class PicsPair extends Component {
   };
 
   componentDidMount() {
-    this.props.actions.fetchComparison();
+    // TODO: remove hardcoded id
+    this.props.actions.fetchComparison(1);
   }
 
-  click(pics, url) {
-    this.props.actions.pictureClick(pics, url);
-    console.log(this.props.data.pics);
-  }
+  handleClick = id => () => this.props.actions.pictureClick(id)
 
   render() {
     const { pics, isLoading, question } = this.props.data;
 
     return (
       <div className={styles.picsPair}>
-        <h1>{question}</h1>
         {isLoading || pics.length < 2
           ? <div>Loading...</div>
-          : <div className={styles.wrapper}>
-              <img src={pics[0].url} alt="First pic" onClick = {() => this.click(pics, pics[0].url)}/>
-              <div className={styles.versus}><span>VS</span></div>
-              <img src={pics[1].url} alt="Second pic"/>
+          : <div>
+              <h1>{question}</h1>
+              <div className={styles.wrapper}>
+                <img src={pics[0].url} alt="First pic" onClick={this.handleClick(pics[0].id)}/>
+                <div className={styles.versus}><span>VS</span></div>
+                <img src={pics[1].url} alt="Second pic" onClick={this.handleClick(pics[1].id)}/>
+              </div>
             </div>
         }
       </div>
@@ -47,7 +48,7 @@ class PicsPair extends Component {
 
 const mapStateToProps = state => ({
   isLoading: state.comparison.isLoading,
-  pics: state.comparison.pics,
+  pics: values(state.comparison.pics),
   question: state.comparison.question
 });
 

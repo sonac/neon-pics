@@ -1,10 +1,11 @@
+import { evolve, inc } from 'ramda';
 import { createReducerFromDescriptor } from 'state/utils';
 import { fetchComparison, fetchComparisonSuccess, fetchComparisonError, pictureClick } from './actions'
 
 const initState = {
   isLoading: true,
   error: null,
-  pics: [],
+  pics: {},
   question: null
 };
 
@@ -14,11 +15,8 @@ export default createReducerFromDescriptor({
   [fetchComparisonSuccess.type]: (state, action) => ({
     ...state,
     isLoading: false,
-    pics: action.pics,
-    question: action.que
+    question: action.question,
+    pics: action.pictures.reduce((acc, pic) => ({...acc, [pic.id]: {...pic, rating: 0} }), {}),
   }),
-  [pictureClick.type]: (state, action) => ({
-    ...state,
-    pics: action.pics
-  })
+  [pictureClick.type]: (state, action) => evolve({ pics: { [action.id]: { rating: inc } } }, state)
 }, initState);
