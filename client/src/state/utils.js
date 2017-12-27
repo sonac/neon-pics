@@ -10,7 +10,6 @@ export function createReducerFromDescriptor(descriptor, initState) {
 export function createActionCreator(type, creator) {
   const typedCreator = function() {
     const action = isFunction(creator) ? creator(...arguments) : {};
-    //console.log(creator)
     action.type = type;
     return action;
   };

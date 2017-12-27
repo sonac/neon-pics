@@ -2,30 +2,19 @@ import { fetchComparison, fetchComparisonSuccess, fetchComparisonError, pictureC
 
 export default ({ getState, dispatch }) => next => action => {
   if (action.type === fetchComparison.type) {
-    fetch('comparison/1')
+    fetch(`comparison/${action.id}`)
       .then(response => response.json())
-      .then(urls => {
-        const pictures = urls["pictures"]
-        const question = urls["text"]
-        console.log(pictures)
-        dispatch(fetchComparisonSuccess(question, pictures.map(pic => ({ id: pic.id, url: pic.picUrl, rating: 0 }))));
-        }
+      .then(data =>
+        // here we just change the field names received from backend, ratings logic should be added in reducer
+        dispatch(fetchComparisonSuccess({
+          question: data.text,
+          pictures: data.pictures.map(pic => ({id: pic.id, url: pic.picUrl}))
+        }))
       )
       .catch(error => {
-        throw error
-        dispatch(fetchComparisonError(error))}
-      )
-  }
-  else if (action.type === pictureClick.type) {
-    //const hcUrl = "http://www.lovethispic.com/uploaded_images/22349-Neon-Lights-Coca-cola.jpg"
-    console.log(action.url)
-    var i = 0;
-    for (i = 0; i < action.pics.length; i++) {
-      if (action.pics[i].url == action.url) {
-        action.pics[i].rating += 1
-      }
-    }
-    return action.pics;
+        console.error(error);
+        dispatch(fetchComparisonError(error))
+      })
   }
 
   return next(action);
