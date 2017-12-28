@@ -45,7 +45,7 @@ trait QuestionnaireAnswerRepository {
 }
 
 @Singleton
-class QuestionnaireRepositoryImpl @Inject()(dbWrapper: PostgresService) extends QuestionnaireRepository with QuestionnaireAnswerRepository {
+class QuestionnaireRepositoryImpl @Inject()(dbWrapper: PostgresService, picturesRepository: Pictures) extends QuestionnaireRepository with QuestionnaireAnswerRepository {
 
   import dbWrapper.db
 
@@ -65,7 +65,7 @@ class QuestionnaireRepositoryImpl @Inject()(dbWrapper: PostgresService) extends 
 
   def getAllQuestionnaires: Future[Seq[QuestionnaireWithPictures]] = {
     val pics = questionnairePictureTable
-      .join(Pictures.pictures)
+      .join(picturesRepository.pictures)
       .on(_.picId === _.id)
     val q: QueryBase[Seq[(QuestionnaireTable#TableElementType, Option[(QuestionnairePicture, Picture)])]] =
       questionnaireTable
@@ -113,7 +113,7 @@ class QuestionnaireRepositoryImpl @Inject()(dbWrapper: PostgresService) extends 
 
     val pics: Query[(QuestionnairePictureTable, PictureTable), (QuestionnairePicture, Picture), Seq] = questionnairePictureTable
       .filter(_.questId === questId)
-      .join(Pictures.pictures)
+      .join(picturesRepository.pictures)
       .on(_.picId === _.id)
     val q: QueryBase[Seq[(Questionnaire, Option[(QuestionnairePicture, Picture)])]] =
       questionnaireTable

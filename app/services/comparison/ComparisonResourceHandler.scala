@@ -10,8 +10,6 @@ case class ComparisonResource(id: Int, text: String, pictures: Seq[Picture])
 
 object ComparisonResource {
 
-  import models.Pictures.pictureWrites
-
   implicit val implicitWrites: Writes[ComparisonResource] {
     def writes(comparison: ComparisonResource): JsValue
   } = new Writes[ComparisonResource] {
