@@ -1,4 +1,4 @@
-import { inc } from 'ramda';
+import { inc, values, map, evolve, add } from 'ramda';
 import { evolvePath } from 'utils/common';
 import { createReducerFromDescriptor } from 'state/utils';
 import { fetchComparison, fetchComparisonSuccess, fetchComparisonError, pictureClick, postComparison, nextTwo } from './actions'
@@ -9,7 +9,8 @@ const initState = {
   pics: {},
   question: null,
   questionId: null,
-  curVote: null
+  curVote: null,
+  curPics: []
 };
 
 export default createReducerFromDescriptor({
@@ -21,11 +22,15 @@ export default createReducerFromDescriptor({
     question: action.question,
     questionId: action.questionId,
     pics: action.pictures.reduce((acc, pic) => ({...acc, [pic.id]: {...pic, rating: 0} }), {}),
+    curPics: action.curPics
   }),
   [pictureClick.type]: (state, action) => ({
     ...state,
     curVote: action.id
   }),
-  [nextTwo.type]: (state, action) => evolvePath(['pics', state.curVote, 'rating'], inc, state),
+  [nextTwo.type]: (state, action) => evolve({
+    curPics: map(add(2)),
+    pics: {[state.curVote]: {rating: inc}}
+  }, state),
   [postComparison.type]: (state, action) => ({ ...state})
 }, initState);

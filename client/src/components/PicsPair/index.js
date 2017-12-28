@@ -11,7 +11,8 @@ class PicsPair extends Component {
     data: PropTypes.shape({
       isLoading: PropTypes.boolean,
       pics: PropTypes.array,
-      question: PropTypes.string
+      question: PropTypes.string,
+      curPics: PropTypes.array
     }),
     actions: PropTypes.shape({
       fetchComparison: PropTypes.func,
@@ -30,7 +31,7 @@ class PicsPair extends Component {
   }
 
   render() {
-    const { pics, isLoading, question } = this.props.data;
+    const { pics, isLoading, question, curPics } = this.props.data;
 
     return (
       <div className={styles.picsPair}>
@@ -39,9 +40,9 @@ class PicsPair extends Component {
           : <div>
               <h1>{question}</h1>
               <div className={styles.wrapper}>
-                <img src={pics[0].url} alt="First pic" onClick={this.picClick(pics[0].id)}/>
+                <img src={pics[curPics[0]].url} alt="First pic" onClick={this.picClick(pics[0].id)}/>
                 <div className={styles.versus}><span>VS</span></div>
-                <img src={pics[1].url} alt="Second pic" onClick={this.picClick(pics[1].id)}/>
+                <img src={pics[curPics[1]].url} alt="Second pic" onClick={this.picClick(pics[1].id)}/>
               </div>
               <NavButtons />
             </div>
@@ -54,7 +55,8 @@ class PicsPair extends Component {
 const mapStateToProps = state => ({
   isLoading: state.comparison.isLoading,
   pics: values(state.comparison.pics),
-  question: state.comparison.question
+  question: state.comparison.question,
+  curPics: state.comparison.curPics
 });
 
 const mapDispatchToProps = {

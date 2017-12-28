@@ -10,7 +10,8 @@ export default ({ getState, dispatch }) => next => action => {
         dispatch(fetchComparisonSuccess({
           question: data.text,
           questionId: data.id,
-          pictures: data.pictures.map(pic => ({id: pic.id, url: pic.picUrl}))
+          pictures: data.pictures.map(pic => ({id: pic.id, url: pic.picUrl})),
+          curPics: [data.pictures[0].id, data.pictures[1].id]
         }))
       )
       .catch(error => {

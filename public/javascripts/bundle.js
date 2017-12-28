@@ -27968,7 +27968,8 @@ var PicsPair = function (_Component) {
       var _props$data = this.props.data,
           pics = _props$data.pics,
           isLoading = _props$data.isLoading,
-          question = _props$data.question;
+          question = _props$data.question,
+          curPics = _props$data.curPics;
 
 
       return _react2.default.createElement(
@@ -27989,7 +27990,7 @@ var PicsPair = function (_Component) {
           _react2.default.createElement(
             'div',
             { className: _styles2.default.wrapper },
-            _react2.default.createElement('img', { src: pics[0].url, alt: 'First pic', onClick: this.picClick(pics[0].id) }),
+            _react2.default.createElement('img', { src: pics[curPics[0]].url, alt: 'First pic', onClick: this.picClick(pics[0].id) }),
             _react2.default.createElement(
               'div',
               { className: _styles2.default.versus },
@@ -27999,7 +28000,7 @@ var PicsPair = function (_Component) {
                 'VS'
               )
             ),
-            _react2.default.createElement('img', { src: pics[1].url, alt: 'Second pic', onClick: this.picClick(pics[1].id) })
+            _react2.default.createElement('img', { src: pics[curPics[1]].url, alt: 'Second pic', onClick: this.picClick(pics[1].id) })
           ),
           _react2.default.createElement(_NavButtons2.default, null)
         )
@@ -28014,7 +28015,8 @@ PicsPair.propTypes = {
   data: _propTypes2.default.shape({
     isLoading: _propTypes2.default.boolean,
     pics: _propTypes2.default.array,
-    question: _propTypes2.default.string
+    question: _propTypes2.default.string,
+    curPics: _propTypes2.default.array
   }),
   actions: _propTypes2.default.shape({
     fetchComparison: _propTypes2.default.func,
@@ -28027,7 +28029,8 @@ var mapStateToProps = function mapStateToProps(state) {
   return {
     isLoading: state.comparison.isLoading,
     pics: (0, _ramda.values)(state.comparison.pics),
-    question: state.comparison.question
+    question: state.comparison.question,
+    curPics: state.comparison.curPics
   };
 };
 
@@ -38688,7 +38691,8 @@ exports.default = function (_ref) {
               questionId: data.id,
               pictures: data.pictures.map(function (pic) {
                 return { id: pic.id, url: pic.picUrl };
-              })
+              }),
+              curPics: [data.pictures[0].id, data.pictures[1].id]
             }))
           );
         }).catch(function (error) {
@@ -38749,7 +38753,8 @@ var initState = {
   pics: {},
   question: null,
   questionId: null,
-  curVote: null
+  curVote: null,
+  curPics: []
 };
 
 exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes = {}, _defineProperty(_createReducerFromDes, _actions.fetchComparison.type, function (state) {
@@ -38763,14 +38768,18 @@ exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes
     questionId: action.questionId,
     pics: action.pictures.reduce(function (acc, pic) {
       return _extends({}, acc, _defineProperty({}, pic.id, _extends({}, pic, { rating: 0 })));
-    }, {})
+    }, {}),
+    curPics: action.curPics
   });
 }), _defineProperty(_createReducerFromDes, _actions.pictureClick.type, function (state, action) {
   return _extends({}, state, {
     curVote: action.id
   });
 }), _defineProperty(_createReducerFromDes, _actions.nextTwo.type, function (state, action) {
-  return (0, _common.evolvePath)(['pics', state.curVote, 'rating'], _ramda.inc, state);
+  return (0, _ramda.evolve)({
+    curPics: (0, _ramda.map)((0, _ramda.add)(2)),
+    pics: _defineProperty({}, state.curVote, { rating: _ramda.inc })
+  }, state);
 }), _defineProperty(_createReducerFromDes, _actions.postComparison.type, function (state, action) {
   return _extends({}, state);
 }), _createReducerFromDes), initState);
