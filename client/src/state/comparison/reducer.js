@@ -10,7 +10,8 @@ const initState = {
   question: null,
   questionId: null,
   curVote: null,
-  curPics: []
+  curPics: 0,
+  combs: []
 };
 
 export default createReducerFromDescriptor({
@@ -22,14 +23,14 @@ export default createReducerFromDescriptor({
     question: action.question,
     questionId: action.questionId,
     pics: action.pictures.reduce((acc, pic) => ({...acc, [pic.id]: {...pic, rating: 0} }), {}),
-    curPics: action.curPics
+    combs: action.combs
   }),
   [pictureClick.type]: (state, action) => ({
     ...state,
     curVote: action.id
   }),
   [nextTwo.type]: (state, action) => evolve({
-    curPics: map(add(2)),
+    curPics: inc,
     pics: {[state.curVote]: {rating: inc}}
   }, state),
   [postComparison.type]: (state, action) => ({ ...state})

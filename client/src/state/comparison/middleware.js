@@ -1,5 +1,6 @@
 import { fetchComparison, fetchComparisonSuccess, fetchComparisonError, pictureClick, postComparison } from './actions';
 import { values } from 'ramda';
+import { pairwise } from 'utils/common';
 
 export default ({ getState, dispatch }) => next => action => {
   if (action.type === fetchComparison.type) {
@@ -11,7 +12,7 @@ export default ({ getState, dispatch }) => next => action => {
           question: data.text,
           questionId: data.id,
           pictures: data.pictures.map(pic => ({id: pic.id, url: pic.picUrl})),
-          curPics: [data.pictures[0].id, data.pictures[1].id]
+          combs: pairwise(data.pictures.map(pic => pic.id))
         }))
       )
       .catch(error => {

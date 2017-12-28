@@ -19,3 +19,11 @@ function buildTreeFromPath(path, val) {
 export function evolvePath(path, fn, obj) {
   return evolve(buildTreeFromPath(path, fn), obj);
 }
+
+export function pairwise(arr) {
+  if (arr.length < 2) { return []; }
+  let x = head(arr),
+      xs  = tail(arr),
+      pairs = xs.map(_ => [x, _]);
+  return pairs.concat(pairwise(xs));
+}

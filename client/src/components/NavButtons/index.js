@@ -10,8 +10,8 @@ class NavButtons extends Component {
 
   static propTypes = {
     data: PropTypes.shape({
-      pics: PropTypes.array,
-      curPics: PropTypes.array
+      curPics: PropTypes.int,
+      limit: PropTypes.int
     }),
     actions: PropTypes.shape({
       postComparison: PropTypes.func,
@@ -24,9 +24,9 @@ class NavButtons extends Component {
   }
 
   nextClicked() {
-    const { pics, curPics } = this.props.data;
-    const maxId = pics.map(x => x.id).reduce((x, y) => Math.max(x, y));
-    if (curPics[1] >= maxId) console.log("done");
+    const { curPics, limit } = this.props.data;
+    console.log(curPics);
+    if (curPics >= limit - 1) console.log("done");
     else this.props.actions.nextTwo();
   }
 
@@ -42,8 +42,8 @@ class NavButtons extends Component {
 }
 
 const mapStateToProps = state => ({
-  pics: values(state.comparison.pics),
-  curPics: state.comparison.curPics
+  curPics: state.comparison.curPics,
+  limit: state.comparison.combs.length
 });
 
 const mapDispatchToProps = {
