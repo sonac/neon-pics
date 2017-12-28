@@ -27951,7 +27951,6 @@ var PicsPair = function (_Component) {
     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = PicsPair.__proto__ || Object.getPrototypeOf(PicsPair)).call.apply(_ref, [this].concat(args))), _this), _this.picClick = function (id) {
       return function () {
         _this.props.actions.pictureClick(id);
-        console.log(_this.props.data.pics);
       };
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
@@ -27990,7 +27989,7 @@ var PicsPair = function (_Component) {
           _react2.default.createElement(
             'div',
             { className: _styles2.default.wrapper },
-            _react2.default.createElement('img', { src: pics[curPics[0]].url, alt: 'First pic', onClick: this.picClick(pics[0].id) }),
+            _react2.default.createElement('img', { src: pics[curPics[0]].url, alt: 'First pic', onClick: this.picClick(pics[curPics[0]].id) }),
             _react2.default.createElement(
               'div',
               { className: _styles2.default.versus },
@@ -28000,7 +27999,7 @@ var PicsPair = function (_Component) {
                 'VS'
               )
             ),
-            _react2.default.createElement('img', { src: pics[curPics[1]].url, alt: 'Second pic', onClick: this.picClick(pics[1].id) })
+            _react2.default.createElement('img', { src: pics[curPics[1]].url, alt: 'Second pic', onClick: this.picClick(pics[curPics[1]].id) })
           ),
           _react2.default.createElement(_NavButtons2.default, null)
         )
@@ -28014,7 +28013,7 @@ var PicsPair = function (_Component) {
 PicsPair.propTypes = {
   data: _propTypes2.default.shape({
     isLoading: _propTypes2.default.boolean,
-    pics: _propTypes2.default.array,
+    pics: _propTypes2.default.object,
     question: _propTypes2.default.string,
     curPics: _propTypes2.default.array
   }),
@@ -28028,7 +28027,7 @@ PicsPair.propTypes = {
 var mapStateToProps = function mapStateToProps(state) {
   return {
     isLoading: state.comparison.isLoading,
-    pics: (0, _ramda.values)(state.comparison.pics),
+    pics: state.comparison.pics,
     question: state.comparison.question,
     curPics: state.comparison.curPics
   };
@@ -36207,7 +36206,16 @@ var NavButtons = function (_Component) {
   }, {
     key: 'nextClicked',
     value: function nextClicked() {
-      this.props.actions.nextTwo();
+      var _props$data = this.props.data,
+          pics = _props$data.pics,
+          curPics = _props$data.curPics;
+
+      var maxId = pics.map(function (x) {
+        return x.id;
+      }).reduce(function (x, y) {
+        return Math.max(x, y);
+      });
+      if (curPics[1] >= maxId) console.log("done");else this.props.actions.nextTwo();
     }
   }, {
     key: 'render',
@@ -36239,7 +36247,10 @@ var NavButtons = function (_Component) {
 }(_react.Component);
 
 NavButtons.propTypes = {
-  data: _propTypes2.default.shape({}),
+  data: _propTypes2.default.shape({
+    pics: _propTypes2.default.array,
+    curPics: _propTypes2.default.array
+  }),
   actions: _propTypes2.default.shape({
     postComparison: _propTypes2.default.func,
     nextTwo: _propTypes2.default.func
@@ -36248,7 +36259,10 @@ NavButtons.propTypes = {
 
 
 var mapStateToProps = function mapStateToProps(state) {
-  return {};
+  return {
+    pics: (0, _ramda.values)(state.comparison.pics),
+    curPics: state.comparison.curPics
+  };
 };
 
 var mapDispatchToProps = {
