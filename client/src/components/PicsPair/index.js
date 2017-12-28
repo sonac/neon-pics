@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { values } from 'ramda';
 import { fetchComparison, fetchComparisonSuccess, fetchComparisonError, pictureClick } from 'state/comparison/actions';
 import styles from './styles.css';
+import NavButtons from 'components/NavButtons';
 
 class PicsPair extends Component {
   static propTypes = {
@@ -23,7 +24,10 @@ class PicsPair extends Component {
     this.props.actions.fetchComparison(1);
   }
 
-  handleClick = id => () => this.props.actions.pictureClick(id)
+  handleClick = id => () => {
+    this.props.actions.pictureClick(id)
+    console.log(this.props.data.pics)
+  }
 
   render() {
     const { pics, isLoading, question } = this.props.data;
@@ -41,6 +45,7 @@ class PicsPair extends Component {
               </div>
             </div>
         }
+        <NavButtons />
       </div>
     );
   }

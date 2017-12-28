@@ -12,11 +12,14 @@
   "author": "sonac",
   "license": "ISC",
   "dependencies": {
+    "node-sass": "^4.7.2",
     "ramda": "^0.25.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-foundation-components": "^0.13.0",
     "react-redux": "^5.0.6",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "sass-loader": "^6.0.6"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
