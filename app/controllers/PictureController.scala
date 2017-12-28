@@ -15,10 +15,10 @@ case class CompareResult(gt: Boolean)
   * application's home page.
   */
 @Singleton
-class PictureController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class PictureController @Inject()(cc: ControllerComponents, pictureService: PictureService) extends AbstractController(cc) {
 
   def getPics: Action[AnyContent] = Action.async { implicit request =>
-    PictureService.getAllPictures.map { pic =>
+    pictureService.getAllPictures.map { pic =>
       Ok(Json.toJson(pic))
     }
   }
