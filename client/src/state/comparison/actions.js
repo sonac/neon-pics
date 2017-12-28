@@ -15,6 +15,10 @@ export const pictureClick = createActionCreator('PICTURE_CLICK', id => ({
   id
 }));
 
+export const nextTwo = createActionCreator('NEXT_TWO', pics => ({
+  pics
+}));
+
 export const postComparison = createActionCreator('POST_COMPARISON', pics => ({
   pics
 }));

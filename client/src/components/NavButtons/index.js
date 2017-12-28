@@ -4,7 +4,7 @@ import styles from './styles.css'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { values } from 'ramda';
-import { postComparison } from 'state/comparison/actions';
+import { postComparison, nextTwo } from 'state/comparison/actions';
 
 class NavButtons extends Component {
 
@@ -12,19 +12,24 @@ class NavButtons extends Component {
     data: PropTypes.shape({
     }),
     actions: PropTypes.shape({
-      postComparison: PropTypes.func
+      postComparison: PropTypes.func,
+      nextTwo: PropTypes.func
     }),
   };
 
-  clicked() {
+  sendClicked() {
     this.props.actions.postComparison();
+  }
+
+  nextClicked() {
+    this.props.actions.nextTwo();
   }
 
   render() {
     return (
       <div className={styles.navButtons}>
-        <Button color="secondary" size="large" hollow>Next pair</Button>
-        <Button color="secondary" size="large" hollow onClick={() => this.clicked()}>Send results</Button>
+        <Button color="secondary" size="large" hollow onClick={() => this.nextClicked()}>Next pair</Button>
+        <Button color="secondary" size="large" hollow onClick={() => this.sendClicked()}>Send results</Button>
       </div>
     )
   }
@@ -35,7 +40,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  postComparison
+  postComparison,
+  nextTwo
 };
 
 const mergeProps = (data, actions) => ({

@@ -4743,7 +4743,7 @@ var mergeWithKey = /*#__PURE__*/Object(__WEBPACK_IMPORTED_MODULE_0__internal_cur
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.postComparison = exports.pictureClick = exports.fetchComparison = exports.fetchComparisonError = exports.fetchComparisonSuccess = undefined;
+exports.postComparison = exports.nextTwo = exports.pictureClick = exports.fetchComparison = exports.fetchComparisonError = exports.fetchComparisonSuccess = undefined;
 
 var _utils = __webpack_require__(172);
 
@@ -4766,6 +4766,12 @@ var fetchComparison = exports.fetchComparison = (0, _utils.createActionCreator)(
 var pictureClick = exports.pictureClick = (0, _utils.createActionCreator)('PICTURE_CLICK', function (id) {
   return {
     id: id
+  };
+});
+
+var nextTwo = exports.nextTwo = (0, _utils.createActionCreator)('NEXT_TWO', function (pics) {
+  return {
+    pics: pics
   };
 });
 
@@ -27942,7 +27948,7 @@ var PicsPair = function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = PicsPair.__proto__ || Object.getPrototypeOf(PicsPair)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (id) {
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = PicsPair.__proto__ || Object.getPrototypeOf(PicsPair)).call.apply(_ref, [this].concat(args))), _this), _this.picClick = function (id) {
       return function () {
         _this.props.actions.pictureClick(id);
         console.log(_this.props.data.pics);
@@ -27983,7 +27989,7 @@ var PicsPair = function (_Component) {
           _react2.default.createElement(
             'div',
             { className: _styles2.default.wrapper },
-            _react2.default.createElement('img', { src: pics[0].url, alt: 'First pic', onClick: this.handleClick(pics[0].id) }),
+            _react2.default.createElement('img', { src: pics[0].url, alt: 'First pic', onClick: this.picClick(pics[0].id) }),
             _react2.default.createElement(
               'div',
               { className: _styles2.default.versus },
@@ -27993,7 +27999,7 @@ var PicsPair = function (_Component) {
                 'VS'
               )
             ),
-            _react2.default.createElement('img', { src: pics[1].url, alt: 'Second pic', onClick: this.handleClick(pics[1].id) })
+            _react2.default.createElement('img', { src: pics[1].url, alt: 'Second pic', onClick: this.picClick(pics[1].id) })
           ),
           _react2.default.createElement(_NavButtons2.default, null)
         )
@@ -36191,9 +36197,14 @@ var NavButtons = function (_Component) {
   }
 
   _createClass(NavButtons, [{
-    key: 'clicked',
-    value: function clicked() {
+    key: 'sendClicked',
+    value: function sendClicked() {
       this.props.actions.postComparison();
+    }
+  }, {
+    key: 'nextClicked',
+    value: function nextClicked() {
+      this.props.actions.nextTwo();
     }
   }, {
     key: 'render',
@@ -36205,13 +36216,15 @@ var NavButtons = function (_Component) {
         { className: _styles2.default.navButtons },
         _react2.default.createElement(
           _button.Button,
-          { color: 'secondary', size: 'large', hollow: true },
+          { color: 'secondary', size: 'large', hollow: true, onClick: function onClick() {
+              return _this2.nextClicked();
+            } },
           'Next pair'
         ),
         _react2.default.createElement(
           _button.Button,
           { color: 'secondary', size: 'large', hollow: true, onClick: function onClick() {
-              return _this2.clicked();
+              return _this2.sendClicked();
             } },
           'Send results'
         )
@@ -36225,7 +36238,8 @@ var NavButtons = function (_Component) {
 NavButtons.propTypes = {
   data: _propTypes2.default.shape({}),
   actions: _propTypes2.default.shape({
-    postComparison: _propTypes2.default.func
+    postComparison: _propTypes2.default.func,
+    nextTwo: _propTypes2.default.func
   })
 };
 
@@ -36235,7 +36249,8 @@ var mapStateToProps = function mapStateToProps(state) {
 };
 
 var mapDispatchToProps = {
-  postComparison: _actions.postComparison
+  postComparison: _actions.postComparison,
+  nextTwo: _actions.nextTwo
 };
 
 var mergeProps = function mergeProps(data, actions) {
@@ -38733,7 +38748,8 @@ var initState = {
   error: null,
   pics: {},
   question: null,
-  questionId: null
+  questionId: null,
+  curVote: null
 };
 
 exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes = {}, _defineProperty(_createReducerFromDes, _actions.fetchComparison.type, function (state) {
@@ -38750,7 +38766,11 @@ exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes
     }, {})
   });
 }), _defineProperty(_createReducerFromDes, _actions.pictureClick.type, function (state, action) {
-  return (0, _common.evolvePath)(['pics', action.id, 'rating'], _ramda.inc, state);
+  return _extends({}, state, {
+    curVote: action.id
+  });
+}), _defineProperty(_createReducerFromDes, _actions.nextTwo.type, function (state, action) {
+  return (0, _common.evolvePath)(['pics', state.curVote, 'rating'], _ramda.inc, state);
 }), _defineProperty(_createReducerFromDes, _actions.postComparison.type, function (state, action) {
   return _extends({}, state);
 }), _createReducerFromDes), initState);

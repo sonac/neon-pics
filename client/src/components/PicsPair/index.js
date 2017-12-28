@@ -24,8 +24,8 @@ class PicsPair extends Component {
     this.props.actions.fetchComparison(1);
   }
 
-  handleClick = id => () => {
-    this.props.actions.pictureClick(id)
+  picClick = id => () => {
+    this.props.actions.pictureClick(id);
     console.log(this.props.data.pics)
   }
 
@@ -39,9 +39,9 @@ class PicsPair extends Component {
           : <div>
               <h1>{question}</h1>
               <div className={styles.wrapper}>
-                <img src={pics[0].url} alt="First pic" onClick={this.handleClick(pics[0].id)}/>
+                <img src={pics[0].url} alt="First pic" onClick={this.picClick(pics[0].id)}/>
                 <div className={styles.versus}><span>VS</span></div>
-                <img src={pics[1].url} alt="Second pic" onClick={this.handleClick(pics[1].id)}/>
+                <img src={pics[1].url} alt="Second pic" onClick={this.picClick(pics[1].id)}/>
               </div>
               <NavButtons />
             </div>
