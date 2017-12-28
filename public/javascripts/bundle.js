@@ -27982,13 +27982,24 @@ var PicsPair = function (_Component) {
           isLoading = _props$data.isLoading,
           question = _props$data.question,
           curPics = _props$data.curPics,
-          combs = _props$data.combs;
+          combs = _props$data.combs,
+          curVote = _props$data.curVote;
 
+
+      var leftBorder = "0",
+          rightBorder = "0";
 
       if (!isLoading) {
-        console.log(combs[curPics][1]);
-        console.log(pics);
-        console.log(pics[combs[curPics][1]]);
+        if (pics[combs[curPics][0]].id == curVote) {
+          leftBorder = "10";
+          rightBorder = "0";
+        } else if (pics[combs[curPics][1]].id == curVote) {
+          leftBorder = "0";
+          rightBorder = "10";
+        } else {
+          leftBorder = "0";
+          rightBorder = "0";
+        }
       }
 
       return _react2.default.createElement(
@@ -28009,7 +28020,7 @@ var PicsPair = function (_Component) {
           _react2.default.createElement(
             'div',
             { className: _styles2.default.wrapper },
-            _react2.default.createElement('img', { src: pics[combs[curPics][0]].url, alt: 'First pic', onClick: this.picClick(pics[combs[curPics][0]].id) }),
+            _react2.default.createElement('img', { src: pics[combs[curPics][0]].url, alt: 'First pic', onClick: this.picClick(pics[combs[curPics][0]].id), border: leftBorder }),
             _react2.default.createElement(
               'div',
               { className: _styles2.default.versus },
@@ -28019,7 +28030,7 @@ var PicsPair = function (_Component) {
                 'VS'
               )
             ),
-            _react2.default.createElement('img', { src: pics[combs[curPics][1]].url, alt: 'Second pic', onClick: this.picClick(pics[combs[curPics][1]].id) })
+            _react2.default.createElement('img', { src: pics[combs[curPics][1]].url, alt: 'Second pic', onClick: this.picClick(pics[combs[curPics][1]].id), border: rightBorder })
           ),
           _react2.default.createElement(_NavButtons2.default, null)
         )
@@ -28036,7 +28047,8 @@ PicsPair.propTypes = {
     pics: _propTypes2.default.object,
     question: _propTypes2.default.string,
     curPics: _propTypes2.default.int,
-    combs: _propTypes2.default.array
+    combs: _propTypes2.default.array,
+    curVote: _propTypes2.default.int
   }),
   actions: _propTypes2.default.shape({
     fetchComparison: _propTypes2.default.func,
@@ -28051,7 +28063,8 @@ var mapStateToProps = function mapStateToProps(state) {
     pics: state.comparison.pics,
     question: state.comparison.question,
     curPics: state.comparison.curPics,
-    combs: state.comparison.combs
+    combs: state.comparison.combs,
+    curVote: state.comparison.curVote
   };
 };
 
@@ -38815,6 +38828,7 @@ exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes
 }), _defineProperty(_createReducerFromDes, _actions.nextTwo.type, function (state, action) {
   return (0, _ramda.evolve)({
     curPics: _ramda.inc,
+    curVote: null,
     pics: _defineProperty({}, state.curVote, { rating: _ramda.inc })
   }, state);
 }), _defineProperty(_createReducerFromDes, _actions.postComparison.type, function (state, action) {

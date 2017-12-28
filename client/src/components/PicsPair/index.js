@@ -13,7 +13,8 @@ class PicsPair extends Component {
       pics: PropTypes.object,
       question: PropTypes.string,
       curPics: PropTypes.int,
-      combs: PropTypes.array
+      combs: PropTypes.array,
+      curVote: PropTypes.int
     }),
     actions: PropTypes.shape({
       fetchComparison: PropTypes.func,
@@ -31,12 +32,24 @@ class PicsPair extends Component {
   }
 
   render() {
-    const { pics, isLoading, question, curPics, combs } = this.props.data;
+    const { pics, isLoading, question, curPics, combs, curVote } = this.props.data;
+
+    let leftBorder = "0",
+        rightBorder = "0"
 
     if (!isLoading) {
-      console.log(combs[curPics][1]);
-      console.log(pics);
-      console.log(pics[combs[curPics][1]])
+      if (pics[combs[curPics][0]].id == curVote) {
+        leftBorder = "10"
+        rightBorder = "0"
+      }
+      else if (pics[combs[curPics][1]].id == curVote) {
+        leftBorder = "0"
+        rightBorder = "10"
+      }
+      else {
+        leftBorder = "0"
+        rightBorder = "0"
+      }
     }
 
     return (
@@ -46,9 +59,9 @@ class PicsPair extends Component {
           : <div>
               <h1>{question}</h1>
               <div className={styles.wrapper}>
-                <img src={pics[combs[curPics][0]].url} alt="First pic" onClick={this.picClick(pics[combs[curPics][0]].id)}/>
+                <img src={pics[combs[curPics][0]].url} alt="First pic" onClick={this.picClick(pics[combs[curPics][0]].id)} border={leftBorder}/>
                 <div className={styles.versus}><span>VS</span></div>
-                <img src={pics[combs[curPics][1]].url} alt="Second pic" onClick={this.picClick(pics[combs[curPics][1]].id)}/>
+                <img src={pics[combs[curPics][1]].url} alt="Second pic" onClick={this.picClick(pics[combs[curPics][1]].id)} border={rightBorder}/>
               </div>
               <NavButtons />
             </div>
@@ -63,7 +76,8 @@ const mapStateToProps = state => ({
   pics: state.comparison.pics,
   question: state.comparison.question,
   curPics: state.comparison.curPics,
-  combs: state.comparison.combs
+  combs: state.comparison.combs,
+  curVote: state.comparison.curVote
 });
 
 const mapDispatchToProps = {
