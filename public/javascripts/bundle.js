@@ -38684,23 +38684,17 @@ exports.default = function (_ref) {
         var state = getState();
         var pics = (0, _ramda.values)(state.comparison.pics);
         var questionId = state.comparison.questionId;
-        var data = { questionnaireId: questionId, userId: 1, pictureIdScores: pics.map(function (x) {
-            return { pictureId: x["id"], score: x["rating"] };
+        var data = { "questionnaireId": questionId, "userId": 1, "pictureIdScores": pics.map(function (x) {
+            return { "pictureId": x["id"], "score": x["rating"] };
           }) };
-        var test = {
-          "questionnaireId": 1,
-          "userId": 1,
-          "pictureIdScores": [{ "pictureId": 3, "score": 2 }, { "pictureId": 2, "score": 1 }]
-        };
+
         fetch('/comparison-answer/', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({
-            test: test
-          })
+          body: JSON.stringify(data)
         });
       }
 
