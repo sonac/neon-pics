@@ -24,6 +24,11 @@ export default ({ getState, dispatch }) => next => action => {
     const pics = values(state.comparison.pics);
     const questionId = state.comparison.questionId;
     const data = {questionnaireId: questionId, userId: 1, pictureIdScores: pics.map(x => ({pictureId: x["id"], score: x["rating"]}))};
+    const test = {
+                    "questionnaireId": 1,
+                    "userId": 1,
+                    "pictureIdScores": [{"pictureId": 3, "score": 2}, {"pictureId": 2, "score": 1}]
+                  }
     fetch('/comparison-answer/', {
       method: 'POST',
       headers: {
@@ -31,7 +36,7 @@ export default ({ getState, dispatch }) => next => action => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        data
+        test
       })
     });
   }
