@@ -43,9 +43,9 @@ class PicsPair extends Component {
                 <div className={styles.versus}><span>VS</span></div>
                 <img src={pics[1].url} alt="Second pic" onClick={this.handleClick(pics[1].id)}/>
               </div>
+              <NavButtons />
             </div>
         }
-        <NavButtons />
       </div>
     );
   }

@@ -14,3 +14,7 @@ export const fetchComparison = createActionCreator('FETCH_COMPARISON', id => ({
 export const pictureClick = createActionCreator('PICTURE_CLICK', id => ({
   id
 }));
+
+export const postComparison = createActionCreator('POST_COMPARISON', pics => ({
+  pics
+}));

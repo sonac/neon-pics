@@ -4743,7 +4743,7 @@ var mergeWithKey = /*#__PURE__*/Object(__WEBPACK_IMPORTED_MODULE_0__internal_cur
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.pictureClick = exports.fetchComparison = exports.fetchComparisonError = exports.fetchComparisonSuccess = undefined;
+exports.postComparison = exports.pictureClick = exports.fetchComparison = exports.fetchComparisonError = exports.fetchComparisonSuccess = undefined;
 
 var _utils = __webpack_require__(172);
 
@@ -4766,6 +4766,12 @@ var fetchComparison = exports.fetchComparison = (0, _utils.createActionCreator)(
 var pictureClick = exports.pictureClick = (0, _utils.createActionCreator)('PICTURE_CLICK', function (id) {
   return {
     id: id
+  };
+});
+
+var postComparison = exports.postComparison = (0, _utils.createActionCreator)('POST_COMPARISON', function (pics) {
+  return {
+    pics: pics
   };
 });
 
@@ -27988,9 +27994,9 @@ var PicsPair = function (_Component) {
               )
             ),
             _react2.default.createElement('img', { src: pics[1].url, alt: 'Second pic', onClick: this.handleClick(pics[1].id) })
-          )
-        ),
-        _react2.default.createElement(_NavButtons2.default, null)
+          ),
+          _react2.default.createElement(_NavButtons2.default, null)
+        )
       );
     }
   }]);
@@ -36153,29 +36159,60 @@ var _react2 = _interopRequireDefault(_react);
 
 var _button = __webpack_require__(437);
 
+var _styles = __webpack_require__(521);
+
+var _styles2 = _interopRequireDefault(_styles);
+
+var _propTypes = __webpack_require__(41);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRedux = __webpack_require__(106);
+
+var _ramda = __webpack_require__(70);
+
+var _actions = __webpack_require__(91);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var NavButtons = function () {
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var NavButtons = function (_Component) {
+  _inherits(NavButtons, _Component);
+
   function NavButtons() {
     _classCallCheck(this, NavButtons);
+
+    return _possibleConstructorReturn(this, (NavButtons.__proto__ || Object.getPrototypeOf(NavButtons)).apply(this, arguments));
   }
 
   _createClass(NavButtons, [{
+    key: 'clicked',
+    value: function clicked() {
+      this.props.actions.postComparison();
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       return _react2.default.createElement(
         'div',
-        { className: styles.navButtons },
+        { className: _styles2.default.navButtons },
         _react2.default.createElement(
           _button.Button,
-          { color: 'success', size: 'large' },
+          { color: 'secondary', size: 'large', hollow: true },
           'Next pair'
         ),
         _react2.default.createElement(
           _button.Button,
-          { color: 'success', size: 'large' },
+          { color: 'secondary', size: 'large', hollow: true, onClick: function onClick() {
+              return _this2.clicked();
+            } },
           'Send results'
         )
       );
@@ -36183,9 +36220,32 @@ var NavButtons = function () {
   }]);
 
   return NavButtons;
-}();
+}(_react.Component);
 
-exports.default = NavButtons;
+NavButtons.propTypes = {
+  data: _propTypes2.default.shape({}),
+  actions: _propTypes2.default.shape({
+    postComparison: _propTypes2.default.func
+  })
+};
+
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {};
+};
+
+var mapDispatchToProps = {
+  postComparison: _actions.postComparison
+};
+
+var mergeProps = function mergeProps(data, actions) {
+  return {
+    data: data,
+    actions: actions
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps, mergeProps)(NavButtons);
 
 /***/ }),
 /* 437 */
@@ -38595,6 +38655,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _actions = __webpack_require__(91);
 
+var _ramda = __webpack_require__(70);
+
 exports.default = function (_ref) {
   var getState = _ref.getState,
       dispatch = _ref.dispatch;
@@ -38608,6 +38670,7 @@ exports.default = function (_ref) {
             // here we just change the field names received from backend, ratings logic should be added in reducer
             dispatch((0, _actions.fetchComparisonSuccess)({
               question: data.text,
+              questionId: data.id,
               pictures: data.pictures.map(function (pic) {
                 return { id: pic.id, url: pic.picUrl };
               })
@@ -38616,6 +38679,23 @@ exports.default = function (_ref) {
         }).catch(function (error) {
           console.error(error);
           dispatch((0, _actions.fetchComparisonError)(error));
+        });
+      } else if (action.type == _actions.postComparison.type) {
+        var state = getState();
+        var pics = (0, _ramda.values)(state.comparison.pics);
+        var questionId = state.comparison.questionId;
+        var data = { questionnaireId: questionId, userId: 1, pictureIdScores: pics.map(function (x) {
+            return { pictureId: x["id"], score: x["rating"] };
+          }) };
+        fetch('/comparison-answer/', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            data: data
+          })
         });
       }
 
@@ -38653,7 +38733,8 @@ var initState = {
   isLoading: true,
   error: null,
   pics: {},
-  question: null
+  question: null,
+  questionId: null
 };
 
 exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes = {}, _defineProperty(_createReducerFromDes, _actions.fetchComparison.type, function (state) {
@@ -38664,12 +38745,15 @@ exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes
   return _extends({}, state, {
     isLoading: false,
     question: action.question,
+    questionId: action.questionId,
     pics: action.pictures.reduce(function (acc, pic) {
       return _extends({}, acc, _defineProperty({}, pic.id, _extends({}, pic, { rating: 0 })));
     }, {})
   });
 }), _defineProperty(_createReducerFromDes, _actions.pictureClick.type, function (state, action) {
   return (0, _common.evolvePath)(['pics', action.id, 'rating'], _ramda.inc, state);
+}), _defineProperty(_createReducerFromDes, _actions.postComparison.type, function (state, action) {
+  return _extends({}, state);
 }), _createReducerFromDes), initState);
 
 /***/ }),
@@ -38716,6 +38800,53 @@ exports.push([module.i, "html, body {\n    height: 100%;\n}\n\nbody {\n    font-
 
 // exports
 
+
+/***/ }),
+/* 521 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(522);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(59)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js??ref--1-1!./styles.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js??ref--1-1!./styles.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 522 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(58)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".navButtons_1X5Gd {\n  color: white;\n}\n", ""]);
+
+// exports
+exports.locals = {
+	"navButtons": "navButtons_1X5Gd"
+};
 
 /***/ })
 /******/ ]);
