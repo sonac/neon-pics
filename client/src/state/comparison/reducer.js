@@ -31,7 +31,7 @@ export default createReducerFromDescriptor({
   }),
   [nextTwo.type]: (state, action) => evolve({
     curPics: inc,
-    curVote: null,
+    curVote: _ => null,
     pics: {[state.curVote]: {rating: inc}}
   }, state),
   [postComparison.type]: (state, action) => ({ ...state})

@@ -36243,10 +36243,10 @@ var NavButtons = function (_Component) {
     value: function nextClicked() {
       var _props$data = this.props.data,
           curPics = _props$data.curPics,
-          limit = _props$data.limit;
+          limit = _props$data.limit,
+          curVote = _props$data.curVote;
 
-      console.log(curPics);
-      if (curPics >= limit - 1) console.log("done");else this.props.actions.nextTwo();
+      if (!curVote) alert("Please choose one pic");else if (curPics >= limit - 1) console.log("done");else this.props.actions.nextTwo();
     }
   }, {
     key: 'render',
@@ -36280,7 +36280,8 @@ var NavButtons = function (_Component) {
 NavButtons.propTypes = {
   data: _propTypes2.default.shape({
     curPics: _propTypes2.default.int,
-    limit: _propTypes2.default.int
+    limit: _propTypes2.default.int,
+    curVote: _propTypes2.default.int
   }),
   actions: _propTypes2.default.shape({
     postComparison: _propTypes2.default.func,
@@ -36292,7 +36293,8 @@ NavButtons.propTypes = {
 var mapStateToProps = function mapStateToProps(state) {
   return {
     curPics: state.comparison.curPics,
-    limit: state.comparison.combs.length
+    limit: state.comparison.combs.length,
+    curVote: state.comparison.curVote
   };
 };
 
@@ -38828,7 +38830,9 @@ exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes
 }), _defineProperty(_createReducerFromDes, _actions.nextTwo.type, function (state, action) {
   return (0, _ramda.evolve)({
     curPics: _ramda.inc,
-    curVote: null,
+    curVote: function curVote(_) {
+      return null;
+    },
     pics: _defineProperty({}, state.curVote, { rating: _ramda.inc })
   }, state);
 }), _defineProperty(_createReducerFromDes, _actions.postComparison.type, function (state, action) {
