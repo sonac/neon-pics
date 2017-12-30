@@ -22,7 +22,7 @@ export function evolvePath(path, fn, obj) {
 
 export function pairwise(arr) {
   if (arr.length < 2) { return []; }
-  let x = head(arr),
+  const x = head(arr),
       xs  = tail(arr),
       pairs = xs.map(_ => [x, _]);
   return pairs.concat(pairwise(xs));

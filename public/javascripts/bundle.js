@@ -27981,19 +27981,19 @@ var PicsPair = function (_Component) {
           pics = _props$data.pics,
           isLoading = _props$data.isLoading,
           question = _props$data.question,
-          curPics = _props$data.curPics,
+          currentPicPairIndex = _props$data.currentPicPairIndex,
           combs = _props$data.combs,
-          curVote = _props$data.curVote;
+          currentVote = _props$data.currentVote;
 
 
       var leftBorder = "0",
           rightBorder = "0";
 
       if (!isLoading) {
-        if (pics[combs[curPics][0]].id == curVote) {
+        if (pics[combs[currentPicPairIndex][0]].id == currentVote) {
           leftBorder = "10";
           rightBorder = "0";
-        } else if (pics[combs[curPics][1]].id == curVote) {
+        } else if (pics[combs[currentPicPairIndex][1]].id == currentVote) {
           leftBorder = "0";
           rightBorder = "10";
         } else {
@@ -28020,7 +28020,7 @@ var PicsPair = function (_Component) {
           _react2.default.createElement(
             'div',
             { className: _styles2.default.wrapper },
-            _react2.default.createElement('img', { src: pics[combs[curPics][0]].url, alt: 'First pic', onClick: this.picClick(pics[combs[curPics][0]].id), border: leftBorder }),
+            _react2.default.createElement('img', { src: pics[combs[currentPicPairIndex][0]].url, alt: 'First pic', onClick: this.picClick(pics[combs[currentPicPairIndex][0]].id), border: leftBorder }),
             _react2.default.createElement(
               'div',
               { className: _styles2.default.versus },
@@ -28030,7 +28030,7 @@ var PicsPair = function (_Component) {
                 'VS'
               )
             ),
-            _react2.default.createElement('img', { src: pics[combs[curPics][1]].url, alt: 'Second pic', onClick: this.picClick(pics[combs[curPics][1]].id), border: rightBorder })
+            _react2.default.createElement('img', { src: pics[combs[currentPicPairIndex][1]].url, alt: 'Second pic', onClick: this.picClick(pics[combs[currentPicPairIndex][1]].id), border: rightBorder })
           ),
           _react2.default.createElement(_NavButtons2.default, null)
         )
@@ -28046,9 +28046,9 @@ PicsPair.propTypes = {
     isLoading: _propTypes2.default.boolean,
     pics: _propTypes2.default.object,
     question: _propTypes2.default.string,
-    curPics: _propTypes2.default.int,
+    currentPicPairIndex: _propTypes2.default.int,
     combs: _propTypes2.default.array,
-    curVote: _propTypes2.default.int
+    currentVote: _propTypes2.default.int
   }),
   actions: _propTypes2.default.shape({
     fetchComparison: _propTypes2.default.func,
@@ -28062,9 +28062,9 @@ var mapStateToProps = function mapStateToProps(state) {
     isLoading: state.comparison.isLoading,
     pics: state.comparison.pics,
     question: state.comparison.question,
-    curPics: state.comparison.curPics,
+    currentPicPairIndex: state.comparison.currentPicPairIndex,
     combs: state.comparison.combs,
-    curVote: state.comparison.curVote
+    currentVote: state.comparison.currentVote
   };
 };
 
@@ -36228,46 +36228,48 @@ var NavButtons = function (_Component) {
   _inherits(NavButtons, _Component);
 
   function NavButtons() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
     _classCallCheck(this, NavButtons);
 
-    return _possibleConstructorReturn(this, (NavButtons.__proto__ || Object.getPrototypeOf(NavButtons)).apply(this, arguments));
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = NavButtons.__proto__ || Object.getPrototypeOf(NavButtons)).call.apply(_ref, [this].concat(args))), _this), _this.sendClicked = function () {
+      _this.props.actions.postComparison();
+    }, _this.handleClick = function () {
+      var _this$props$data = _this.props.data,
+          currentPicPairIndex = _this$props$data.currentPicPairIndex,
+          limit = _this$props$data.limit,
+          currentVote = _this$props$data.currentVote;
+
+      if (!currentVote) {
+        alert("Please choose one pic");
+      } else if (currentPicPairIndex >= limit - 1) {
+        console.log("done");
+      } else {
+        _this.props.actions.nextTwo();
+      }
+    }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(NavButtons, [{
-    key: 'sendClicked',
-    value: function sendClicked() {
-      this.props.actions.postComparison();
-    }
-  }, {
-    key: 'nextClicked',
-    value: function nextClicked() {
-      var _props$data = this.props.data,
-          curPics = _props$data.curPics,
-          limit = _props$data.limit,
-          curVote = _props$data.curVote;
-
-      if (!curVote) alert("Please choose one pic");else if (curPics >= limit - 1) console.log("done");else this.props.actions.nextTwo();
-    }
-  }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
-
       return _react2.default.createElement(
         'div',
         { className: _styles2.default.navButtons },
         _react2.default.createElement(
           _button.Button,
-          { color: 'secondary', size: 'large', hollow: true, onClick: function onClick() {
-              return _this2.nextClicked();
-            } },
+          { color: 'secondary', size: 'large', hollow: true, onClick: this.handleClick },
           'Next pair'
         ),
         _react2.default.createElement(
           _button.Button,
-          { color: 'secondary', size: 'large', hollow: true, onClick: function onClick() {
-              return _this2.sendClicked();
-            } },
+          { color: 'secondary', size: 'large', hollow: true, onClick: this.sendClicked },
           'Send results'
         )
       );
@@ -36279,9 +36281,9 @@ var NavButtons = function (_Component) {
 
 NavButtons.propTypes = {
   data: _propTypes2.default.shape({
-    curPics: _propTypes2.default.int,
+    currentPicPairIndex: _propTypes2.default.int,
     limit: _propTypes2.default.int,
-    curVote: _propTypes2.default.int
+    currentVote: _propTypes2.default.int
   }),
   actions: _propTypes2.default.shape({
     postComparison: _propTypes2.default.func,
@@ -36292,9 +36294,9 @@ NavButtons.propTypes = {
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
-    curPics: state.comparison.curPics,
+    currentPicPairIndex: state.comparison.currentPicPairIndex,
     limit: state.comparison.combs.length,
-    curVote: state.comparison.curVote
+    currentVote: state.comparison.currentVote
   };
 };
 
@@ -38754,8 +38756,8 @@ exports.default = function (_ref) {
         var state = getState();
         var pics = (0, _ramda.values)(state.comparison.pics);
         var questionId = state.comparison.questionId;
-        var data = { "questionnaireId": questionId, "userId": 1, "pictureIdScores": pics.map(function (x) {
-            return { "pictureId": x["id"], "score": x["rating"] };
+        var data = { questionnaireId: questionId, userId: 1, pictureIdScores: pics.map(function (x) {
+            return { pictureId: x.id, score: x.rating };
           }) };
 
         fetch('/comparison-answer/', {
@@ -38804,8 +38806,8 @@ var initState = {
   pics: {},
   question: null,
   questionId: null,
-  curVote: null,
-  curPics: 0,
+  currentVote: null,
+  currentPicPairIndex: 0,
   combs: []
 };
 
@@ -38825,15 +38827,15 @@ exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes
   });
 }), _defineProperty(_createReducerFromDes, _actions.pictureClick.type, function (state, action) {
   return _extends({}, state, {
-    curVote: action.id
+    currentVote: action.id
   });
 }), _defineProperty(_createReducerFromDes, _actions.nextTwo.type, function (state, action) {
   return (0, _ramda.evolve)({
-    curPics: _ramda.inc,
-    curVote: function curVote(_) {
+    currentPicPairIndex: _ramda.inc,
+    currentVote: function currentVote(_) {
       return null;
     },
-    pics: _defineProperty({}, state.curVote, { rating: _ramda.inc })
+    pics: _defineProperty({}, state.currentVote, { rating: _ramda.inc })
   }, state);
 }), _defineProperty(_createReducerFromDes, _actions.postComparison.type, function (state, action) {
   return _extends({}, state);

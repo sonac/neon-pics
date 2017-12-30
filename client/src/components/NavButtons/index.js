@@ -10,9 +10,9 @@ class NavButtons extends Component {
 
   static propTypes = {
     data: PropTypes.shape({
-      curPics: PropTypes.int,
+      currentPicPairIndex: PropTypes.int,
       limit: PropTypes.int,
-      curVote: PropTypes.int
+      currentVote: PropTypes.int
     }),
     actions: PropTypes.shape({
       postComparison: PropTypes.func,
@@ -20,22 +20,28 @@ class NavButtons extends Component {
     }),
   };
 
-  sendClicked() {
+  sendClicked = () => {
     this.props.actions.postComparison();
   }
 
-  nextClicked() {
-    const { curPics, limit, curVote } = this.props.data;
-    if (!curVote) alert("Please choose one pic")
-    else if (curPics >= limit - 1) console.log("done");
-    else this.props.actions.nextTwo();
+  handleClick = () => {
+    const { currentPicPairIndex, limit, currentVote } = this.props.data;
+    if (!currentVote) {
+      alert("Please choose one pic")
+    }
+    else if (currentPicPairIndex >= limit - 1) {
+      console.log("done")
+    }
+    else {
+      this.props.actions.nextTwo()
+    }
   }
 
   render() {
     return (
       <div className={styles.navButtons}>
-        <Button color="secondary" size="large" hollow onClick={() => this.nextClicked()}>Next pair</Button>
-        <Button color="secondary" size="large" hollow onClick={() => this.sendClicked()}>Send results</Button>
+        <Button color="secondary" size="large" hollow onClick={this.handleClick}>Next pair</Button>
+        <Button color="secondary" size="large" hollow onClick={this.sendClicked}>Send results</Button>
       </div>
     )
   }
@@ -43,9 +49,9 @@ class NavButtons extends Component {
 }
 
 const mapStateToProps = state => ({
-  curPics: state.comparison.curPics,
+  currentPicPairIndex: state.comparison.currentPicPairIndex,
   limit: state.comparison.combs.length,
-  curVote: state.comparison.curVote
+  currentVote: state.comparison.currentVote
 });
 
 const mapDispatchToProps = {

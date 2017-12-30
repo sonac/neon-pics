@@ -12,9 +12,9 @@ class PicsPair extends Component {
       isLoading: PropTypes.boolean,
       pics: PropTypes.object,
       question: PropTypes.string,
-      curPics: PropTypes.int,
+      currentPicPairIndex: PropTypes.int,
       combs: PropTypes.array,
-      curVote: PropTypes.int
+      currentVote: PropTypes.int
     }),
     actions: PropTypes.shape({
       fetchComparison: PropTypes.func,
@@ -32,17 +32,17 @@ class PicsPair extends Component {
   }
 
   render() {
-    const { pics, isLoading, question, curPics, combs, curVote } = this.props.data;
+    const { pics, isLoading, question, currentPicPairIndex, combs, currentVote } = this.props.data;
 
     let leftBorder = "0",
         rightBorder = "0"
 
     if (!isLoading) {
-      if (pics[combs[curPics][0]].id == curVote) {
+      if (pics[combs[currentPicPairIndex][0]].id == currentVote) {
         leftBorder = "10"
         rightBorder = "0"
       }
-      else if (pics[combs[curPics][1]].id == curVote) {
+      else if (pics[combs[currentPicPairIndex][1]].id == currentVote) {
         leftBorder = "0"
         rightBorder = "10"
       }
@@ -59,9 +59,9 @@ class PicsPair extends Component {
           : <div>
               <h1>{question}</h1>
               <div className={styles.wrapper}>
-                <img src={pics[combs[curPics][0]].url} alt="First pic" onClick={this.picClick(pics[combs[curPics][0]].id)} border={leftBorder}/>
+                <img src={pics[combs[currentPicPairIndex][0]].url} alt="First pic" onClick={this.picClick(pics[combs[currentPicPairIndex][0]].id)} border={leftBorder}/>
                 <div className={styles.versus}><span>VS</span></div>
-                <img src={pics[combs[curPics][1]].url} alt="Second pic" onClick={this.picClick(pics[combs[curPics][1]].id)} border={rightBorder}/>
+                <img src={pics[combs[currentPicPairIndex][1]].url} alt="Second pic" onClick={this.picClick(pics[combs[currentPicPairIndex][1]].id)} border={rightBorder}/>
               </div>
               <NavButtons />
             </div>
@@ -75,9 +75,9 @@ const mapStateToProps = state => ({
   isLoading: state.comparison.isLoading,
   pics: state.comparison.pics,
   question: state.comparison.question,
-  curPics: state.comparison.curPics,
+  currentPicPairIndex: state.comparison.currentPicPairIndex,
   combs: state.comparison.combs,
-  curVote: state.comparison.curVote
+  currentVote: state.comparison.currentVote
 });
 
 const mapDispatchToProps = {
