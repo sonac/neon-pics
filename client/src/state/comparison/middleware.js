@@ -1,15 +1,42 @@
-import { fetchComparison, fetchComparisonSuccess, fetchComparisonError } from './actions';
+import { fetchComparison, fetchComparisonSuccess, fetchComparisonError, pictureClick, postComparison } from './actions';
+import { values } from 'ramda';
+import { pairwise } from 'utils/common';
 
 export default ({ getState, dispatch }) => next => action => {
   if (action.type === fetchComparison.type) {
-    fetch('api/pictures')
+    fetch(`comparison/${action.id}`)
       .then(response => response.json())
-      .then(urls =>
-        dispatch(fetchComparisonSuccess(urls.map(url => ({ url }))))
+      .then(data =>
+        // here we just change the field names received from backend, ratings logic should be added in reducer
+        dispatch(fetchComparisonSuccess({
+          question: data.text,
+          questionId: data.id,
+          pictures: data.pictures.map(pic => ({id: pic.id, url: pic.picUrl})),
+          combs: pairwise(data.pictures.map(pic => pic.id))
+        }))
       )
-      .catch(error =>
+      .catch(error => {
+        console.error(error);
         dispatch(fetchComparisonError(error))
+      })
+  }
+
+  else if (action.type == postComparison.type) {
+    const state = getState();
+    const pics = values(state.comparison.pics);
+    const questionId = state.comparison.questionId;
+    const data = {questionnaireId: questionId, userId: 1, pictureIdScores: pics.map(x => ({pictureId: x.id, score: x.rating}))};
+
+    fetch('/comparison-answer/', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(
+        data
       )
+    });
   }
 
   return next(action);
