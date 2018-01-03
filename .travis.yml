@@ -25,8 +25,8 @@ before_install:
 - gcloud auth activate-service-account --key-file client-secret.json
 install:
 - gcloud config set project neon-pics
-- gcloud -q components update gae-python
-- pip install -r requirements.txt -t lib/
+#- gcloud -q components update gae-python
+#- pip install -r requirements.txt -t lib/
 script:
 - sbt test
 before_cache:
