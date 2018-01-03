@@ -7,6 +7,7 @@
       tier: questionnaire
   spec: 
     type: LoadBalancer
+    loadBalancerIP: 35.198.113.47
     ports: 
     - port: 9000
     selector:
