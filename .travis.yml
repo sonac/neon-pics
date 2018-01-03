@@ -28,7 +28,7 @@ install:
 #- gcloud -q components update gae-python
 #- pip install -r requirements.txt -t lib/
 script:
-- sbt test
+#- sbt test
 - sbt docker:publishLocal
 - gcloud docker -- push eu.gcr.io/neon-pics/production:latest
 before_cache:
