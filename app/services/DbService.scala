@@ -7,17 +7,17 @@ import slick.jdbc.{H2Profile, PostgresProfile, SQLActionBuilder}
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-trait PostgresService {
+trait DbService {
   def db: Database
 }
 
 @Singleton
-class PostgresServiceProduction extends PostgresService {
+class DbServicePostgresProduction extends DbService {
   val db: PostgresProfile.backend.Database = PostgresProfile.api.Database.forConfig("productionDb")
 }
 
 @Singleton
-class PostgresServiceTest extends PostgresService {
+class DbServiceH2 extends DbService {
   val db = init()
 
   def init(): Database = {

@@ -4,13 +4,13 @@ import com.google.inject.AbstractModule
 import net.codingwell.scalaguice.ScalaModule
 import play.api.{Configuration, Environment}
 import services.comparison.{QuestionnaireAnswerRepository, QuestionnaireRepository, QuestionnaireRepositoryImpl}
-import services.{PostgresService, PostgresServiceTest}
+import services.{DbService, DbServiceH2}
 
 class Module(environment: Environment, configuration: Configuration)
   extends AbstractModule
     with ScalaModule {
   override def configure(): Unit = {
-    bind[PostgresService].to[PostgresServiceTest]
+    bind[DbService].to[DbServiceH2]
     bind[QuestionnaireRepository].to[QuestionnaireRepositoryImpl].in[Singleton]
     bind[QuestionnaireAnswerRepository].to[QuestionnaireRepositoryImpl].in[Singleton]
   }
