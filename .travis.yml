@@ -29,6 +29,7 @@ install:
 #- pip install -r requirements.txt -t lib/
 script:
 - sbt test
+- sbt docker:publishLocal
 before_cache:
 - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
 - find $HOME/.sbt -name "*.lock" -delete
