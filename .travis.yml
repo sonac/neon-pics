@@ -30,6 +30,7 @@ install:
 script:
 - sbt test
 - sbt docker:publishLocal
+- gcloud docker -- push eu.gcr.io/neon-pics/production:latest
 before_cache:
 - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
 - find $HOME/.sbt -name "*.lock" -delete
