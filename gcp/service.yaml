@@ -1,0 +1,13 @@
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: questionnaire
+    labels: 
+      app: neon-pics
+      tier: questionnaire
+  spec: 
+    type: LoadBalancer
+    ports: 
+    - port: 9000
+    selector:
+      app: neon-pics
