@@ -1,6 +1,6 @@
 import React from 'react';
 import PicsPair from 'components/PicsPair';
-import styles from './styles.css';
+const styles = require('./styles.css');
 
 export default function App() {
   return (

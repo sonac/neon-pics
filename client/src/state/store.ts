@@ -2,7 +2,13 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import comparisonMiddleware from './comparison/middleware';
 import comparisonReducer from './comparison/reducer';
 
-const finalCreateStore = compose(
+declare global {
+  interface Window {
+    devToolsExtension: Function
+  }
+}
+
+const finalCreateStore = compose<any>(
   applyMiddleware(comparisonMiddleware),
   window.devToolsExtension ? window.devToolsExtension() : f => f
 )(createStore);
