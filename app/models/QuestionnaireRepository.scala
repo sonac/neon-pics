@@ -4,7 +4,7 @@ import com.google.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json, Writes}
 import services.DbService
 import slick.jdbc.PostgresProfile.api._
-import slick.lifted.QueryBase
+import slick.lifted.{QueryBase, TableQuery}
 
 import scala.collection.immutable
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -44,15 +44,15 @@ trait QuestionnaireAnswerRepository {
 }
 
 @Singleton
-class QuestionnaireRepositoryImpl @Inject()(dbWrapper: DbService, picturesRepository: PictureRepository) extends QuestionnaireRepository with QuestionnaireAnswerRepository {
+class QuestionnaireRepositoryImpl @Inject()(dbWrapper: DbService) extends QuestionnaireRepository with QuestionnaireAnswerRepository {
 
   import dbWrapper.db
 
+  val pictures = TableQuery[PictureTable]
   val questionnaireTable = TableQuery[QuestionnaireTable]
   val questionnairePictureTable = TableQuery[QuestionnairePictureTable]
   val questionnaireScoreTable = TableQuery[QuestionnaireScoreTable]
   val insertQuestionnaireTable = questionnaireTable returning questionnaireTable.map(_.id) into ((q, id) => q.copy(id = id))
-
 
   def addQuestionnaire(text: String, pictureIds: Seq[Int] = List()): Future[Int] = {
     for {
@@ -62,9 +62,32 @@ class QuestionnaireRepositoryImpl @Inject()(dbWrapper: DbService, picturesReposi
     } yield q.id
   }
 
+  def getQuestionnaireById(questId: Int): Future[Option[QuestionnaireWithPictures]] = {
+
+    val pics: Query[(QuestionnairePictureTable, PictureTable), (QuestionnairePicture, Picture), Seq] = questionnairePictureTable
+      .filter(_.questId === questId)
+      .join(pictures)
+      .on(_.picId === _.id)
+    val q: QueryBase[Seq[(Questionnaire, Option[(QuestionnairePicture, Picture)])]] =
+      questionnaireTable
+        .filter(_.id === questId)
+        .joinLeft(pics)
+        .on(_.id === _._1.questId)
+
+    for {
+      x: Seq[(Questionnaire, Option[(QuestionnairePicture, Picture)])] <- db.run(q.result)
+      ans: immutable.Iterable[QuestionnaireWithPictures] = x.groupBy {
+        _._1
+      }.map { case (q1, s) =>
+        val pics: Seq[Picture] = s.collect { case (_, Some(y)) => y._2 }
+        QuestionnaireWithPictures(q1, pics)
+      }
+    } yield ans.headOption
+  }
+
   def getAllQuestionnaires: Future[Seq[QuestionnaireWithPictures]] = {
     val pics = questionnairePictureTable
-      .join(picturesRepository.pictures)
+      .join(pictures)
       .on(_.picId === _.id)
     val q: QueryBase[Seq[(QuestionnaireTable#TableElementType, Option[(QuestionnairePicture, Picture)])]] =
       questionnaireTable
@@ -108,26 +131,5 @@ class QuestionnaireRepositoryImpl @Inject()(dbWrapper: DbService, picturesReposi
 
   }
 
-  def getQuestionnaireById(questId: Int): Future[Option[QuestionnaireWithPictures]] = {
 
-    val pics: Query[(QuestionnairePictureTable, PictureTable), (QuestionnairePicture, Picture), Seq] = questionnairePictureTable
-      .filter(_.questId === questId)
-      .join(picturesRepository.pictures)
-      .on(_.picId === _.id)
-    val q: QueryBase[Seq[(Questionnaire, Option[(QuestionnairePicture, Picture)])]] =
-      questionnaireTable
-        .filter(_.id === questId)
-        .joinLeft(pics)
-        .on(_.id === _._1.questId)
-
-    for {
-      x: Seq[(Questionnaire, Option[(QuestionnairePicture, Picture)])] <- db.run(q.result)
-      ans: immutable.Iterable[QuestionnaireWithPictures] = x.groupBy {
-        _._1
-      }.map { case (q1, s) =>
-        val pics: Seq[Picture] = s.collect { case (_, Some(y)) => y._2 }
-        QuestionnaireWithPictures(q1, pics)
-      }
-    } yield ans.headOption
-  }
 }
