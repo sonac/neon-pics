@@ -20,6 +20,12 @@ libraryDependencies ++= Seq(
   "com.h2database" % "h2" % "1.4.196" % Test,
   "net.codingwell" %% "scala-guice" % "4.1.1")
 
+dockerRepository := Some("eu.gcr.io")
+
+packageName in Docker := "neon-pics/production"
+
+dockerUpdateLatest := true
+
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "sonac.controllers._"
 
