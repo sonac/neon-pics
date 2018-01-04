@@ -45,7 +45,7 @@ trait QuestionnaireAnswerRepository {
 }
 
 @Singleton
-class QuestionnaireRepositoryImpl @Inject()(dbWrapper: DbService, picturesRepository: Pictures) extends QuestionnaireRepository with QuestionnaireAnswerRepository {
+class QuestionnaireRepositoryImpl @Inject()(dbWrapper: DbService, picturesRepository: PictureRepository) extends QuestionnaireRepository with QuestionnaireAnswerRepository {
 
   import dbWrapper.db
 
