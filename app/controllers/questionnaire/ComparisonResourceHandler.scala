@@ -1,11 +1,10 @@
-package services.comparison
+package controllers.questionnaire
 
 import com.google.inject.Inject
-import models.Picture
+import models.{Picture, _}
 import play.api.libs.json.{JsValue, Json, Writes}
 
 import scala.concurrent.{ExecutionContext, Future}
-import models._
 
 case class ComparisonResource(id: Int, text: String, pictures: Seq[Picture])
 

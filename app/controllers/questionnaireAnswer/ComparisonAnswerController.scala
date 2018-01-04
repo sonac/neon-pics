@@ -1,10 +1,9 @@
 package controllers.questionnaireAnswer
 
 import com.google.inject.Inject
-import controllers.RequestAugmented
+import controllers.{ControllerComponentsDefault, ControllerDefault, RequestAugmented}
 import play.api.data.{Form, Mapping}
 import play.api.mvc.{Action, AnyContent, Result}
-import services.comparison.{ComparisonBaseController, ComparisonControllerComponents}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -37,7 +36,7 @@ object QuestionnaireAnswerFormInput {
   }
 }
 
-class ComparisonAnswerController @Inject()(ccc: ComparisonControllerComponents, carh: ComparisonAnswerResourceHandler)(implicit ec: ExecutionContext) extends ComparisonBaseController(ccc) {
+class ComparisonAnswerController @Inject()(ccc: ControllerComponentsDefault, carh: ComparisonAnswerResourceHandler)(implicit ec: ExecutionContext) extends ControllerDefault(ccc) {
 
   def addComparisonAnswer(): Action[AnyContent] = {
 
@@ -51,7 +50,7 @@ class ComparisonAnswerController @Inject()(ccc: ComparisonControllerComponents, 
       }
     }
 
-    ComparisonActionBuilder.async { implicit request: RequestAugmented[AnyContent] =>
+    ccc.actionBuilder.async { implicit request: RequestAugmented[AnyContent] =>
       QuestionnaireAnswerFormInput.questionnairAnswerFormInput.bindFromRequest().fold(failure, success)
     }
   }

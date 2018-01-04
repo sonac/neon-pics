@@ -15,10 +15,10 @@ GET         /assets/*file                               controllers.Assets.versi
 # Questionnaire service
 
 # Ads a questionnaire with pics
-POST        /comparison                                 services.comparison.ComparisonController.addQuestionnaire
+POST        /comparison                                 controllers.questionnaire.ComparisonController.addQuestionnaire
 
 # Gets a questionnaire with pics
-GET         /comparison/:questionnaireId                services.comparison.ComparisonController.getQuestionnaire(questionnaireId: Int)
+GET         /comparison/:questionnaireId                controllers.questionnaire.ComparisonController.getQuestionnaire(questionnaireId: Int)
 
 # Ads an answer including all evaluated things
 POST        /comparison-answer/                         controllers.questionnaireAnswer.ComparisonAnswerController.addComparisonAnswer
