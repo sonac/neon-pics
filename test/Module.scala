@@ -3,8 +3,8 @@ import javax.inject._
 import com.google.inject.AbstractModule
 import net.codingwell.scalaguice.ScalaModule
 import play.api.{Configuration, Environment}
-import services.comparison.{QuestionnaireAnswerRepository, QuestionnaireRepository, QuestionnaireRepositoryImpl}
 import services.{DbService, DbServiceH2}
+import models._
 
 class Module(environment: Environment, configuration: Configuration)
   extends AbstractModule

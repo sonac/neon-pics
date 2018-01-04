@@ -3,7 +3,7 @@ import javax.inject._
 import com.google.inject.AbstractModule
 import net.codingwell.scalaguice.ScalaModule
 import play.api.{Configuration, Environment}
-import services.comparison.{QuestionnaireAnswerRepository, QuestionnaireRepository, QuestionnaireRepositoryImpl}
+import models._
 import services.{DbService, DbServicePostgresProduction}
 
 class Module(environment: Environment, configuration: Configuration)

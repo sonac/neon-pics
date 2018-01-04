@@ -7,6 +7,7 @@ import play.api.test.Injecting
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
+import models._
 
 class QuestionnaireRepositoryTest extends PlaySpec with GuiceOneAppPerTest with Injecting {
   "addQuestionnaire" should {

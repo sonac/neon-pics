@@ -5,6 +5,7 @@ import com.google.inject.Inject
 import play.api.libs.json.{JsValue, Json, Writes}
 
 import scala.concurrent.{ExecutionContext, Future}
+import models._
 
 case class ComparisonAnswerResource(questionnaireId: Int, userId: Int, scores: Seq[PictureIdScore])
 

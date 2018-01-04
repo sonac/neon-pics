@@ -5,6 +5,7 @@ import models.Picture
 import play.api.libs.json.{JsValue, Json, Writes}
 
 import scala.concurrent.{ExecutionContext, Future}
+import models._
 
 case class ComparisonResource(id: Int, text: String, pictures: Seq[Picture])
 

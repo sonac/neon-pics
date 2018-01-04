@@ -1,7 +1,6 @@
-package services.comparison
+package models
 
 import com.google.inject.{Inject, Singleton}
-import models.{Picture, PictureTable}
 import services.DbService
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.TableQuery
