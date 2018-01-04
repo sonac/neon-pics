@@ -1,4 +1,4 @@
-package services.comparison
+package controllers
 
 import com.google.inject.Inject
 import play.api.i18n.MessagesApi

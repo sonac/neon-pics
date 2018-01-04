@@ -1,6 +1,7 @@
 package services.comparison
 
 import com.google.inject.Inject
+import controllers.RequestAugmented
 import play.api.data.{Form, Mapping}
 import play.api.mvc.{Action, AnyContent, Result}
 

@@ -1,6 +1,7 @@
 package services.comparison
 
 import com.google.inject.Inject
+import controllers.{ActionBuilderParser, RequestAugmented}
 import play.api.data.{Form, Mapping}
 import play.api.http.FileMimeTypes
 import play.api.i18n.{Langs, MessagesApi}
