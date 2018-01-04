@@ -6,4 +6,8 @@ target
 /.project
 /.settings
 /RUNNING_PID
-/app/assets/javascripts/node_modules
+/node_modules/
+/client/node_modules/
+/client/package
+/client/pg.js
+credentials.tar.gz

@@ -1,24 +1,27 @@
 package services
 
+import com.google.inject.{Inject, Singleton}
 import models._
+
 import scala.concurrent.Future
 
-object PictureService {
+@Singleton
+class PictureService @Inject()(pictureRepository: Pictures){
 
   def addPicture(pic: Picture): Future[String] = {
-    Pictures.add(pic)
+    pictureRepository.add(pic)
   }
 
   def deletePicture(id: Int): Future[Int] = {
-    Pictures.delete(id)
+    pictureRepository.delete(id)
   }
 
   def getPicture(id: Int): Future[Option[Picture]] = {
-    Pictures.get(id)
+    pictureRepository.get(id)
   }
 
   def getAllPictures: Future[Seq[String]] = {
-    Pictures.getAll
+    pictureRepository.getAll
   }
 
 }
