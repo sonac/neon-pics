@@ -8,8 +8,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class RequestAugmented[A](request: Request[A], val messagesApi: MessagesApi) extends WrappedRequest(request) with MessagesRequestHeader with PreferredMessagesProvider
 
-class ActionBuilderParser @Inject()(messagesApi: MessagesApi, playBodyParsers: PlayBodyParsers)
-                                   (implicit val executionContext: ExecutionContext)
+class ActionBuilderDefault @Inject()(messagesApi: MessagesApi, playBodyParsers: PlayBodyParsers)
+                                    (implicit val executionContext: ExecutionContext)
   extends ActionBuilder[RequestAugmented, AnyContent] {
   type ComparisonRequestBlock[A] = RequestAugmented[A] => Future[Result]
 

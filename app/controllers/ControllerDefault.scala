@@ -9,7 +9,7 @@ class ControllerDefault @Inject()(ccc: ControllerComponentsDefault) extends Base
   override protected def controllerComponents: ControllerComponents = ccc
 }
 
-case class ControllerComponentsDefault @Inject()(actionBuilder: ActionBuilderParser,
+case class ControllerComponentsDefault @Inject()(actionBuilder: ActionBuilderDefault,
                                                  parsers: PlayBodyParsers,
                                                  messagesApi: MessagesApi,
                                                  langs: Langs,
