@@ -6,14 +6,14 @@ import play.api.libs.json.{JsValue, Json, Writes}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class ComparisonAnswerResource(questionnaireId: Int, userId: Int, scores: Seq[PictureIdScore])
+case class QuestionnaireAnswerResource(questionnaireId: Int, userId: Int, scores: Seq[PictureIdScore])
 
-object ComparisonAnswerResource {
+object QuestionnaireAnswerResource {
 
-  implicit val implicitWrites: Writes[ComparisonAnswerResource] {
-    def writes(o: ComparisonAnswerResource): JsValue
-  } = new Writes[ComparisonAnswerResource] {
-    override def writes(o: ComparisonAnswerResource): JsValue = {
+  implicit val implicitWrites: Writes[QuestionnaireAnswerResource] {
+    def writes(o: QuestionnaireAnswerResource): JsValue
+  } = new Writes[QuestionnaireAnswerResource] {
+    override def writes(o: QuestionnaireAnswerResource): JsValue = {
       Json.obj(
         "questionnaireId" -> o.questionnaireId,
         "userId" -> o.userId,
@@ -23,7 +23,7 @@ object ComparisonAnswerResource {
   }
 }
 
-class ComparisonAnswerResourceHandler @Inject()(questionnaireAnswerRepository: QuestionnaireAnswerRepository)(implicit ec: ExecutionContext) {
+class QuestionnaireAnswerResourceHandler @Inject()(questionnaireAnswerRepository: QuestionnaireAnswerRepository)(implicit ec: ExecutionContext) {
 
   def create(questionnaireAnswer: QuestionnaireAnswerFormInput): Future[Unit.type] = {
     val scores = questionnaireAnswer.pictureIdScores.map { case PictureIdScoreFormInput(pid, s) =>

@@ -1,6 +1,6 @@
 package services.comparison
 
-import controllers.questionnaire.ComparisonController
+import controllers.questionnaire.QuestionnaireController
 import org.scalatestplus.play._
 import org.scalatestplus.play.guice._
 import play.api.libs.json.Json
@@ -13,12 +13,12 @@ import play.api.test._
   *
   * For more information, see https://www.playframework.com/documentation/latest/ScalaTestingWithScalaTest
   */
-class ComparisonControllerTest extends PlaySpec with GuiceOneAppPerTest with Injecting {
+class QuestionnaireControllerTest extends PlaySpec with GuiceOneAppPerTest with Injecting {
 
   "ComparisonController POST" should {
 
     "create and return the resource" in {
-      val controller = inject[ComparisonController]
+      val controller = inject[QuestionnaireController]
 
       val jsonQuestionnairePost = Json.parse(
         """{
@@ -44,7 +44,7 @@ class ComparisonControllerTest extends PlaySpec with GuiceOneAppPerTest with Inj
   "ComparisonController GET" should {
 
     "return the resource" in {
-      val controller = inject[ComparisonController]
+      val controller = inject[QuestionnaireController]
       val response = controller.getQuestionnaire(1).apply(FakeRequest(GET, "/"))
 
       status(response) mustBe OK

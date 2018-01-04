@@ -2,20 +2,14 @@ package controllers.questionnaireAnswer
 
 import com.google.inject.Inject
 import controllers.{ControllerComponentsDefault, ControllerDefault, RequestAugmented}
-import play.api.data.{Form, Mapping}
+import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
 
+class QuestionnaireAnswerController @Inject()(ccc: ControllerComponentsDefault, carh: QuestionnaireAnswerResourceHandler)(implicit ec: ExecutionContext) extends ControllerDefault(ccc) {
 
-
-
-
-
-
-class ComparisonAnswerController @Inject()(ccc: ControllerComponentsDefault, carh: ComparisonAnswerResourceHandler)(implicit ec: ExecutionContext) extends ControllerDefault(ccc) {
-
-  def addComparisonAnswer(): Action[AnyContent] = {
+  def addQuestionnaireAnswer(): Action[AnyContent] = {
 
     def failure(badForm: Form[QuestionnaireAnswerFormInput])(implicit request: RequestAugmented[AnyContent]): Future[Result] = {
       Future.successful(BadRequest(badForm.errorsAsJson))
