@@ -39,7 +39,7 @@ class ComparisonAnswerController @Inject()(ccc: ComparisonControllerComponents, 
 
   def addComparisonAnswer(): Action[AnyContent] = {
 
-    def failure(badForm: Form[QuestionnaireAnswerFormInput])(implicit request: ComparisonRequest[AnyContent]): Future[Result] = {
+    def failure(badForm: Form[QuestionnaireAnswerFormInput])(implicit request: RequestAugmented[AnyContent]): Future[Result] = {
       Future.successful(BadRequest(badForm.errorsAsJson))
     }
 
@@ -49,7 +49,7 @@ class ComparisonAnswerController @Inject()(ccc: ComparisonControllerComponents, 
       }
     }
 
-    ComparisonActionBuilder.async { implicit request: ComparisonRequest[AnyContent] =>
+    ComparisonActionBuilder.async { implicit request: RequestAugmented[AnyContent] =>
       QuestionnaireAnswerFormInput.questionnairAnswerFormInput.bindFromRequest().fold(failure, success)
     }
   }

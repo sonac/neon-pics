@@ -26,7 +26,7 @@ class ComparisonController @Inject()(ccc: ComparisonControllerComponents)(implic
 
   def getQuestionnaire(questionnaireId: Int): Action[AnyContent] = {
 
-    ComparisonActionBuilder.async { implicit request: ComparisonRequest[AnyContent] =>
+    ComparisonActionBuilder.async { implicit request: RequestAugmented[AnyContent] =>
       ccc.comparisonResourceHandler.get(questionnaireId).map { q =>
         Ok(Json.toJson(q))
       }
@@ -35,7 +35,7 @@ class ComparisonController @Inject()(ccc: ComparisonControllerComponents)(implic
 
   def addQuestionnaire(): Action[AnyContent] = {
 
-    def failure(badForm: Form[QuestionnaireFormInput])(implicit request: ComparisonRequest[AnyContent]) = {
+    def failure(badForm: Form[QuestionnaireFormInput])(implicit request: RequestAugmented[AnyContent]) = {
       Future.successful(BadRequest(badForm.errorsAsJson))
     }
 
@@ -45,14 +45,14 @@ class ComparisonController @Inject()(ccc: ComparisonControllerComponents)(implic
       }
     }
 
-    ComparisonActionBuilder.async { implicit request: ComparisonRequest[AnyContent] =>
+    ComparisonActionBuilder.async { implicit request: RequestAugmented[AnyContent] =>
       questionnaireFormInput.bindFromRequest().fold(failure, success)
     }
   }
 
 }
 
-case class ComparisonControllerComponents @Inject()(comparisonActionBuilder: ComparisonActionBuilder,
+case class ComparisonControllerComponents @Inject()(comparisonActionBuilder: ActionBuilderParser,
                                                     comparisonResourceHandler: ComparisonResourceHandler,
                                                     actionBuilder: DefaultActionBuilder,
                                                     parsers: PlayBodyParsers,
@@ -63,7 +63,7 @@ case class ComparisonControllerComponents @Inject()(comparisonActionBuilder: Com
   extends ControllerComponents
 
 class ComparisonBaseController @Inject()(ccc: ComparisonControllerComponents) extends BaseController {
-  def ComparisonActionBuilder: ComparisonActionBuilder = ccc.comparisonActionBuilder
+  def ComparisonActionBuilder: ActionBuilderParser = ccc.comparisonActionBuilder
 
   override protected def controllerComponents: ControllerComponents = ccc
 
