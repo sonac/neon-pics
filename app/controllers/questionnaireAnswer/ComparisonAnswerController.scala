@@ -1,9 +1,10 @@
-package services.comparison
+package controllers.questionnaireAnswer
 
 import com.google.inject.Inject
 import controllers.RequestAugmented
 import play.api.data.{Form, Mapping}
 import play.api.mvc.{Action, AnyContent, Result}
+import services.comparison.{ComparisonBaseController, ComparisonControllerComponents}
 
 import scala.concurrent.{ExecutionContext, Future}
 

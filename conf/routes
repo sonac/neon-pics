@@ -21,5 +21,5 @@ POST        /comparison                                 services.comparison.Comp
 GET         /comparison/:questionnaireId                services.comparison.ComparisonController.getQuestionnaire(questionnaireId: Int)
 
 # Ads an answer including all evaluated things
-POST        /comparison-answer/                         services.comparison.ComparisonAnswerController.addComparisonAnswer
+POST        /comparison-answer/                         controllers.questionnaireAnswer.ComparisonAnswerController.addComparisonAnswer
 
