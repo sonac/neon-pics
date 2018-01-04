@@ -7,34 +7,11 @@ import play.api.mvc.{Action, AnyContent, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class PictureIdScoreFormInput(pictureId: Int, score: BigDecimal)
 
-object PictureIdScoreFormInput {
-  val pictureIdScoreFormInput: Mapping[PictureIdScoreFormInput] = {
-    import play.api.data.Forms._
-    mapping(
-      "pictureId" -> number,
-      "score" -> bigDecimal
-    )(PictureIdScoreFormInput.apply)(PictureIdScoreFormInput.unapply)
-  }
-}
 
-case class QuestionnaireAnswerFormInput(questionnaireId: Int, userId: Int, pictureIdScores: Seq[PictureIdScoreFormInput])
 
-object QuestionnaireAnswerFormInput {
-  val questionnairAnswerFormInput: Form[QuestionnaireAnswerFormInput] = {
-    import play.api.data.Forms._
 
-    Form(
-      mapping(
-        "questionnaireId" -> number,
-        "userId" -> number,
-        "pictureIdScores" -> seq(PictureIdScoreFormInput.pictureIdScoreFormInput)
-      )
-      (QuestionnaireAnswerFormInput.apply)(QuestionnaireAnswerFormInput.unapply)
-    )
-  }
-}
+
 
 class ComparisonAnswerController @Inject()(ccc: ControllerComponentsDefault, carh: ComparisonAnswerResourceHandler)(implicit ec: ExecutionContext) extends ControllerDefault(ccc) {
 
@@ -51,7 +28,7 @@ class ComparisonAnswerController @Inject()(ccc: ControllerComponentsDefault, car
     }
 
     ccc.actionBuilder.async { implicit request: RequestAugmented[AnyContent] =>
-      QuestionnaireAnswerFormInput.questionnairAnswerFormInput.bindFromRequest().fold(failure, success)
+      QuestionnaireAnswerFormInput.form.bindFromRequest().fold(failure, success)
     }
   }
 }

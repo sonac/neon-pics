@@ -10,17 +10,6 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ComparisonController @Inject()(ccc: ControllerComponentsDefault, crh: ComparisonResourceHandler)(implicit ec: ExecutionContext) extends ControllerDefault(ccc) {
 
-  private val questionnaireFormInput: Form[QuestionnaireFormInput] = {
-    import play.api.data.Forms._
-
-    Form(
-      mapping(
-        "text" -> text,
-        "pictureIds" -> seq(number)
-      )(QuestionnaireFormInput.apply)(QuestionnaireFormInput.unapply)
-    )
-  }
-
   def getQuestionnaire(questionnaireId: Int): Action[AnyContent] = {
     ccc.actionBuilder.async { implicit request: RequestAugmented[AnyContent] =>
       crh.get(questionnaireId).map { q =>
@@ -42,7 +31,7 @@ class ComparisonController @Inject()(ccc: ControllerComponentsDefault, crh: Comp
     }
 
     ccc.actionBuilder.async { implicit request: RequestAugmented[AnyContent] =>
-      questionnaireFormInput.bindFromRequest().fold(failure, success)
+      QuestionnaireFormInput.form.bindFromRequest().fold(failure, success)
     }
   }
 
