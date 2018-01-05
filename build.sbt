@@ -26,6 +26,8 @@ packageName in Docker := "neon-pics/production"
 
 dockerUpdateLatest := true
 
+javaOptions in Test += "-Dconfig.file=conf/application.test.conf"
+
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "sonac.controllers._"
 

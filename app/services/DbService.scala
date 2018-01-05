@@ -14,7 +14,7 @@ trait DbService {
 
 @Singleton
 class DbServicePostgresProduction extends DbService {
-  val db: PostgresProfile.backend.Database = PostgresProfile.api.Database.forConfig("productionDb")
+  val db: PostgresProfile.backend.Database = PostgresProfile.api.Database.forConfig("db")
 }
 
 @Singleton
@@ -22,7 +22,7 @@ class DbServiceH2 extends DbService {
   val db = init()
 
   def init(): Database = {
-    val db: jdbc.H2Profile.backend.Database = H2Profile.api.Database.forConfig("testDb")
+    val db: jdbc.H2Profile.backend.Database = H2Profile.api.Database.forConfig("db")
 
     val sql: SQLActionBuilder =
       sql"""
