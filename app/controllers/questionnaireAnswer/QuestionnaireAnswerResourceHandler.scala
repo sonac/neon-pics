@@ -2,6 +2,7 @@ package controllers.questionnaireAnswer
 
 import com.google.inject.Inject
 import models._
+import models.daos.QuestionnaireAnswerRepository
 import play.api.libs.json.{JsValue, Json, Writes}
 
 import scala.concurrent.{ExecutionContext, Future}

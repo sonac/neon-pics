@@ -1,5 +1,6 @@
 package services.comparison
 
+import models.daos.QuestionnaireRepository
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.test.Injecting
@@ -7,7 +8,6 @@ import play.api.test.Injecting
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
-import models._
 
 class QuestionnaireRepositoryTest extends PlaySpec with GuiceOneAppPerTest with Injecting {
   "addQuestionnaire" should {
