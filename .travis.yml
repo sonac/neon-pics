@@ -6,6 +6,9 @@ scala:
 - 2.12.3
 jdk:
 - oraclejdk8
+before_cache:
+- find $HOME/.ivy2 -name "ivydata-*.properties" -delete
+- find $HOME/.sbt -name "*.lock" -delete
 cache:
   directories:
   - "$HOME/.ivy2"
@@ -28,11 +31,16 @@ install:
 #- gcloud -q components update gae-python
 #- pip install -r requirements.txt -t lib/
 script:
-#- sbt test
+- sbt test
 - sbt docker:publishLocal
-- gcloud docker -- push eu.gcr.io/neon-pics/production:latest
-before_cache:
-- find $HOME/.ivy2 -name "ivydata-*.properties" -delete
-- find $HOME/.sbt -name "*.lock" -delete
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    gcloud docker -- push eu.gcr.io/neon-pics/production:latest;
+    docker push USER/REPO;
+    fi
+  - if [ "$TRAVIS_BRANCH" == "develop" ]; then
+    gcloud docker -- push eu.gcr.io/neon-pics/stage:latest;
+    docker push USER/REPO;
+    fi
 notifications:
   webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
