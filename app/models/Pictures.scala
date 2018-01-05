@@ -3,7 +3,7 @@ package models
 import com.google.inject.{Inject, Singleton}
 import slick.jdbc.PostgresProfile.api._
 import play.api.libs.json._
-import services.PostgresService
+import services.DbService
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -24,7 +24,7 @@ class PictureTable(tag: Tag) extends Table[Picture](tag, "pictures") {
 }
 
 @Singleton
-class Pictures @Inject()(dbWrapper: PostgresService){
+class Pictures @Inject()(dbWrapper: DbService){
 
   def fromPicture(p: Picture): Picture = Picture(p.id, p.picUrl)
 
