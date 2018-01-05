@@ -1,5 +1,17 @@
 import { Action } from 'redux';
-import { UntypedActionCreator, ActionCreator, ReducerDescriptor, BasicReducer } from 'state/types';
+import {
+  ReducerDescriptor,
+  BasicReducer,
+  UntypedActionCreator0,
+  UntypedActionCreator1,
+  UntypedActionCreator2,
+  UntypedActionCreator3,
+  TypedFunc,
+  ActionCreator0,
+  ActionCreator1,
+  ActionCreator2,
+  ActionCreator3
+} from 'state/types';
 
 export function createReducerFromDescriptor(descriptor: ReducerDescriptor, initState: object): BasicReducer {
   return (state: object = initState, action: Action): object => {
@@ -8,10 +20,23 @@ export function createReducerFromDescriptor(descriptor: ReducerDescriptor, initS
   }
 }
 
-export function createActionCreator<T extends object>(type: string, creator?: UntypedActionCreator<T>): ActionCreator<T> {
-  const typedCreator = <ActionCreator<T>>function(...args: any[]): T & Action {
-    return <T & Action>{ ...(creator ? creator(...args) : {}), type };
-  };
+export function createActionCreator<R extends object>(
+  type: string, creator?: UntypedActionCreator0<R>
+): ActionCreator0<R>
+export function createActionCreator<T1, R extends object>(
+  type: string, creator?: UntypedActionCreator1<T1, R>
+): ActionCreator1<T1, R>
+export function createActionCreator<T1, T2, R extends object>(
+  type: string, creator?: UntypedActionCreator2<T1, T2, R>
+): ActionCreator2<T1, T2, R>
+export function createActionCreator<T1, T2, T3, R extends object>(
+  type: string, creator?: UntypedActionCreator3<T1, T2, T3, R>
+): ActionCreator3<T1, T2, T3, R>
+
+export function createActionCreator(type, creator) {
+  const typedCreator = function(): Action {
+    return { ...(creator ? creator(...arguments) : {}), type };
+  } as TypedFunc;
 
   typedCreator.type = type;
 
