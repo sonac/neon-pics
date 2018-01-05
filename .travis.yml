@@ -30,7 +30,15 @@ install:
 script:
 - sbt test
 - sbt docker:publishLocal
-- gcloud docker -- push eu.gcr.io/neon-pics/production:latest
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    gcloud docker -- push eu.gcr.io/neon-pics/production:latest;
+    docker push USER/REPO;
+    fi
+  - if [ "$TRAVIS_BRANCH" == "develop" ]; then
+    gcloud docker -- push eu.gcr.io/neon-pics/stage:latest;
+    docker push USER/REPO;
+    fi
 before_cache:
 - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
 - find $HOME/.sbt -name "*.lock" -delete
