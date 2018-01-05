@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { values } from 'ramda';
 import { fetchComparison, pictureClick } from 'state/comparison/actions';
 import { PicturesMap, State as ComparisonState } from 'state/comparison/types';
+import { IdActionCreator } from 'state/types';
 
 import NavButtons from 'components/NavButtons';
 
@@ -18,8 +19,8 @@ interface Data {
 }
 
 interface Actions {
-  fetchComparison: Function;
-  pictureClick: Function;
+  fetchComparison: IdActionCreator;
+  pictureClick: IdActionCreator;
 }
 
 interface Props {

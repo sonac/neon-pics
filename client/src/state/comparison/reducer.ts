@@ -1,4 +1,5 @@
 import { inc, evolve } from 'ramda';
+import { Action } from 'redux';
 import { createReducerFromDescriptor } from 'state/utils';
 import {
   fetchComparison,
@@ -9,14 +10,8 @@ import {
   nextTwo
 } from './actions'
 import { pairwise } from 'utils/common';
-import {
-  State,
-  FetchComparisonSuccessAction,
-  ErrorAction,
-  IdAction,
-  NextTwoAction,
-  PostComparisonAction
-} from './types';
+import { State, FetchComparisonSuccessAction } from './types';
+import { ErrorAction, IdAction } from 'state/types';
 
 const initState = {
   isLoading: true,
@@ -51,10 +46,10 @@ export default createReducerFromDescriptor({
     ...state,
     currentVote: action.id
   }),
-  [nextTwo.type]: (state: State, action: NextTwoAction): State => evolve({
+  [nextTwo.type]: (state: State, action: Action): State => evolve({
     currentPicPairIndex: inc,
     currentVote: _ => null,
     pics: {[state.currentVote]: {rating: inc}}
   }, state),
-  [postComparison.type]: (state: State, action: PostComparisonAction): State => ({ ...state})
+  [postComparison.type]: (state: State, action: Action): State => ({ ...state})
 }, initState);

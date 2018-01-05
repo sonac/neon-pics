@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { values } from 'ramda';
 import { postComparison, nextTwo } from 'state/comparison/actions';
 import { State as ComparisonState } from 'state/comparison/types';
+import { BasicActionCreator } from 'state/types';
 
 const styles = require('./styles.css');
 
@@ -14,8 +15,8 @@ interface Data {
 }
 
 interface Actions {
-  postComparison: Function;
-  nextTwo: Function;
+  postComparison: BasicActionCreator;
+  nextTwo: BasicActionCreator;
 }
 
 interface Props {

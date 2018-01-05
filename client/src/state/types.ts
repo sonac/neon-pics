@@ -16,8 +16,22 @@ export type ActionCreator1<T1, R> = Typed & UntypedActionCreator1<T1, R & Action
 export type ActionCreator2<T1, T2, R> = Typed & UntypedActionCreator2<T1, T2, R & Action>;
 export type ActionCreator3<T1, T2, T3, R> = Typed & UntypedActionCreator3<T1, T2, T3, R & Action>;
 
+export type BasicActionCreator = ActionCreator0<Action>;
+
+export type IdData = {
+  id: number;
+}
+export type IdAction = IdData & Action;
+export type IdActionCreator = ActionCreator1<number, IdAction>;
+
 export type BasicReducer = Reducer<object>;
 
 export interface ReducerDescriptor extends ReducersMapObject {
   [key: string]: BasicReducer;
 }
+
+export type ErrorData = {
+  error: string | Error;
+}
+export type ErrorAction = ErrorData & Action;
+export type ErrorActionCreator = ActionCreator1<string | Error, ErrorAction>;

@@ -1,5 +1,6 @@
 import * as utils from 'state/utils';
-import { FetchComparisonSuccessData, IdData, ErrorData } from './types';
+import { FetchComparisonSuccessData } from './types';
+import { IdData, ErrorData } from 'state/types';
 
 export const fetchComparison = utils.createActionCreator('FETCH_COMPARISON', id => ({
   id

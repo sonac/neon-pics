@@ -1,4 +1,5 @@
 import { Action } from 'redux';
+import { ActionCreator1 } from 'state/types';
 
 export interface Picture {
   id: number;
@@ -19,27 +20,10 @@ export interface State {
   combs: [number, number][];
 }
 
-export type FetchComparisonAction = {};
-
-export interface FetchComparisonSuccessData {
+export type FetchComparisonSuccessData = {
   question: string;
   questionId: number;
   pictures: { id: number, url: string }[];
 }
-
-export interface FetchComparisonSuccessAction extends FetchComparisonSuccessData, Action {}
-
-export interface ErrorData {
-  error: string | Error;
-}
-
-export interface ErrorAction extends ErrorData, Action {}
-
-export interface IdData {
-  id: number;
-}
-
-export interface IdAction extends IdData, Action {}
-
-export type NextTwoAction = Action
-export type PostComparisonAction = Action
+export type FetchComparisonSuccessAction = FetchComparisonSuccessData & Action;
+export type FetchComparisonSuccessCreator = ActionCreator1<FetchComparisonSuccessData, FetchComparisonSuccessAction>;
