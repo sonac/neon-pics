@@ -1,6 +1,7 @@
 package models
 
 import com.google.inject.{Inject, Singleton}
+import models.daos._
 import play.api.libs.json.{JsValue, Json, Writes}
 import services.DbService
 import slick.jdbc.PostgresProfile.api._

@@ -1,7 +1,8 @@
 package controllers.questionnaire
 
 import com.google.inject.Inject
-import models.{Picture, _}
+import models._
+import models.daos.Picture
 import play.api.libs.json.{JsValue, Json, Writes}
 
 import scala.concurrent.{ExecutionContext, Future}

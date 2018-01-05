@@ -1,4 +1,4 @@
-package models
+package models.daos
 
 import play.api.libs.json.{Json, OWrites, Reads}
 import slick.jdbc.PostgresProfile.api._

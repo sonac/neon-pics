@@ -1,6 +1,7 @@
 package models
 
 import com.google.inject.{Inject, Singleton}
+import models.daos.{Picture, PictureTable}
 import services.DbService
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.TableQuery
