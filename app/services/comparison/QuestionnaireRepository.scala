@@ -3,7 +3,7 @@ package services.comparison
 import com.google.inject.{Inject, Singleton}
 import models._
 import play.api.libs.json.{JsValue, Json, Writes}
-import services.PostgresService
+import services.DbService
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.QueryBase
 
@@ -45,7 +45,7 @@ trait QuestionnaireAnswerRepository {
 }
 
 @Singleton
-class QuestionnaireRepositoryImpl @Inject()(dbWrapper: PostgresService, picturesRepository: Pictures) extends QuestionnaireRepository with QuestionnaireAnswerRepository {
+class QuestionnaireRepositoryImpl @Inject()(dbWrapper: DbService, picturesRepository: Pictures) extends QuestionnaireRepository with QuestionnaireAnswerRepository {
 
   import dbWrapper.db
 

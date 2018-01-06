@@ -17,7 +17,14 @@ libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "com.typesafe.play" %% "play-slick" % "3.0.0",
   "org.postgresql" % "postgresql" % "9.4-1206-jdbc41",
+  "com.h2database" % "h2" % "1.4.196" % Test,
   "net.codingwell" %% "scala-guice" % "4.1.1")
+
+dockerRepository := Some("eu.gcr.io")
+
+packageName in Docker := "neon-pics/production"
+
+dockerUpdateLatest := true
 
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "sonac.controllers._"

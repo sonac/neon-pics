@@ -1,0 +1,20 @@
+---
+  apiVersion: apps/v1beta1
+  kind: Deployment
+  metadata:
+    name: neon-pics-deployment
+  spec:
+    selector:
+      matchLabels:
+        app: neon-pics
+    replicas: 1
+    template: 
+      metadata: 
+        labels: 
+          app: neon-pics
+      spec: 
+        containers: 
+          - name: questionnaire
+            image: eu.gcr.io/neon-pics/production:latest
+            ports: 
+              - containerPort: 9000
