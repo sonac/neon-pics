@@ -1,6 +1,5 @@
-package controllers.questionnaire
+package controllers.questionnaireAnswer
 
-import controllers.questionnaireAnswer.QuestionnaireAnswerController
 import org.scalatestplus.play._
 import org.scalatestplus.play.guice._
 import play.api.libs.json.Json
