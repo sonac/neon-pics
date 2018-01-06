@@ -53,4 +53,8 @@ trait DBTableDefinitions{
   val insertQuestionnaireTable: driver.IntoInsertActionComposer[Questionnaire, Questionnaire] = questionnaireTable returning questionnaireTable.map(_.id) into ((q, id) => q.copy(id = id))
 
   val schema: driver.DDL = pictureTable.schema ++ questionnaireTable.schema ++ questionnairePictureTable.schema ++ questionnaireScoreTable.schema
+
+  val questionnairePictures = questionnairePictureTable
+    .join(pictureTable)
+    .on(_.picId === _.id)
 }
