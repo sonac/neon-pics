@@ -46,11 +46,11 @@ trait DBTableDefinitions{
     def score = column[Double]("score")
   }
 
-  val pictures = TableQuery[PictureTable]
-  val questionnaireTable = TableQuery[QuestionnaireTable]
-  val questionnairePictureTable = TableQuery[QuestionnairePictureTable]
-  val questionnaireScoreTable = TableQuery[QuestionnaireScoreTable]
+  val pictureTable: TableQuery[PictureTable] = TableQuery[PictureTable]
+  val questionnaireTable: TableQuery[QuestionnaireTable] = TableQuery[QuestionnaireTable]
+  val questionnairePictureTable: TableQuery[QuestionnairePictureTable] = TableQuery[QuestionnairePictureTable]
+  val questionnaireScoreTable: TableQuery[QuestionnaireScoreTable] = TableQuery[QuestionnaireScoreTable]
   val insertQuestionnaireTable: driver.IntoInsertActionComposer[Questionnaire, Questionnaire] = questionnaireTable returning questionnaireTable.map(_.id) into ((q, id) => q.copy(id = id))
 
-  val schema: driver.DDL = pictures.schema ++ questionnaireTable.schema ++ questionnairePictureTable.schema ++ questionnaireScoreTable.schema
+  val schema: driver.DDL = pictureTable.schema ++ questionnaireTable.schema ++ questionnairePictureTable.schema ++ questionnaireScoreTable.schema
 }

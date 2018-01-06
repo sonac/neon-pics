@@ -40,7 +40,7 @@ class QuestionnaireRepositoryImpl @Inject()(protected val dbConfigProvider: Data
 
   def getAllQuestionnaires: Future[Seq[QuestionnaireWithPictures]] = {
     val pics = questionnairePictureTable
-      .join(pictures)
+      .join(pictureTable)
       .on(_.picId === _.id)
     val q: QueryBase[Seq[(QuestionnaireTable#TableElementType, Option[(QuestionnairePicture, Picture)])]] =
       questionnaireTable
@@ -88,7 +88,7 @@ class QuestionnaireRepositoryImpl @Inject()(protected val dbConfigProvider: Data
 
     val pics: Query[(QuestionnairePictureTable, PictureTable), (QuestionnairePicture, Picture), Seq] = questionnairePictureTable
       .filter(_.questId === questId)
-      .join(pictures)
+      .join(pictureTable)
       .on(_.picId === _.id)
     val q: QueryBase[Seq[(Questionnaire, Option[(QuestionnairePicture, Picture)])]] =
       questionnaireTable
