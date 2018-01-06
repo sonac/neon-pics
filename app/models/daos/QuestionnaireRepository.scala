@@ -12,7 +12,7 @@ trait QuestionnaireRepository {
 
   def getQuestionnaireById(questId: Int): Future[Option[QuestionnaireWithPictures]]
 
-  def getAllQuestionnaires: Future[Seq[QuestionnaireWithPictures]]
+  def getQuestionnaireAll: Future[Seq[QuestionnaireWithPictures]]
 }
 
 trait QuestionnaireAnswerRepository {
@@ -54,7 +54,7 @@ class QuestionnaireRepositoryImpl @Inject()(protected val dbConfigProvider: Data
     } yield ans.headOption
   }
 
-  def getAllQuestionnaires: Future[Seq[QuestionnaireWithPictures]] = {
+  def getQuestionnaireAll: Future[Seq[QuestionnaireWithPictures]] = {
     val q =
       questionnaireTable
         .joinLeft(questionnairePictures)
@@ -96,5 +96,5 @@ class QuestionnaireRepositoryImpl @Inject()(protected val dbConfigProvider: Data
     }
 
   }
-  
+
 }
