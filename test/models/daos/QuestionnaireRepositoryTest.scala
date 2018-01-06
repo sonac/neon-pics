@@ -1,6 +1,5 @@
-package services.comparison
+package models.daos
 
-import models.daos.QuestionnaireRepository
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.test.Injecting

@@ -1,6 +1,5 @@
-package services.comparison
+package controllers.questionnaire
 
-import controllers.questionnaire.QuestionnaireController
 import org.scalatestplus.play._
 import org.scalatestplus.play.guice._
 import play.api.libs.json.Json

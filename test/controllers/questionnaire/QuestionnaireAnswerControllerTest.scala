@@ -1,4 +1,4 @@
-package services.comparison
+package controllers.questionnaire
 
 import controllers.questionnaireAnswer.QuestionnaireAnswerController
 import org.scalatestplus.play._

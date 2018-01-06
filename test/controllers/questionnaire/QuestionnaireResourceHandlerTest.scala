@@ -1,6 +1,5 @@
-package services.comparison
+package controllers.questionnaire
 
-import controllers.questionnaire.QuestionnaireResourceHandler
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.test.Injecting
