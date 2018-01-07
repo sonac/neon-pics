@@ -1,25 +1,32 @@
 import React, { Component } from 'react';
 import { Button } from 'react-foundation-components/lib/button';
-import styles from './styles.css'
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { values } from 'ramda';
 import { postComparison, nextTwo } from 'state/comparison/actions';
+import { State as ComparisonState } from 'state/comparison/types';
+import { BasicActionCreator } from 'state/types';
 
-class NavButtons extends Component {
+const styles = require('./styles.css');
 
-  static propTypes = {
-    data: PropTypes.shape({
-      currentPicPairIndex: PropTypes.int,
-      limit: PropTypes.int,
-      currentVote: PropTypes.int
-    }),
-    actions: PropTypes.shape({
-      postComparison: PropTypes.func,
-      nextTwo: PropTypes.func
-    }),
-  };
+interface Data {
+  currentPicPairIndex: number;
+  limit: number;
+  currentVote: number;
+}
 
+interface Actions {
+  postComparison: BasicActionCreator;
+  nextTwo: BasicActionCreator;
+}
+
+interface Props {
+  data: Data;
+  actions: Actions;
+}
+
+type State = {}
+
+class NavButtons extends Component<Props, State> {
   sendClicked = () => {
     this.props.actions.postComparison();
   }
@@ -48,18 +55,18 @@ class NavButtons extends Component {
 
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
   currentPicPairIndex: state.comparison.currentPicPairIndex,
   limit: state.comparison.combs.length,
   currentVote: state.comparison.currentVote
 });
 
-const mapDispatchToProps = {
+const mapDispatchToProps: Actions = {
   postComparison,
   nextTwo
 };
 
-const mergeProps = (data, actions) => ({
+const mergeProps = (data: Data, actions: Actions): Props => ({
   data,
   actions
 });

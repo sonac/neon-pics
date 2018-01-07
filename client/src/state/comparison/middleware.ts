@@ -1,18 +1,27 @@
 import { fetchComparison, fetchComparisonSuccess, fetchComparisonError, pictureClick, postComparison } from './actions';
 import { values } from 'ramda';
-import { pairwise } from 'utils/common';
+
+interface FetchPicture {
+  id: number;
+  picUrl: string
+}
+
+interface FetchComparisonResponse {
+  id: number;
+  text: string;
+  pictures: FetchPicture[]
+}
 
 export default ({ getState, dispatch }) => next => action => {
   if (action.type === fetchComparison.type) {
     fetch(`comparison/${action.id}`)
       .then(response => response.json())
-      .then(data =>
+      .then((data: FetchComparisonResponse): void =>
         // here we just change the field names received from backend, ratings logic should be added in reducer
         dispatch(fetchComparisonSuccess({
           question: data.text,
           questionId: data.id,
-          pictures: data.pictures.map(pic => ({id: pic.id, url: pic.picUrl})),
-          combs: pairwise(data.pictures.map(pic => pic.id))
+          pictures: data.pictures.map(pic => ({id: pic.id, url: pic.picUrl}))
         }))
       )
       .catch(error => {
@@ -21,7 +30,7 @@ export default ({ getState, dispatch }) => next => action => {
       })
   }
 
-  else if (action.type == postComparison.type) {
+  if (action.type == postComparison.type) {
     const state = getState();
     const pics = values(state.comparison.pics);
     const questionId = state.comparison.questionId;
