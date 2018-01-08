@@ -47,7 +47,6 @@ class NavButtons extends Component<Props, State> {
   render() {
     return (
       <div className={styles.navButtons}>
-        <Button color="secondary" size="large" hollow onClick={this.handleClick}>Next pair</Button>
         <Button color="secondary" size="large" hollow onClick={this.sendClicked}>Send results</Button>
       </div>
     )

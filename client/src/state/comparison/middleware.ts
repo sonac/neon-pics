@@ -16,13 +16,21 @@ export default ({ getState, dispatch }) => next => action => {
   if (action.type === fetchComparison.type) {
     fetch(`comparison/${action.id}`)
       .then(response => response.json())
-      .then((data: FetchComparisonResponse): void =>
+      .then((data: FetchComparisonResponse): void => {
+      const pics = data.pictures.map(pic => ({id: pic.id, url: pic.picUrl}))
         // here we just change the field names received from backend, ratings logic should be added in reducer
         dispatch(fetchComparisonSuccess({
           question: data.text,
           questionId: data.id,
-          pictures: data.pictures.map(pic => ({id: pic.id, url: pic.picUrl}))
-        }))
+          pictures: pics,
+          initSortState: {
+            sortedPart: [pics.map(p => String(p.id))[0]],
+            curElPos: 1,
+            start: 0,
+            end: 0,
+            picsToCompare: [pics.map(p => String(p.id))[0], pics.map(p => String(p.id))[1]]
+          }
+        }))}
       )
       .catch(error => {
         console.error(error);

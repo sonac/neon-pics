@@ -27878,7 +27878,17 @@ var PicsPair = function (_Component) {
 
         _this.picClick = function (id) {
             return function () {
-                _this.props.actions.pictureClick(id);
+                // TODO: combine pictureClick and nextTwo into one action
+                var _this$props$data = _this.props.data,
+                    sortState = _this$props$data.sortState,
+                    pics = _this$props$data.pics;
+
+                if (sortState.sortedPart.length == Object.keys(pics).length) {
+                    console.log("done");
+                } else {
+                    _this.props.actions.pictureClick(id);
+                    _this.props.actions.nextTwo();
+                }
             };
         };
         return _this;
@@ -27899,7 +27909,8 @@ var PicsPair = function (_Component) {
                 question = _props$data.question,
                 currentPicPairIndex = _props$data.currentPicPairIndex,
                 combs = _props$data.combs,
-                currentVote = _props$data.currentVote;
+                currentVote = _props$data.currentVote,
+                sortState = _props$data.sortState;
 
             if (isLoading) {
                 return _react2.default.createElement(
@@ -27911,9 +27922,18 @@ var PicsPair = function (_Component) {
                         'Loading...'
                     )
                 );
+            } else if (sortState.sortedPart.length == Object.keys(pics).length) {
+                return _react2.default.createElement(
+                    'div',
+                    { className: styles.picsPair },
+                    _react2.default.createElement('img', { src: 'https://c1.staticflickr.com/7/6095/6385016345_f19d5414a7_b.jpg' })
+                );
             }
-            var pic1 = pics[combs[currentPicPairIndex][0]];
-            var pic2 = pics[combs[currentPicPairIndex][1]];
+            //console.log(limit);
+            console.log(currentPicPairIndex);
+            console.log("index pics " + sortState.picsToCompare);
+            var pic1 = pics[sortState.picsToCompare[0]];
+            var pic2 = pics[sortState.picsToCompare[1]];
             /*let leftBorder = "0",
                 rightBorder = "0";
                  if (!isLoading) {
@@ -27972,12 +27992,15 @@ var mapStateToProps = function mapStateToProps(state) {
         question: state.comparison.question,
         currentPicPairIndex: state.comparison.currentPicPairIndex,
         combs: state.comparison.combs,
-        currentVote: state.comparison.currentVote
+        currentVote: state.comparison.currentVote,
+        limit: state.comparison.combs.length,
+        sortState: state.comparison.sortState
     };
 };
 var mapDispatchToProps = {
     fetchComparison: _actions.fetchComparison,
-    pictureClick: _actions.pictureClick
+    pictureClick: _actions.pictureClick,
+    nextTwo: _actions.nextTwo
 };
 var mergeProps = function mergeProps(data, actions) {
     return {
@@ -28054,11 +28077,6 @@ var NavButtons = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 { className: styles.navButtons },
-                _react2.default.createElement(
-                    _button.Button,
-                    { color: 'secondary', size: 'large', hollow: true, onClick: this.handleClick },
-                    'Next pair'
-                ),
                 _react2.default.createElement(
                     _button.Button,
                     { color: 'secondary', size: 'large', hollow: true, onClick: this.sendClicked },
@@ -30698,16 +30716,28 @@ exports.default = function (_ref) {
                 fetch('comparison/' + action.id).then(function (response) {
                     return response.json();
                 }).then(function (data) {
-                    return (
-                        // here we just change the field names received from backend, ratings logic should be added in reducer
-                        dispatch((0, _actions.fetchComparisonSuccess)({
-                            question: data.text,
-                            questionId: data.id,
-                            pictures: data.pictures.map(function (pic) {
-                                return { id: pic.id, url: pic.picUrl };
-                            })
-                        }))
-                    );
+                    var pics = data.pictures.map(function (pic) {
+                        return { id: pic.id, url: pic.picUrl };
+                    });
+                    // here we just change the field names received from backend, ratings logic should be added in reducer
+                    dispatch((0, _actions.fetchComparisonSuccess)({
+                        question: data.text,
+                        questionId: data.id,
+                        pictures: pics,
+                        initSortState: {
+                            sortedPart: [pics.map(function (p) {
+                                return String(p.id);
+                            })[0]],
+                            curElPos: 1,
+                            start: 0,
+                            end: 0,
+                            picsToCompare: [pics.map(function (p) {
+                                return String(p.id);
+                            })[0], pics.map(function (p) {
+                                return String(p.id);
+                            })[1]]
+                        }
+                    }));
                 }).catch(function (error) {
                     console.error(error);
                     dispatch((0, _actions.fetchComparisonError)(error));
@@ -38712,6 +38742,8 @@ var _actions = __webpack_require__(43);
 
 var _common = __webpack_require__(520);
 
+var _sorting = __webpack_require__(523);
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var initState = {
@@ -38722,7 +38754,10 @@ var initState = {
     questionId: null,
     currentVote: null,
     currentPicPairIndex: 0,
-    combs: []
+    combs: [],
+    picsToCompare: [],
+    sortState: {},
+    mid: 0
 };
 exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes = {}, _defineProperty(_createReducerFromDes, _actions.fetchComparison.type, function (state) {
     return Object.assign({}, state, { isLoading: true });
@@ -38733,9 +38768,9 @@ exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes
             return Object.assign({}, acc, _defineProperty({}, pic.id, Object.assign({}, pic, { rating: 0 })));
         }, {}), combs: (0, _common.pairwise)(action.pictures.map(function (pic) {
             return pic.id;
-        })) });
+        })), picsToCompare: state.combs[state.currentPicPairIndex], sortState: action.initSortState });
 }), _defineProperty(_createReducerFromDes, _actions.pictureClick.type, function (state, action) {
-    return Object.assign({}, state, { currentVote: action.id });
+    return Object.assign({}, state, { sortState: (0, _sorting.sort)(action.id, Object.keys(state.pics), state.sortState) });
 }), _defineProperty(_createReducerFromDes, _actions.nextTwo.type, function (state, action) {
     return (0, _ramda.evolve)({
         currentPicPairIndex: _ramda.inc,
@@ -38829,6 +38864,65 @@ exports.push([module.i, "html, body {\n    height: 100%;\n}\n\nbody {\n    font-
 
 // exports
 
+
+/***/ }),
+/* 523 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.sort = sort;
+function sort(choice, pics, sortState) {
+    var sortedPart = sortState.sortedPart,
+        curElPos = sortState.curElPos,
+        start = sortState.start,
+        end = sortState.end,
+        picsToCompare = sortState.picsToCompare;
+
+    var val = pics[curElPos];
+    if (start == end) {
+        curElPos += 1;
+        start = 0;
+        end += 1;
+        picsToCompare = [sortedPart[Math.trunc(end / 2)], pics[curElPos]];
+        if (val == String(choice)) {
+            sortedPart = sortedPart.slice(0, start).concat([val]).concat(sortedPart.slice(start));
+        } else {
+            sortedPart = sortedPart.concat([val]);
+        }
+    } else {
+        if (val == String(choice) && start == 0) {
+            curElPos += 1;
+            end += 1;
+            sortedPart = [val].concat(sortedPart);
+            picsToCompare = [sortedPart[0], pics[curElPos]];
+        } else if (start == 0) {
+            start = Math.round(end / 2);
+            picsToCompare = [sortedPart[start], pics[curElPos]];
+        } else if (val == String(choice)) {
+            start = Math.round(start / 2);
+            picsToCompare = [sortedPart[start], pics[curElPos]];
+        } else {
+            start = Math.round((start + end) / 2);
+            picsToCompare = [sortedPart[start], pics[curElPos]];
+        }
+    }
+    var newSortState = {
+        sortedPart: sortedPart,
+        curElPos: curElPos,
+        start: start,
+        end: end,
+        picsToCompare: picsToCompare
+    };
+    if (sortedPart.length == pics.length) {
+        alert("Done, please stop clicking");
+    }
+    return newSortState;
+}
 
 /***/ })
 /******/ ]);
