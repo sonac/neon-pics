@@ -30726,12 +30726,13 @@ exports.default = function (_ref) {
                                 return String(p.id);
                             })[0]],
                             curElPos: 1,
-                            curSortElPos: 0,
                             picsToCompare: [pics.map(function (p) {
                                 return String(p.id);
                             })[0], pics.map(function (p) {
                                 return String(p.id);
-                            })[1]]
+                            })[1]],
+                            start: 0,
+                            end: 0
                         }
                     }));
                 }).catch(function (error) {
@@ -38875,33 +38876,37 @@ exports.sort = sort;
 function sort(choice, pics, sortState) {
     var sortedPart = sortState.sortedPart,
         curElPos = sortState.curElPos,
-        curSortElPos = sortState.curSortElPos,
-        picsToCompare = sortState.picsToCompare;
+        picsToCompare = sortState.picsToCompare,
+        start = sortState.start,
+        end = sortState.end;
 
     var val = pics[curElPos];
-    var len = sortedPart.length - 1;
-    if (curSortElPos == len || curSortElPos == 0) {
+    var curSortElPos = Math.round((start + end) / 2);
+    if (end - start <= 1) {
         if (val != String(choice)) {
             curSortElPos += 1;
         }
         sortedPart = sortedPart.slice(0, curSortElPos).concat([val]).concat(sortedPart.slice(curSortElPos));
         curElPos += 1;
-        curSortElPos = Math.trunc(len / 2);
+        start = 0;
+        end = sortedPart.length - 1;
     } else {
         if (val == String(choice)) {
-            curSortElPos = Math.trunc(curSortElPos / 2);
+            end = Math.round(end / 2);
+            curSortElPos = Math.round((start + end) / 2);
         } else {
-            curSortElPos = Math.trunc((len + curSortElPos) / 2);
+            start = Math.round((start + end) / 2);
+            curSortElPos = Math.round((end + start) / 2);
         }
     }
     picsToCompare = [sortedPart[curSortElPos], pics[curElPos]];
     var newSortState = {
         sortedPart: sortedPart,
         curElPos: curElPos,
-        curSortElPos: curSortElPos,
-        picsToCompare: picsToCompare
+        picsToCompare: picsToCompare,
+        start: start,
+        end: end
     };
-    console.log(newSortState);
     if (sortedPart.length == pics.length) {
         alert("Done, please stop clicking");
     }

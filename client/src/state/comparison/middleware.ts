@@ -26,8 +26,9 @@ export default ({ getState, dispatch }) => next => action => {
           initSortState: {
             sortedPart: [pics.map(p => String(p.id))[0]],
             curElPos: 1,
-            curSortElPos: 0,
-            picsToCompare: [pics.map(p => String(p.id))[0], pics.map(p => String(p.id))[1]]
+            picsToCompare: [pics.map(p => String(p.id))[0], pics.map(p => String(p.id))[1]],
+            start: 0,
+            end: 0
           }
         }))}
       )

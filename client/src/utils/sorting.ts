@@ -4,34 +4,37 @@ export function sort (choice: number,
                       pics: Array<string>, 
                       sortState: SortState): SortState {
 
-  let {sortedPart, curElPos, curSortElPos, picsToCompare} = sortState;
+  let {sortedPart, curElPos, picsToCompare, start, end} = sortState;
   const val = pics[curElPos];
-  const len = sortedPart.length - 1;
+  let curSortElPos = Math.round((start + end) / 2);
 
-  if (curSortElPos == len || curSortElPos == 0) { //criterias for moving to next unsorted element
+  if ((end - start) <= 1) { //criterias for moving to next unsorted element
     if (val != String(choice)) {
       curSortElPos += 1;
     }
     sortedPart = sortedPart.slice(0, curSortElPos).concat([val]).concat(sortedPart.slice(curSortElPos));
     curElPos += 1;
-    curSortElPos = Math.trunc((len)/2)
+    start = 0
+    end = sortedPart.length - 1;
   }
   else { //iterate through sorted part to find a place in the world
     if (val == String(choice)) {
-      curSortElPos = Math.trunc(curSortElPos / 2)
+      end = Math.round(end / 2)
+      curSortElPos = Math.round((start + end) / 2)
     }
     else {
-      curSortElPos = Math.trunc((len + curSortElPos) / 2)
+      start = Math.round((start + end) / 2)
+      curSortElPos = Math.round((end + start) / 2)
     }
   }
   picsToCompare = [sortedPart[curSortElPos], pics[curElPos]];
   const newSortState: SortState = {
     sortedPart,
     curElPos,
-    curSortElPos,
-    picsToCompare
+    picsToCompare,
+    start,
+    end
   }
-  console.log(newSortState);
   if (sortedPart.length == pics.length) {
     alert("Done, please stop clicking");
   }
