@@ -3,49 +3,39 @@ import { State, SortState, PicturesMap } from 'state/comparison/types';
 export function sort (choice: number, 
                       pics: Array<string>, 
                       sortState: SortState): SortState {
-  let {sortedPart, curElPos, start, end, picsToCompare} = sortState;
+
+  let {sortedPart, curElPos, curSortElPos, picsToCompare} = sortState;
   const val = pics[curElPos];
-  if (start == end) {
+  const len = sortedPart.length - 1;
+
+  if (curSortElPos == len || curSortElPos == 0) { //criterias for moving to next unsorted element
+    if (val != String(choice)) {
+      curSortElPos += 1;
+    }
+    sortedPart = sortedPart.slice(0, curSortElPos).concat([val]).concat(sortedPart.slice(curSortElPos));
     curElPos += 1;
-    start = 0;
-    end += 1;
-    picsToCompare = [sortedPart[Math.trunc(end/2)], pics[curElPos]]
+    curSortElPos = Math.trunc((len)/2)
+  }
+  else { //iterate through sorted part to find a place in the world
     if (val == String(choice)) {
-      sortedPart = sortedPart.slice(0, start).concat([val]).concat(sortedPart.slice(start));
+      curSortElPos = Math.trunc(curSortElPos / 2)
     }
     else {
-      sortedPart = sortedPart.concat([val]);
+      curSortElPos = Math.trunc((len + curSortElPos) / 2)
     }
   }
-  else {
-    if (val == String(choice) && start == 0) {
-      curElPos += 1;
-      end += 1;
-      sortedPart = [val].concat(sortedPart);
-      picsToCompare = [sortedPart[0], pics[curElPos]];
-    }
-    else if (start == 0) {
-      start = Math.round(end/2)
-      picsToCompare = [sortedPart[start], pics[curElPos]];
-    }
-    else if (val == String(choice)) {
-      start = Math.round(start/2);
-      picsToCompare = [sortedPart[start], pics[curElPos]];
-    }
-    else {
-      start = Math.round((start + end)/2);
-      picsToCompare = [sortedPart[start], pics[curElPos]];
-    }
-  }
+  picsToCompare = [sortedPart[curSortElPos], pics[curElPos]];
   const newSortState: SortState = {
     sortedPart,
     curElPos,
-    start,
-    end,
+    curSortElPos,
     picsToCompare
   }
+  console.log(newSortState);
   if (sortedPart.length == pics.length) {
     alert("Done, please stop clicking");
   }
   return newSortState;
 }
+
+

@@ -27929,9 +27929,6 @@ var PicsPair = function (_Component) {
                     _react2.default.createElement('img', { src: 'https://c1.staticflickr.com/7/6095/6385016345_f19d5414a7_b.jpg' })
                 );
             }
-            //console.log(limit);
-            console.log(currentPicPairIndex);
-            console.log("index pics " + sortState.picsToCompare);
             var pic1 = pics[sortState.picsToCompare[0]];
             var pic2 = pics[sortState.picsToCompare[1]];
             /*let leftBorder = "0",
@@ -30729,8 +30726,7 @@ exports.default = function (_ref) {
                                 return String(p.id);
                             })[0]],
                             curElPos: 1,
-                            start: 0,
-                            end: 0,
+                            curSortElPos: 0,
                             picsToCompare: [pics.map(function (p) {
                                 return String(p.id);
                             })[0], pics.map(function (p) {
@@ -38879,45 +38875,33 @@ exports.sort = sort;
 function sort(choice, pics, sortState) {
     var sortedPart = sortState.sortedPart,
         curElPos = sortState.curElPos,
-        start = sortState.start,
-        end = sortState.end,
+        curSortElPos = sortState.curSortElPos,
         picsToCompare = sortState.picsToCompare;
 
     var val = pics[curElPos];
-    if (start == end) {
-        curElPos += 1;
-        start = 0;
-        end += 1;
-        picsToCompare = [sortedPart[Math.trunc(end / 2)], pics[curElPos]];
-        if (val == String(choice)) {
-            sortedPart = sortedPart.slice(0, start).concat([val]).concat(sortedPart.slice(start));
-        } else {
-            sortedPart = sortedPart.concat([val]);
+    var len = sortedPart.length - 1;
+    if (curSortElPos == len || curSortElPos == 0) {
+        if (val != String(choice)) {
+            curSortElPos += 1;
         }
+        sortedPart = sortedPart.slice(0, curSortElPos).concat([val]).concat(sortedPart.slice(curSortElPos));
+        curElPos += 1;
+        curSortElPos = Math.trunc(len / 2);
     } else {
-        if (val == String(choice) && start == 0) {
-            curElPos += 1;
-            end += 1;
-            sortedPart = [val].concat(sortedPart);
-            picsToCompare = [sortedPart[0], pics[curElPos]];
-        } else if (start == 0) {
-            start = Math.round(end / 2);
-            picsToCompare = [sortedPart[start], pics[curElPos]];
-        } else if (val == String(choice)) {
-            start = Math.round(start / 2);
-            picsToCompare = [sortedPart[start], pics[curElPos]];
+        if (val == String(choice)) {
+            curSortElPos = Math.trunc(curSortElPos / 2);
         } else {
-            start = Math.round((start + end) / 2);
-            picsToCompare = [sortedPart[start], pics[curElPos]];
+            curSortElPos = Math.trunc((len + curSortElPos) / 2);
         }
     }
+    picsToCompare = [sortedPart[curSortElPos], pics[curElPos]];
     var newSortState = {
         sortedPart: sortedPart,
         curElPos: curElPos,
-        start: start,
-        end: end,
+        curSortElPos: curSortElPos,
         picsToCompare: picsToCompare
     };
+    console.log(newSortState);
     if (sortedPart.length == pics.length) {
         alert("Done, please stop clicking");
     }

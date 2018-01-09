@@ -63,10 +63,6 @@ class PicsPair extends Component<Props, State> {
              </div>;
     }
 
-    //console.log(limit);
-    console.log(currentPicPairIndex);
-    console.log("index pics " + sortState.picsToCompare);
-
     const pic1 = pics[sortState.picsToCompare[0]];
     const pic2 = pics[sortState.picsToCompare[1]];
 

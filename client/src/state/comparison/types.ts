@@ -12,8 +12,7 @@ export type PicturesMap = Record<string, Picture>
 export type SortState = {
   sortedPart: Array<string>;
   curElPos: number;
-  start: number;
-  end: number;
+  curSortElPos: number;
   picsToCompare: Array<string>;
 };
 
