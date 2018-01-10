@@ -38767,7 +38767,7 @@ exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes
             return pic.id;
         })), picsToCompare: state.combs[state.currentPicPairIndex], sortState: action.initSortState });
 }), _defineProperty(_createReducerFromDes, _actions.pictureClick.type, function (state, action) {
-    return Object.assign({}, state, { sortState: (0, _sorting.sort)(action.id, Object.keys(state.pics), state.sortState) });
+    return Object.assign({}, state, { sortState: (0, _sorting.processSortingStep)(action.id, Object.keys(state.pics), state.sortState) });
 }), _defineProperty(_createReducerFromDes, _actions.nextTwo.type, function (state, action) {
     return (0, _ramda.evolve)({
         currentPicPairIndex: _ramda.inc,
@@ -38872,8 +38872,8 @@ exports.push([module.i, "html, body {\n    height: 100%;\n}\n\nbody {\n    font-
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.sort = sort;
-function sort(choice, pics, sortState) {
+exports.processSortingStep = processSortingStep;
+function processSortingStep(choice, pics, sortState) {
     var sortedPart = sortState.sortedPart,
         curElPos = sortState.curElPos,
         picsToCompare = sortState.picsToCompare,

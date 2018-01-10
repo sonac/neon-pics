@@ -10,7 +10,7 @@ import {
   nextTwo
 } from './actions'
 import { pairwise } from 'utils/common';
-import { sort } from 'utils/sorting';
+import { processSortingStep } from 'utils/sorting';
 import { State, FetchComparisonSuccessAction } from './types';
 import { ErrorAction, IdAction } from 'state/types';
 
@@ -50,7 +50,7 @@ export default createReducerFromDescriptor({
   }),
   [pictureClick.type]: (state: State, action: IdAction): State => ({
     ...state,
-    sortState: sort(action.id, Object.keys(state.pics), state.sortState)
+    sortState: processSortingStep(action.id, Object.keys(state.pics), state.sortState)
   }),
   [nextTwo.type]: (state: State, action: Action): State => evolve({
     currentPicPairIndex: inc,

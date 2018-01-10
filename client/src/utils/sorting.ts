@@ -1,6 +1,6 @@
-import { State, SortState, PicturesMap } from 'state/comparison/types';
+import { SortState } from 'state/comparison/types';
 
-export function sort (choice: number, 
+export function processSortingStep (choice: number, 
                       pics: Array<string>, 
                       sortState: SortState): SortState {
 

@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
-        "module": "es6",
+        "module": "commonjs",
         "moduleResolution": "node",
-        "target": "es6",
+        "target": "es5",
         "allowSyntheticDefaultImports": true,
         "baseUrl": "src",
         "sourceMap": true,
