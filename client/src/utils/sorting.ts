@@ -16,6 +16,7 @@ export function processSortingStep (choice: number,
     curElPos += 1;
     start = 0
     end = sortedPart.length - 1;
+    curSortElPos = Math.round((start + end) / 2);
   }
   else { //iterate through sorted part to find a place in the world
     if (val == String(choice)) {

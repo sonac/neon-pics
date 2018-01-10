@@ -38890,6 +38890,7 @@ function processSortingStep(choice, pics, sortState) {
         curElPos += 1;
         start = 0;
         end = sortedPart.length - 1;
+        curSortElPos = Math.round((start + end) / 2);
     } else {
         if (val == String(choice)) {
             end = Math.round(end / 2);
