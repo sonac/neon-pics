@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { values } from 'ramda';
-import { fetchComparison, pictureClick, nextTwo } from 'state/comparison/actions';
+import { fetchComparison, pictureClick, nextTwo } from '../../state/comparison/actions';
 import { PicturesMap, SortState, State as ComparisonState } from 'state/comparison/types';
 import { IdActionCreator, BasicActionCreator } from 'state/types';
 

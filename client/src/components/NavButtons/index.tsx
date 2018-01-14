@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button } from 'react-foundation-components/lib/button';
 import { connect } from 'react-redux';
 import { values } from 'ramda';
-import { postComparison, nextTwo } from 'state/comparison/actions';
+import { postComparison, nextTwo } from '../../state/comparison/actions';
 import { State as ComparisonState } from 'state/comparison/types';
 import { BasicActionCreator } from 'state/types';
 
@@ -47,7 +47,7 @@ class NavButtons extends Component<Props, State> {
   render() {
     return (
       <div className={styles.navButtons}>
-        <Button color="secondary" size="large" hollow onClick={this.sendClicked}>Send results</Button>
+        <Button color="secondary" size="large" hollow onClick={this.sendClicked}>Send results!</Button>
       </div>
     )
   }

@@ -28077,7 +28077,7 @@ var NavButtons = function (_Component) {
                 _react2.default.createElement(
                     _button.Button,
                     { color: 'secondary', size: 'large', hollow: true, onClick: this.sendClicked },
-                    'Send results'
+                    'Send results!'
                 )
             );
         }
