@@ -45,7 +45,6 @@ describe('testing reducer', () => {
     pics: fetchSuccesData.pictures.reduce((acc, pic) => ({...acc, [pic.id]: {...pic, rating: 0} }), {}),
     sortState: fetchSuccesData.initSortState
   };
-  console.log(expectedData);
 
   it('should return initial state', () => {
     const id = 1;
