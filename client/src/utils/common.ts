@@ -1,4 +1,5 @@
-import { evolve, head, tail } from 'ramda';
+import { evolve, head, tail, inc } from 'ramda';
+import { PicturesMap } from 'state/comparison/types';
 
 function buildTreeFromPath<T>(path: string[], val: T): object | T {
   return path.length === 0
@@ -22,4 +23,9 @@ export function pairwise<T>(arr: T[]): [T, T][] {
         pairs = xs.map((_: T): [T, T] => [x, _]);
 
   return pairs.concat(pairwise(xs));
+}
+
+export function incrRating(vote: number, pics: PicturesMap): PicturesMap {
+  pics[vote].rating += 1
+  return pics
 }

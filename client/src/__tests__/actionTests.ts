@@ -2,7 +2,7 @@ import * as actions from 'state/comparison/actions';
 import { FetchComparisonSuccessData } from 'state/comparison/types';
 import { expect } from 'chai';
 
-describe('actions', () => {
+describe('testing actions', () => {
     it('should create an action to comparison', () => {
       const id = 1
       const expectedAction = {

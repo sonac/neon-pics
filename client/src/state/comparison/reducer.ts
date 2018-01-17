@@ -6,25 +6,20 @@ import {
   fetchComparisonSuccess,
   fetchComparisonError,
   pictureClick,
-  postComparison,
-  nextTwo
+  postComparison
 } from './actions'
-import { pairwise } from 'utils/common';
+import { pairwise, incrRating } from 'utils/common';
 import { processSortingStep } from 'utils/sorting';
 import { State, FetchComparisonSuccessAction } from './types';
 import { ErrorAction, IdAction } from 'state/types';
 
-const initState = {
+const initState: State = {
   isLoading: true,
   error: null,
   pics: {},
   question: '',
   questionId: null,
-  currentVote: null,
-  currentPicPairIndex: 0,
-  combs: [],
-  picsToCompare: [],
-  sortState: {},
+  sortState: null,
   mid: 0
 };
 
@@ -44,18 +39,12 @@ export default createReducerFromDescriptor({
     question: action.question,
     questionId: action.questionId,
     pics: action.pictures.reduce((acc, pic) => ({...acc, [pic.id]: {...pic, rating: 0} }), {}),
-    combs: pairwise(action.pictures.map(pic => pic.id)),
-    picsToCompare: state.combs[state.currentPicPairIndex],
     sortState: action.initSortState
   }),
   [pictureClick.type]: (state: State, action: IdAction): State => ({
     ...state,
-    sortState: processSortingStep(action.id, Object.keys(state.pics), state.sortState)
+    sortState: processSortingStep(action.id, Object.keys(state.pics), state.sortState),
+    pics: incrRating(action.id, state.pics)
   }),
-  [nextTwo.type]: (state: State, action: Action): State => evolve({
-    currentPicPairIndex: inc,
-    currentVote: _ => null,
-    pics: {[state.currentVote]: {rating: inc}}
-  }, state),
   [postComparison.type]: (state: State, action: Action): State => ({ ...state})
 }, initState);

@@ -36,9 +36,6 @@ export function processSortingStep (choice: number,
     start,
     end
   }
-  if (sortedPart.length == pics.length) {
-    alert("Done, please stop clicking");
-  }
   return newSortState;
 }
 

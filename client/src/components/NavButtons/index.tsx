@@ -10,7 +10,6 @@ const styles = require('./styles.css');
 
 interface Data {
   currentPicPairIndex: number;
-  limit: number;
   currentVote: number;
 }
 
@@ -31,19 +30,6 @@ class NavButtons extends Component<Props, State> {
     this.props.actions.postComparison();
   }
 
-  handleClick = () => {
-    const { currentPicPairIndex, limit, currentVote } = this.props.data;
-    if (!currentVote) {
-      alert("Please choose one pic")
-    }
-    else if (currentPicPairIndex >= limit - 1) {
-      console.log("done")
-    }
-    else {
-      this.props.actions.nextTwo()
-    }
-  }
-
   render() {
     return (
       <div className={styles.navButtons}>
@@ -56,7 +42,6 @@ class NavButtons extends Component<Props, State> {
 
 const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
   currentPicPairIndex: state.comparison.currentPicPairIndex,
-  limit: state.comparison.combs.length,
   currentVote: state.comparison.currentVote
 });
 

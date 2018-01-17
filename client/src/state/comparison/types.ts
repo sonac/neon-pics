@@ -23,11 +23,7 @@ export interface State {
   pics: Record<string, Picture>;
   question: string;
   questionId: null | number;
-  currentVote: null | number;
-  currentPicPairIndex: number;
-  combs: [number, number][];
-  picsToCompare: [number, number];
-  sortState: SortState;
+  sortState: SortState | null;
   mid: number;
 }
 

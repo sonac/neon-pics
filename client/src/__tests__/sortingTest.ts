@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { processSortingStep } from '../utils/sorting';
 import { SortState } from 'state/comparison/types';
 
-describe("processSortingStep", () => {
+describe("testing processSortingStep ", () => {
     const initialUnsortedArr: Array<string> = ["1", "2", "5", "3", "4"];
     const initialSortState: SortState = {
         sortedPart: ["1", "2"],
