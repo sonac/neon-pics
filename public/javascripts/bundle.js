@@ -27878,7 +27878,15 @@ var PicsPair = function (_Component) {
 
         _this.picClick = function (id) {
             return function () {
-                _this.props.actions.pictureClick(id);
+                var _this$props$data = _this.props.data,
+                    sortState = _this$props$data.sortState,
+                    pics = _this$props$data.pics;
+
+                if (sortState.sortedPart.length == Object.keys(pics).length) {
+                    console.log("done");
+                } else {
+                    _this.props.actions.pictureClick(id);
+                }
             };
         };
         return _this;
@@ -27897,9 +27905,7 @@ var PicsPair = function (_Component) {
                 pics = _props$data.pics,
                 isLoading = _props$data.isLoading,
                 question = _props$data.question,
-                currentPicPairIndex = _props$data.currentPicPairIndex,
-                combs = _props$data.combs,
-                currentVote = _props$data.currentVote;
+                sortState = _props$data.sortState;
 
             if (isLoading) {
                 return _react2.default.createElement(
@@ -27911,25 +27917,15 @@ var PicsPair = function (_Component) {
                         'Loading...'
                     )
                 );
+            } else if (sortState.sortedPart.length == Object.keys(pics).length) {
+                return _react2.default.createElement(
+                    'div',
+                    { className: styles.picsPair },
+                    _react2.default.createElement('img', { src: 'https://c1.staticflickr.com/7/6095/6385016345_f19d5414a7_b.jpg' })
+                );
             }
-            var pic1 = pics[combs[currentPicPairIndex][0]];
-            var pic2 = pics[combs[currentPicPairIndex][1]];
-            /*let leftBorder = "0",
-                rightBorder = "0";
-                 if (!isLoading) {
-              if (pic1.id === currentVote) {
-                leftBorder = "10";
-                rightBorder = "0";
-              }
-              else if (pic2.id === currentVote) {
-                leftBorder = "0";
-                rightBorder = "10";
-              }
-              else {
-                leftBorder = "0";
-                rightBorder = "0";
-              }
-            }*/
+            var pic1 = pics[sortState.picsToCompare[0]];
+            var pic2 = pics[sortState.picsToCompare[1]];
             return _react2.default.createElement(
                 'div',
                 { className: styles.picsPair },
@@ -27970,9 +27966,7 @@ var mapStateToProps = function mapStateToProps(state) {
         isLoading: state.comparison.isLoading,
         pics: state.comparison.pics,
         question: state.comparison.question,
-        currentPicPairIndex: state.comparison.currentPicPairIndex,
-        combs: state.comparison.combs,
-        currentVote: state.comparison.currentVote
+        sortState: state.comparison.sortState
     };
 };
 var mapDispatchToProps = {
@@ -28031,20 +28025,6 @@ var NavButtons = function (_Component) {
         _this.sendClicked = function () {
             _this.props.actions.postComparison();
         };
-        _this.handleClick = function () {
-            var _this$props$data = _this.props.data,
-                currentPicPairIndex = _this$props$data.currentPicPairIndex,
-                limit = _this$props$data.limit,
-                currentVote = _this$props$data.currentVote;
-
-            if (!currentVote) {
-                alert("Please choose one pic");
-            } else if (currentPicPairIndex >= limit - 1) {
-                console.log("done");
-            } else {
-                _this.props.actions.nextTwo();
-            }
-        };
         return _this;
     }
 
@@ -28056,13 +28036,8 @@ var NavButtons = function (_Component) {
                 { className: styles.navButtons },
                 _react2.default.createElement(
                     _button.Button,
-                    { color: 'secondary', size: 'large', hollow: true, onClick: this.handleClick },
-                    'Next pair'
-                ),
-                _react2.default.createElement(
-                    _button.Button,
                     { color: 'secondary', size: 'large', hollow: true, onClick: this.sendClicked },
-                    'Send results'
+                    'Send results!'
                 )
             );
         }
@@ -28074,7 +28049,6 @@ var NavButtons = function (_Component) {
 var mapStateToProps = function mapStateToProps(state) {
     return {
         currentPicPairIndex: state.comparison.currentPicPairIndex,
-        limit: state.comparison.combs.length,
         currentVote: state.comparison.currentVote
     };
 };
@@ -30698,16 +30672,28 @@ exports.default = function (_ref) {
                 fetch('comparison/' + action.id).then(function (response) {
                     return response.json();
                 }).then(function (data) {
-                    return (
-                        // here we just change the field names received from backend, ratings logic should be added in reducer
-                        dispatch((0, _actions.fetchComparisonSuccess)({
-                            question: data.text,
-                            questionId: data.id,
-                            pictures: data.pictures.map(function (pic) {
-                                return { id: pic.id, url: pic.picUrl };
-                            })
-                        }))
-                    );
+                    var pics = data.pictures.map(function (pic) {
+                        return { id: pic.id, url: pic.picUrl };
+                    });
+                    // here we just change the field names received from backend, ratings logic should be added in reducer
+                    dispatch((0, _actions.fetchComparisonSuccess)({
+                        question: data.text,
+                        questionId: data.id,
+                        pictures: pics,
+                        initSortState: {
+                            sortedPart: [pics.map(function (p) {
+                                return String(p.id);
+                            })[0]],
+                            curElPos: 1,
+                            picsToCompare: [pics.map(function (p) {
+                                return String(p.id);
+                            })[0], pics.map(function (p) {
+                                return String(p.id);
+                            })[1]],
+                            start: 0,
+                            end: 0
+                        }
+                    }));
                 }).catch(function (error) {
                     console.error(error);
                     dispatch((0, _actions.fetchComparisonError)(error));
@@ -38704,13 +38690,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createReducerFromDes;
 
-var _ramda = __webpack_require__(80);
-
 var _utils = __webpack_require__(116);
 
 var _actions = __webpack_require__(43);
 
 var _common = __webpack_require__(520);
+
+var _sorting = __webpack_require__(523);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -38720,9 +38706,8 @@ var initState = {
     pics: {},
     question: '',
     questionId: null,
-    currentVote: null,
-    currentPicPairIndex: 0,
-    combs: []
+    sortState: null,
+    mid: 0
 };
 exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes = {}, _defineProperty(_createReducerFromDes, _actions.fetchComparison.type, function (state) {
     return Object.assign({}, state, { isLoading: true });
@@ -38731,19 +38716,9 @@ exports.default = (0, _utils.createReducerFromDescriptor)((_createReducerFromDes
 }), _defineProperty(_createReducerFromDes, _actions.fetchComparisonSuccess.type, function (state, action) {
     return Object.assign({}, state, { isLoading: false, question: action.question, questionId: action.questionId, pics: action.pictures.reduce(function (acc, pic) {
             return Object.assign({}, acc, _defineProperty({}, pic.id, Object.assign({}, pic, { rating: 0 })));
-        }, {}), combs: (0, _common.pairwise)(action.pictures.map(function (pic) {
-            return pic.id;
-        })) });
+        }, {}), sortState: action.initSortState });
 }), _defineProperty(_createReducerFromDes, _actions.pictureClick.type, function (state, action) {
-    return Object.assign({}, state, { currentVote: action.id });
-}), _defineProperty(_createReducerFromDes, _actions.nextTwo.type, function (state, action) {
-    return (0, _ramda.evolve)({
-        currentPicPairIndex: _ramda.inc,
-        currentVote: function currentVote(_) {
-            return null;
-        },
-        pics: _defineProperty({}, state.currentVote, { rating: _ramda.inc })
-    }, state);
+    return Object.assign({}, state, { sortState: (0, _sorting.processSortingStep)(action.id, Object.keys(state.pics), state.sortState), pics: (0, _common.incrRating)(action.id, state.pics) });
 }), _defineProperty(_createReducerFromDes, _actions.postComparison.type, function (state, action) {
     return Object.assign({}, state);
 }), _createReducerFromDes), initState);
@@ -38760,6 +38735,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.evolvePath = evolvePath;
 exports.pairwise = pairwise;
+exports.incrRating = incrRating;
 
 var _ramda = __webpack_require__(80);
 
@@ -38783,6 +38759,10 @@ function pairwise(arr) {
         return [x, _];
     });
     return pairs.concat(pairwise(xs));
+}
+function incrRating(vote, pics) {
+    pics[vote].rating += 1;
+    return pics;
 }
 
 /***/ }),
@@ -38829,6 +38809,55 @@ exports.push([module.i, "html, body {\n    height: 100%;\n}\n\nbody {\n    font-
 
 // exports
 
+
+/***/ }),
+/* 523 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.processSortingStep = processSortingStep;
+function processSortingStep(choice, pics, sortState) {
+    var sortedPart = sortState.sortedPart,
+        curElPos = sortState.curElPos,
+        picsToCompare = sortState.picsToCompare,
+        start = sortState.start,
+        end = sortState.end;
+
+    var val = pics[curElPos];
+    var curSortElPos = Math.round((start + end) / 2);
+    if (end - start <= 1) {
+        if (val != String(choice)) {
+            curSortElPos += 1;
+        }
+        sortedPart = sortedPart.slice(0, curSortElPos).concat([val]).concat(sortedPart.slice(curSortElPos));
+        curElPos += 1;
+        start = 0;
+        end = sortedPart.length - 1;
+        curSortElPos = Math.round((start + end) / 2);
+    } else {
+        if (val == String(choice)) {
+            end = Math.round(end / 2);
+            curSortElPos = Math.round((start + end) / 2);
+        } else {
+            start = Math.round((start + end) / 2);
+            curSortElPos = Math.round((end + start) / 2);
+        }
+    }
+    picsToCompare = [sortedPart[curSortElPos], pics[curElPos]];
+    var newSortState = {
+        sortedPart: sortedPart,
+        curElPos: curElPos,
+        picsToCompare: picsToCompare,
+        start: start,
+        end: end
+    };
+    return newSortState;
+}
 
 /***/ })
 /******/ ]);

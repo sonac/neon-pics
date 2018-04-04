@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { values } from 'ramda';
-import { fetchComparison, pictureClick } from 'state/comparison/actions';
-import { PicturesMap, State as ComparisonState } from 'state/comparison/types';
-import { IdActionCreator } from 'state/types';
+import { fetchComparison, pictureClick } from '../../state/comparison/actions';
+import { PicturesMap, SortState, State as ComparisonState } from 'state/comparison/types';
+import { IdActionCreator, BasicActionCreator } from 'state/types';
 
 import NavButtons from 'components/NavButtons';
 
@@ -13,9 +13,7 @@ interface Data {
   isLoading: boolean;
   pics: PicturesMap;
   question: string;
-  currentPicPairIndex: number;
-  combs: [number, number][];
-  currentVote: number;
+  sortState: SortState;
 }
 
 interface Actions {
@@ -36,37 +34,30 @@ class PicsPair extends Component<Props, State> {
     this.props.actions.fetchComparison(1);
   }
 
-  picClick = id => () => {
-    this.props.actions.pictureClick(id);
+  picClick = id => () => { 
+    const { sortState, pics } = this.props.data;
+    if (sortState.sortedPart.length == Object.keys(pics).length) {
+      console.log("done")
+    }
+    else {
+      this.props.actions.pictureClick(id);
+    }
   };
 
   render() {
-    const { pics, isLoading, question, currentPicPairIndex, combs, currentVote } = this.props.data;
+    const { pics, isLoading, question, sortState } = this.props.data;
 
     if (isLoading) {
       return <div className={styles.picsPair}><div>Loading...</div></div>;
     }
+    else if (sortState.sortedPart.length == Object.keys(pics).length) {
+      return <div className={styles.picsPair}>
+               <img src="https://c1.staticflickr.com/7/6095/6385016345_f19d5414a7_b.jpg" />
+             </div>;
+    }
 
-    const pic1 = pics[combs[currentPicPairIndex][0]];
-    const pic2 = pics[combs[currentPicPairIndex][1]];
-
-    /*let leftBorder = "0",
-        rightBorder = "0";
-
-    if (!isLoading) {
-      if (pic1.id === currentVote) {
-        leftBorder = "10";
-        rightBorder = "0";
-      }
-      else if (pic2.id === currentVote) {
-        leftBorder = "0";
-        rightBorder = "10";
-      }
-      else {
-        leftBorder = "0";
-        rightBorder = "0";
-      }
-    }*/
+    const pic1 = pics[sortState.picsToCompare[0]];
+    const pic2 = pics[sortState.picsToCompare[1]];
 
     return (
       <div className={styles.picsPair}>
@@ -94,9 +85,7 @@ const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
   isLoading: state.comparison.isLoading,
   pics: state.comparison.pics,
   question: state.comparison.question,
-  currentPicPairIndex: state.comparison.currentPicPairIndex,
-  combs: state.comparison.combs,
-  currentVote: state.comparison.currentVote
+  sortState: state.comparison.sortState
 });
 
 const mapDispatchToProps = {

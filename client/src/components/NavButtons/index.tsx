@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button } from 'react-foundation-components/lib/button';
 import { connect } from 'react-redux';
 import { values } from 'ramda';
-import { postComparison, nextTwo } from 'state/comparison/actions';
+import { postComparison, nextTwo } from '../../state/comparison/actions';
 import { State as ComparisonState } from 'state/comparison/types';
 import { BasicActionCreator } from 'state/types';
 
@@ -10,7 +10,6 @@ const styles = require('./styles.css');
 
 interface Data {
   currentPicPairIndex: number;
-  limit: number;
   currentVote: number;
 }
 
@@ -31,24 +30,10 @@ class NavButtons extends Component<Props, State> {
     this.props.actions.postComparison();
   }
 
-  handleClick = () => {
-    const { currentPicPairIndex, limit, currentVote } = this.props.data;
-    if (!currentVote) {
-      alert("Please choose one pic")
-    }
-    else if (currentPicPairIndex >= limit - 1) {
-      console.log("done")
-    }
-    else {
-      this.props.actions.nextTwo()
-    }
-  }
-
   render() {
     return (
       <div className={styles.navButtons}>
-        <Button color="secondary" size="large" hollow onClick={this.handleClick}>Next pair</Button>
-        <Button color="secondary" size="large" hollow onClick={this.sendClicked}>Send results</Button>
+        <Button color="secondary" size="large" hollow onClick={this.sendClicked}>Send results!</Button>
       </div>
     )
   }
@@ -57,7 +42,6 @@ class NavButtons extends Component<Props, State> {
 
 const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
   currentPicPairIndex: state.comparison.currentPicPairIndex,
-  limit: state.comparison.combs.length,
   currentVote: state.comparison.currentVote
 });
 
