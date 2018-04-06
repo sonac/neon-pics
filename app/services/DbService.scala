@@ -13,7 +13,7 @@ trait DbService {
 
 @Singleton
 class DbServicePostgresProduction extends DbService {
-  val db: PostgresProfile.backend.Database = PostgresProfile.api.Database.forConfig("productionDb")
+  val db: PostgresProfile.backend.Database = PostgresProfile.api.Database.forConfig("neonDb")
 }
 
 @Singleton
