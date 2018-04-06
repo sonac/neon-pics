@@ -15,3 +15,4 @@ class UserTable(tag: Tag) extends Table[User](tag, "user") {
   def eMail = column[String]("email")
 
 }
+

@@ -66,6 +66,14 @@ class DbServiceH2 extends DbService {
            |  PRIMARY KEY (quest_id, user_id, pic_id)
            |);
            |
+ |DROP TABLE IF EXISTS user;
+           |CREATE TABLE user (
+           |  login     VARCHAR(2000),
+           |  password  VARCHAR(2000),
+           |  email     VARCHAR(2000),
+           |  PRIMARY KEY (login)
+           |);
+           |
  |INSERT INTO pictures (id, pic_url)
            |VALUES (1, 'https://i.pinimg.com/564x/c6/57/75/c65775b98acd6be835065f604af66435.jpg');
            |INSERT INTO pictures (id, pic_url)
@@ -80,6 +88,9 @@ class DbServiceH2 extends DbService {
            |
  |INSERT INTO questionnaire_picture
            |VALUES (1, 1), (1, 2), (1, 3), (1, 4);
+           |
+ |INSERT INTO user
+           |VALUES ('testUser', 'testPassword', 'testEMail');
       """.stripMargin
 
     val f = db.run(sql.asUpdate)

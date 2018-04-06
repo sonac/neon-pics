@@ -1,23 +1,16 @@
-package services.auth
+package services.user
 
-import com.google.inject.Inject
+import com.google.inject.{Inject, Singleton}
 import slick.jdbc.PostgresProfile.api._
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import models._
 import services.DbService
 
-trait UserRepository {
-
-  def addUser(login: String, password: String, eMail: String): Future[Int]
-
-  def getUserByLogin(login: String): Future[Option[User]]
-
-}
-
 @Singleton
-class UserRepositoryImpl @Inject()(dbWrapper: DbService) extends UserRepository {
+class UserRepository @Inject()(dbWrapper: DbService) {
 
   import dbWrapper.db
 
