@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Component } from 'react';
 import { Button } from 'react-foundation-components/lib/button';
 import { connect } from 'react-redux';
 import { values } from 'ramda';
@@ -41,8 +42,8 @@ class NavButtons extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
-  currentPicPairIndex: state.comparison.currentPicPairIndex,
-  currentVote: state.comparison.currentVote
+  currentPicPairIndex: state.comparison.mid,
+  currentVote: state.comparison.mid
 });
 
 const mapDispatchToProps: Actions = {

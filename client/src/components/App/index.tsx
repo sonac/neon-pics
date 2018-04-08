@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import PicsPair from 'components/PicsPair';
 const styles = require('./styles.css');
 

@@ -35,7 +35,7 @@ export function createActionCreator<T1, T2, T3, R extends object>(
 
 export function createActionCreator(type, creator) {
   const typedCreator = function(): Action {
-    return { ...(creator ? creator(...arguments) : {}), type };
+    return { ...(creator ? creator.apply(creator, arguments) : {}), type };
   } as TypedFunc;
 
   typedCreator.type = type;
