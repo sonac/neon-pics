@@ -15,15 +15,19 @@ class UserRepository @Inject()(dbWrapper: DbService) {
   import dbWrapper.db
 
   val userTable = TableQuery[UserTable]
+  val inserUserTable = userTable returning userTable.map(_.id) into ((u, id) => u.copy(id = id))
 
-  def addUser(login: String, password: String, eMail: String): Future[Int] = {
-    for {
-      u <- db.run(userTable += User(login, password, eMail))
-    } yield u
+
+  def addUser(id: Int, login: String, password: String, eMail: String): Future[User] = {
+    db.run(inserUserTable += User(id, login, password, eMail))
   }
 
   def getUserByLogin(userLogin: String): Future[Option[User]] = {
     db.run(userTable.filter(_.login === userLogin).result.headOption)
+  }
+
+  def getMaxId: Future[Int] = {
+    db.run(userTable.sortBy(_.id).take(1).result).map(u => u.head.id)
   }
 
 }

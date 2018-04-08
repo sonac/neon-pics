@@ -3,7 +3,7 @@ package services.user
 import com.google.inject.Inject
 import play.api.http.FileMimeTypes
 import play.api.i18n.{Langs, MessagesApi}
-import play.api.libs.json.Json
+import play.api.libs.json._
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -22,8 +22,15 @@ class UserController @Inject() (ucc: UserControllerComponents)
 
   def addUser(): Action[AnyContent] = {
     UserActionBuilder.async { implicit request: UserRequest[AnyContent] =>
-      println(request.body)
-      Future(Ok("Oh hi, Mark!"))
+      val userFromJson: JsResult[UserResource] = Json.fromJson[UserResource](request.body.asJson.get)
+
+      userFromJson match {
+        case JsSuccess(usr: UserResource, path: JsPath) =>
+          ucc.userResourceHandler.create(usr).map { u =>
+            Created(Json.toJson(u))
+          }
+        case e: JsError => Future(BadRequest("Detected error:"+ JsError.toJson(e)))
+      }
     }
   }
 

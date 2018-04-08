@@ -68,10 +68,11 @@ class DbServiceH2 extends DbService {
            |
  |DROP TABLE IF EXISTS user;
            |CREATE TABLE user (
+           |  id        SERIAL PRIMARY KEY,
            |  login     VARCHAR(2000),
            |  password  VARCHAR(2000),
            |  email     VARCHAR(2000),
-           |  PRIMARY KEY (login)
+           |  UNIQUE KEY user_login(login)
            |);
            |
  |INSERT INTO pictures (id, pic_url)
@@ -90,7 +91,7 @@ class DbServiceH2 extends DbService {
            |VALUES (1, 1), (1, 2), (1, 3), (1, 4);
            |
  |INSERT INTO user
-           |VALUES ('testUser', 'testPassword', 'testEMail');
+           |VALUES (1, 'testUser', 'testPassword', 'testEMail');
       """.stripMargin
 
     val f = db.run(sql.asUpdate)
