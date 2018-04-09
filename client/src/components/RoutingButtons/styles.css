@@ -1,7 +1,7 @@
-.authButton {
+.routingButtons {
   position: absolute;
   top: 10px;
-  right: 50px;
+  left: 50px;
 }
 .buttonStyle {
   color: red;
