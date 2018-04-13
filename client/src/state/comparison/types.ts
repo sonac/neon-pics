@@ -17,6 +17,19 @@ export type SortState = {
   end: number;
 };
 
+export type User = {
+  login: string;
+  password: string;
+  eMail: string;
+}
+
+export type UserInput = {
+  login: string;
+  eMail: string;
+  password: string;
+  confirmedPassword: string;
+}
+
 export interface State {
   isLoading: boolean;
   error: null | string | Error;
@@ -24,6 +37,8 @@ export interface State {
   question: string;
   questionId: null | number;
   sortState: SortState | null;
+  currentUser: User | null;
+  userInput: UserInput;
   mid: number;
 }
 

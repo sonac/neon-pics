@@ -1,8 +1,14 @@
 .routingButtons {
+}
+
+.homeButton {
   position: absolute;
   top: 10px;
   left: 50px;
 }
-.buttonStyle {
-  color: red;
+
+.authButton {
+  position: absolute;
+  top: 10px;
+  right: 100px;
 }

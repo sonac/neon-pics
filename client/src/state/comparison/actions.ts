@@ -1,6 +1,6 @@
 import * as utils from 'state/utils';
-import { FetchComparisonSuccessData } from './types';
-import { IdData, ErrorData } from 'state/types';
+import { FetchComparisonSuccessData, User, UserInput } from './types';
+import { IdData, ErrorData, UserInputData } from 'state/types';
 
 export const fetchComparison = utils.createActionCreator('FETCH_COMPARISON', id => ({
   id
@@ -21,3 +21,7 @@ export const pictureClick = utils.createActionCreator('PICTURE_CLICK', (id: numb
 export const nextTwo = utils.createActionCreator('NEXT_TWO');
 
 export const postComparison = utils.createActionCreator('POST_COMPARISON');
+
+export const updateCurrentUserInput = utils.createActionCreator('UPDATE_CURRENT_USER_INPUT', (user: UserInput): UserInputData => ({
+  user
+}));

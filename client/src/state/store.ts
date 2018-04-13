@@ -1,4 +1,5 @@
 import { StoreCreator, createStore, combineReducers, applyMiddleware, compose } from 'redux';
+//import routerReducer from 'react-router-redux';
 import comparisonMiddleware from './comparison/middleware';
 import comparisonReducer from './comparison/reducer';
 

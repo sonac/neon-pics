@@ -1,6 +1,6 @@
 import * as reducer from 'state/comparison/reducer';
 import * as actions from 'state/comparison/actions';
-import { State, FetchComparisonSuccessData } from 'state/comparison/types';
+import { State, FetchComparisonSuccessData, User } from 'state/comparison/types';
 import { expect } from 'chai';
 
 describe('testing reducer', () => {
@@ -12,6 +12,8 @@ describe('testing reducer', () => {
     question: '',
     questionId: null,
     sortState: null,
+    currentUser: null,
+    userInput: null,
     mid: 0
   };
 

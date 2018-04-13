@@ -1,48 +1,19 @@
 import * as React from 'react';
-import { Component } from 'react';
 import { Button } from 'react-foundation-components/lib/button';
-import { connect } from 'react-redux';
-import { values } from 'ramda';
-import { postComparison, nextTwo } from '../../state/comparison/actions';
-import { State as ComparisonState } from 'state/comparison/types';
-import { BasicActionCreator } from 'state/types';
+import { Link } from 'react-router-dom';
+import AuthButton from 'components/AuthButton';
 
-const styles = require('./styles.css');
+const styles = require('./styles.css')
 
-interface Data {
-}
-
-interface Actions {
-}
-
-interface Props {
-}
-
-type State = {}
-
-class RoutingButtons extends Component<Props, State> {
-  sendClicked = () => {
-    console.log("click");
-  }
-
-  render() {
-    return (
-      <div className={styles.routingButtons}>
-        <Button style={{styles}} color="success" size="large" hollow onClick={this.sendClicked}>Home</Button>
+export default function RoutingButtons() {
+  return (
+    <div className={styles.routingButtons}>
+      <div className={styles.homeButton}>
+        <Link to="/"><Button color="success" size="large" hollow>Home</Button></Link>
       </div>
-    )
-  }
-
+      <div className={styles.authButton}>
+        <Link to="/register"><AuthButton /></Link>
+      </div>
+    </div>
+  );
 }
-
-const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
-});
-
-const mapDispatchToProps: Actions = {
-};
-
-const mergeProps = (data: Data, actions: Actions): Props => ({
-});
-
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(RoutingButtons);
-

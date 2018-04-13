@@ -1,5 +1,39 @@
 .registration {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 18px;
+  color: white;
+}
+.wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   position: absolute;
-  top: 10px;
+  padding-bottom: 5px;
+  padding: 5px;
   left: 50px;
+  top: 300px;
+  color: white;
+}
+input {
+  padding: 10px;
+  border-radius: 2px;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(203, 95, 236);
+  color: rgb(214, 105, 165);
+  font-size: 30px;
+  font-family: Arial,sans-serif;
+  font-weight: normal;
+  line-height: 15px;
+  height: 60px;
+  max-width: 100%;
+  width: 400px;
+  outline: none;
+  margin-bottom: 5px;
+  border-radius: 10px;
+}
+.formInput {
+
 }

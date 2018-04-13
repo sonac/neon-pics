@@ -6,12 +6,13 @@ import {
   fetchComparisonSuccess,
   fetchComparisonError,
   pictureClick,
-  postComparison
+  postComparison,
+  updateCurrentUserInput
 } from './actions'
 import { pairwise, incrRating } from 'utils/common';
 import { processSortingStep } from 'utils/sorting';
 import { State, FetchComparisonSuccessAction } from './types';
-import { ErrorAction, IdAction } from 'state/types';
+import { ErrorAction, IdAction, UserInputAction } from 'state/types';
 
 const initState: State = {
   isLoading: true,
@@ -20,6 +21,8 @@ const initState: State = {
   question: '',
   questionId: null,
   sortState: null,
+  currentUser: {login: "oh", password: "hi", eMail: "Mark"},
+  userInput: {login: "login", eMail: "email@email.com", password: "password", confirmedPassword: "password"},
   mid: 0
 };
 
@@ -46,5 +49,6 @@ export default createReducerFromDescriptor({
     sortState: processSortingStep(action.id, Object.keys(state.pics), state.sortState),
     pics: incrRating(action.id, state.pics)
   }),
-  [postComparison.type]: (state: State, action: Action): State => ({ ...state})
+  [postComparison.type]: (state: State, action: Action): State => ({ ...state}),
+  [updateCurrentUserInput.type]: (state: State, action: UserInputAction): State => ({ ...state, userInput: action.user}), 
 }, initState);
