@@ -55,7 +55,7 @@ describe('testing reducer', () => {
 
   it('should return some error when comparison failed', () => {
     const errState = {...initState, error: undefined, isLoading: false };
-    expect(reducer.default(initState, actions.fetchComparisonError)).to.eql(errState);
+    expect(reducer.default(initState, actions.fetchError)).to.eql(errState);
   })
 
   it('should return data after successful fetch', () => {

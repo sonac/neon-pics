@@ -1,5 +1,11 @@
-import { fetchComparison, fetchComparisonSuccess, fetchComparisonError, pictureClick, postComparison } from './actions';
+import { fetchComparison, 
+  fetchComparisonSuccess, 
+  fetchError, 
+  pictureClick, 
+  postComparison, 
+  postUser } from './actions';
 import { values } from 'ramda';
+import { User, UserInput } from './types';
 
 interface FetchPicture {
   id: number;
@@ -34,7 +40,7 @@ export default ({ getState, dispatch }) => next => action => {
       )
       .catch(error => {
         console.error(error);
-        dispatch(fetchComparisonError(error))
+        dispatch(fetchError(error))
       })
   }
 
@@ -54,6 +60,25 @@ export default ({ getState, dispatch }) => next => action => {
         data
       )
     });
+  }
+
+  if (action.type == postUser.type) {
+    const state = getState();
+    const userInp: UserInput = state.comparison.userInput;
+    const user: User = {login: userInp.login, password: userInp.password, eMail: userInp.eMail}
+
+    fetch('/user', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user)
+    })
+      .then(response =>
+        fetch(`/user/${user.login}`)
+          .then(resonse => console.log(response.json()))
+      );
   }
 
   return next(action);

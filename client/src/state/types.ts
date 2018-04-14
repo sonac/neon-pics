@@ -39,7 +39,7 @@ export type ErrorAction = ErrorData & Action;
 export type ErrorActionCreator = ActionCreator1<string | Error, ErrorAction>;
 
 export type UserInputData = {
-  user: UserInput
+  userInp: UserInput
 }
 export type UserInputAction = UserInputData & Action;
 export type UserInputActionCreator = ActionCreator1<UserInput, UserInputAction>

@@ -18,16 +18,12 @@ class UserRepository @Inject()(dbWrapper: DbService) {
   val inserUserTable = userTable returning userTable.map(_.id) into ((u, id) => u.copy(id = id))
 
 
-  def addUser(id: Int, login: String, password: String, eMail: String): Future[User] = {
+  def addUser(id: Int = 0, login: String, password: String, eMail: String): Future[User] = {
     db.run(inserUserTable += User(id, login, password, eMail))
   }
 
   def getUserByLogin(userLogin: String): Future[Option[User]] = {
     db.run(userTable.filter(_.login === userLogin).result.headOption)
-  }
-
-  def getMaxId: Future[Int] = {
-    db.run(userTable.sortBy(_.id).take(1).result).map(u => u.head.id)
   }
 
 }

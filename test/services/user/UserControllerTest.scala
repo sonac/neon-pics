@@ -15,7 +15,7 @@ class UserControllerTest extends PlaySpec with GuiceOneAppPerTest with Injecting
         """{
           |"login": "mockUser",
           |"password" : "mockPassword",
-          |"email" : "mockEMail"
+          |"eMail" : "mockEMail"
           |}
         """.stripMargin)
 

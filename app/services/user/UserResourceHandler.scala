@@ -21,7 +21,7 @@ object UserResource {
       Json.obj(
         "login" -> user.login,
         "password" -> user.password,
-        "email" -> user.eMail
+        "eMail" -> user.eMail
       )
     }
   }
@@ -29,7 +29,7 @@ object UserResource {
   implicit val implicitReads: Reads[UserResource] = (
     (__ \ "login").read[String] and
     (__ \ "password").read[String] and
-    (__ \ "email").read[String]
+    (__ \ "eMail").read[String]
   )(UserResource.apply _)
 
   /*
@@ -44,9 +44,8 @@ object UserResource {
 class UserResourceHandler @Inject()(userRepository: UserRepository)(implicit ec: ExecutionContext) {
 
   def create(user: UserResource): Future[UserResource] = {
-    userRepository.getMaxId.map { id =>
-      userRepository.addUser(id + 1, user.login, user.password, user.eMail).map(u => UserResource(u.login, u.password, u.eMail))
-    }.flatten
+    userRepository.addUser(login = user.login, password = user.password, eMail = user.eMail)
+      .map(u => UserResource(u.login, u.password, u.eMail))
   }
 
   def get(userLogin: String): Future[UserResource] = {
@@ -57,24 +56,3 @@ class UserResourceHandler @Inject()(userRepository: UserRepository)(implicit ec:
   }
 
 }
-
-/*
-
-case class ComparisonResource(id: Int, text: String, pictures: Seq[Picture])
-
-object ComparisonResource {
-
-  implicit val implicitWrites: Writes[ComparisonResource] {
-    def writes(comparison: ComparisonResource): JsValue
-  } = new Writes[ComparisonResource] {
-    def writes(comparison: ComparisonResource): JsValue = {
-      Json.obj(
-        "id" -> comparison.id,
-        "text" -> comparison.text,
-        "pictures" -> comparison.pictures
-      )
-    }
-  }
-
-}
- */

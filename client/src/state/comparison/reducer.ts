@@ -4,10 +4,11 @@ import { createReducerFromDescriptor } from 'state/utils';
 import {
   fetchComparison,
   fetchComparisonSuccess,
-  fetchComparisonError,
+  fetchError,
   pictureClick,
   postComparison,
-  updateCurrentUserInput
+  updateCurrentUserInput,
+  postUser
 } from './actions'
 import { pairwise, incrRating } from 'utils/common';
 import { processSortingStep } from 'utils/sorting';
@@ -31,7 +32,7 @@ export default createReducerFromDescriptor({
     ...state,
     isLoading: true
   }),
-  [fetchComparisonError.type]: (state: State, action: ErrorAction): State => ({
+  [fetchError.type]: (state: State, action: ErrorAction): State => ({
     ...state,
     error: action.error,
     isLoading: false
@@ -50,5 +51,6 @@ export default createReducerFromDescriptor({
     pics: incrRating(action.id, state.pics)
   }),
   [postComparison.type]: (state: State, action: Action): State => ({ ...state}),
-  [updateCurrentUserInput.type]: (state: State, action: UserInputAction): State => ({ ...state, userInput: action.user}), 
+  [updateCurrentUserInput.type]: (state: State, action: UserInputAction): State => ({ ...state, userInput: action.userInp}),
+  [postUser.type]: (state: State, action: Action): State => ({...state}) 
 }, initState);

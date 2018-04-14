@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { Button } from 'react-foundation-components/lib/button';
 import { connect } from 'react-redux';
 import { values } from 'ramda';
-import { updateCurrentUserInput } from '../../state/comparison/actions';
+import { updateCurrentUserInput, postUser } from '../../state/comparison/actions';
 import { User, UserInput, State as ComparisonState } from 'state/comparison/types';
 import { BasicActionCreator, UserInputActionCreator } from 'state/types';
 
@@ -16,6 +16,7 @@ interface Data {
 
 interface Actions {
   updateCurrentUserInput: UserInputActionCreator;
+  postUser: BasicActionCreator;
 }
 
 interface Props {
@@ -28,7 +29,7 @@ type State = {}
 class Registration extends Component<Props, State> {
 
   handleClick = () => {
-    console.log("click")
+    this.props.actions.postUser();
   }
 
   handleChange = (e, inp) => {
@@ -73,7 +74,8 @@ const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
 });
 
 const mapDispatchToProps = {
-  updateCurrentUserInput
+  updateCurrentUserInput,
+  postUser
 };
 
 const mergeProps = (data: Data, actions: Actions): Props => ({

@@ -23,7 +23,7 @@ class UserController @Inject() (ucc: UserControllerComponents)
   def addUser(): Action[AnyContent] = {
     UserActionBuilder.async { implicit request: UserRequest[AnyContent] =>
       val userFromJson: JsResult[UserResource] = Json.fromJson[UserResource](request.body.asJson.get)
-
+      println(request.body.asJson.get)
       userFromJson match {
         case JsSuccess(usr: UserResource, path: JsPath) =>
           ucc.userResourceHandler.create(usr).map { u =>
