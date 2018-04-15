@@ -32,12 +32,27 @@ object UserResource {
     (__ \ "eMail").read[String]
   )(UserResource.apply _)
 
-  /*
-  implicit val locationReads: Reads[Location] = (
-  (JsPath \ "lat").read[Double] and
-  (JsPath \ "long").read[Double]
-)(Location.apply _)
-   */
+}
+
+case class UserLoginResource(login: String, password: String)
+
+object UserLoginResource {
+
+  implicit val implicitWrites: Writes[UserLoginResource] {
+    def writes(user: UserLoginResource): JsValue
+  } = new Writes[UserLoginResource] {
+    def writes(user: UserLoginResource): JsValue = {
+      Json.obj(
+        "login" -> user.login,
+        "password" -> user.password
+      )
+    }
+  }
+
+  implicit val implicitReads: Reads[UserLoginResource] = (
+    (__ \ "login").read[String] and
+      (__ \ "password").read[String]
+    )(UserLoginResource.apply _)
 
 }
 

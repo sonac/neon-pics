@@ -33,3 +33,6 @@ GET         /user/:login                                services.user.UserContro
 # Ads new user
 POST        /user                                       services.user.UserController.addUser
 
+# Login request
+POST        /login                                      services.user.UserController.login
+

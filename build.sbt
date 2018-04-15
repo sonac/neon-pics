@@ -1,4 +1,4 @@
-import com.typesafe.sbt.packager.MappingsHelper.{directory, _}
+import com.typesafe.sbt.packager.MappingsHelper._
 import sbt.Keys.mappings
 
 name := """neon-pics"""
@@ -18,7 +18,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick" % "3.0.0",
   "org.postgresql" % "postgresql" % "9.4-1206-jdbc41",
   "com.h2database" % "h2" % "1.4.196" % Test,
-  "net.codingwell" %% "scala-guice" % "4.1.1")
+  "net.codingwell" %% "scala-guice" % "4.1.1",
+  "com.pauldijou" %% "jwt-core" % "0.16.0")
 
 dockerRepository := Some("eu.gcr.io")
 

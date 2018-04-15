@@ -1,16 +1,22 @@
 package services.user
 
 import com.google.inject.Inject
+import pdi.jwt.{Jwt, JwtAlgorithm}
+
 import play.api.http.FileMimeTypes
 import play.api.i18n.{Langs, MessagesApi}
 import play.api.libs.json._
 import play.api.mvc._
+import play.api.Configuration
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Success, Failure}
 
-class UserController @Inject() (ucc: UserControllerComponents)
+class UserController @Inject() (ucc: UserControllerComponents, conf: Configuration)
                                (implicit ec: ExecutionContext)
                      extends UserBaseController(ucc) {
+
+  private val secretKey = conf.get[String]("play.http.secret.key")
 
   def getUser(userLogin: String): Action[AnyContent] = {
     UserActionBuilder.async { implicit request: UserRequest[AnyContent] =>
@@ -29,6 +35,26 @@ class UserController @Inject() (ucc: UserControllerComponents)
           ucc.userResourceHandler.create(usr).map { u =>
             Created(Json.toJson(u))
           }
+        case e: JsError => Future(BadRequest("Detected error:"+ JsError.toJson(e)))
+      }
+    }
+  }
+
+  def login(): Action[AnyContent] = {
+    UserActionBuilder.async { implicit request: UserRequest[AnyContent] =>
+      val userFromJson: JsResult[UserLoginResource] = Json.fromJson[UserLoginResource](request.body.asJson.get)
+      userFromJson match {
+        case JsSuccess(usrLog: UserLoginResource, path: JsPath) => {
+          ucc.userResourceHandler.get(usrLog.login).map(storedUser => {
+            if (storedUser.password == usrLog.password) {
+              val token = Jwt.encode(Json.toJson(storedUser).toString, secretKey, JwtAlgorithm.HS256)
+              Ok("oh").withHeaders(("auth-token", token))
+            }
+            else Unauthorized("hi")
+          }).recover {
+            case err => BadRequest("wopsie " + err)
+          }
+        }
         case e: JsError => Future(BadRequest("Detected error:"+ JsError.toJson(e)))
       }
     }
