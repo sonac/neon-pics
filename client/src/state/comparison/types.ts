@@ -23,11 +23,16 @@ export type User = {
   eMail: string;
 }
 
-export type UserInput = {
+export type UserRegInput = {
   login: string;
   eMail: string;
   password: string;
   confirmedPassword: string;
+}
+
+export type UserLogInput = {
+  login: string;
+  password: string;
 }
 
 export interface State {
@@ -38,8 +43,11 @@ export interface State {
   questionId: null | number;
   sortState: SortState | null;
   currentUser: User | null;
-  userInput: UserInput;
+  regFormPlaceholder: UserRegInput;
+  userRegInput: UserRegInput | null;
+  userLogInput: UserLogInput | null;
   mid: number;
+  showLogin: boolean;
 }
 
 export type FetchComparisonSuccessData = {

@@ -1,25 +1,30 @@
-.registration {
+.login {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  margin: auto;
   height: 100%;
+  text-align: center;
   font-size: 18px;
-  color: white;
+  color: rgb(28, 28, 29);
 }
-.wrapper{
+.inputWrapper{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  position: absolute;
   padding-bottom: 5px;
   padding: 5px;
-  left: 50px;
-  top: 200px;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0px;
+  top: 50px;
+  bottom: 50px;
   color: white;
 }
 input {
   padding: 10px;
   border-radius: 2px;
+  background-color: rgb(255, 255, 255);
   border: 1px solid rgb(203, 95, 236);
   color: rgb(214, 105, 165);
   font-size: 30px;

@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { Button } from 'react-foundation-components/lib/button';
 import { connect } from 'react-redux';
 import { values } from 'ramda';
-import { updateCurrentUserInput, postUser } from '../../state/comparison/actions';
+import { updateCurrentUserInput, login } from '../../state/comparison/actions';
 import { User, UserRegInput, State as ComparisonState } from 'state/comparison/types';
 import { BasicActionCreator, UserRegInputActionCreator } from 'state/types';
 
@@ -16,7 +16,7 @@ interface Data {
 
 interface Actions {
   updateCurrentUserInput: UserRegInputActionCreator;
-  postUser: BasicActionCreator;
+  login: BasicActionCreator;
 }
 
 interface Props {
@@ -26,10 +26,16 @@ interface Props {
 
 type State = {}
 
-class Registration extends Component<Props, State> {
+class Auth extends Component<Props, State> {
 
   handleClick = () => {
-    this.props.actions.postUser();
+    this.props.actions.login();
+  }
+
+  handleEnter = (e) => {
+    if (e.key === 'Enter') {
+      console.log('heres enter')
+    }
   }
 
   handleChange = (e, inp) => {
@@ -44,23 +50,18 @@ class Registration extends Component<Props, State> {
   render() {
     console.log(this.props.data.userInput)
     return (
-      <div className={styles.registration}>
-        <h2>Oh hi, Mark!</h2>
-        <div className={styles.wrapper}>
+      <div className={styles.login}>
+        <h2>Login window</h2>
+        <div className={styles.inputWrapper}>
             <input type="text" 
               placeholder={this.props.data.regFormPlaceholder.login} 
               onChange={(e) => {this.handleChange(e, "login")}} />
-            <input type="email" 
-              placeholder={this.props.data.regFormPlaceholder.eMail}
-              onChange={(e) => {this.handleChange(e, "email")}}/>
             <input type="password" 
               placeholder={this.props.data.regFormPlaceholder.password}
+              onKeyPress={(e) => this.handleEnter(e)}
               onChange={(e) => {this.handleChange(e, "password")}}/>
-            <input type="password" 
-              placeholder={this.props.data.regFormPlaceholder.confirmedPassword}
-              onChange={(e) => {this.handleChange(e, "confirmedPassword")}}/>
             <br/>
-            <Button size="large" color="success" hollow onClick={this.handleClick}>Register</Button>
+            <Button size="large" color="success" hollow onClick={this.handleClick}>Login</Button>
         </div>
       </div>
     )
@@ -75,7 +76,7 @@ const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
 
 const mapDispatchToProps = {
   updateCurrentUserInput,
-  postUser
+  login
 };
 
 const mergeProps = (data: Data, actions: Actions): Props => ({
@@ -83,5 +84,5 @@ const mergeProps = (data: Data, actions: Actions): Props => ({
   actions
 });
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Registration);
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Auth);
 

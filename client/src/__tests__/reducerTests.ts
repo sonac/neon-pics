@@ -13,8 +13,11 @@ describe('testing reducer', () => {
     questionId: null,
     sortState: null,
     currentUser: null,
-    userInput: null,
-    mid: 0
+    regFormPlaceholder: null,
+    userRegInput: null,
+    userLogInput: null,
+    mid: 0,
+    showLogin: false
   };
 
   const fetchedData = {"id":1,

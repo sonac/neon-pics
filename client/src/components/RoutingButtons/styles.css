@@ -10,5 +10,23 @@
 .authButton {
   position: absolute;
   top: 10px;
-  right: 100px;
+  right: 50px;
+}
+
+.loginWindow {
+  position: absolute;
+  top: 200px;
+  left: 400px;
+  right: 500px;
+  bottom: 100px;
+  background: linear-gradient(to right, transparent, purple, indigo, blue)
+}
+
+.loginOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent;
 }

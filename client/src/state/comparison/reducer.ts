@@ -8,12 +8,14 @@ import {
   pictureClick,
   postComparison,
   updateCurrentUserInput,
-  postUser
+  postUser,
+  loginSwitcher,
+  login
 } from './actions'
 import { pairwise, incrRating } from 'utils/common';
 import { processSortingStep } from 'utils/sorting';
 import { State, FetchComparisonSuccessAction } from './types';
-import { ErrorAction, IdAction, UserInputAction } from 'state/types';
+import { ErrorAction, IdAction, UserRegInputAction } from 'state/types';
 
 const initState: State = {
   isLoading: true,
@@ -23,8 +25,11 @@ const initState: State = {
   questionId: null,
   sortState: null,
   currentUser: {login: "oh", password: "hi", eMail: "Mark"},
-  userInput: {login: "login", eMail: "email@email.com", password: "password", confirmedPassword: "password"},
-  mid: 0
+  regFormPlaceholder: {login: "Login:", eMail: "Email:", password: "Password:", confirmedPassword: "Password:"},
+  userRegInput: null,
+  userLogInput: null,
+  mid: 0,
+  showLogin: false
 };
 
 export default createReducerFromDescriptor({
@@ -51,6 +56,8 @@ export default createReducerFromDescriptor({
     pics: incrRating(action.id, state.pics)
   }),
   [postComparison.type]: (state: State, action: Action): State => ({ ...state}),
-  [updateCurrentUserInput.type]: (state: State, action: UserInputAction): State => ({ ...state, userInput: action.userInp}),
-  [postUser.type]: (state: State, action: Action): State => ({...state}) 
+  [updateCurrentUserInput.type]: (state: State, action: UserRegInputAction): State => ({ ...state, userRegInput: action.userInp}),
+  [postUser.type]: (state: State, action: Action): State => ({...state}),
+  [loginSwitcher.type]: (state: State, action: Action): State => ({...state, showLogin: !state.showLogin}), 
+  [login.type]: (state: State, action: Action): State => ({...state})
 }, initState);

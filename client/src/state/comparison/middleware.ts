@@ -3,9 +3,10 @@ import { fetchComparison,
   fetchError, 
   pictureClick, 
   postComparison, 
-  postUser } from './actions';
+  postUser,
+  login } from './actions';
 import { values } from 'ramda';
-import { User, UserInput } from './types';
+import { User, UserRegInput, UserLogInput } from './types';
 
 interface FetchPicture {
   id: number;
@@ -44,7 +45,7 @@ export default ({ getState, dispatch }) => next => action => {
       })
   }
 
-  if (action.type == postComparison.type) {
+  if (action.type === postComparison.type) {
     const state = getState();
     const pics = values(state.comparison.pics);
     const questionId = state.comparison.questionId;
@@ -62,9 +63,9 @@ export default ({ getState, dispatch }) => next => action => {
     });
   }
 
-  if (action.type == postUser.type) {
+  if (action.type === postUser.type) {
     const state = getState();
-    const userInp: UserInput = state.comparison.userInput;
+    const userInp: UserRegInput = state.comparison.userRegInput;
     const user: User = {login: userInp.login, password: userInp.password, eMail: userInp.eMail}
 
     fetch('/user', {
@@ -79,6 +80,22 @@ export default ({ getState, dispatch }) => next => action => {
         fetch(`/user/${user.login}`)
           .then(resonse => console.log(response.json()))
       );
+  }
+
+  if (action.type === login.type) {
+    const state = getState();
+    const userInp: UserLogInput = state.comparison.userLogInput
+    
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(userInp)
+    })
+      .then(response => console.log(response.json())
+    )
   }
 
   return next(action);

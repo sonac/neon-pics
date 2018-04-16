@@ -1,5 +1,5 @@
 import { ReducersMapObject, Reducer, Action } from 'redux';
-import { User, UserInput } from 'state/comparison/types'
+import { User, UserRegInput, UserLogInput } from 'state/comparison/types'
 import { ActionCreator } from 'react-redux';
 
 export type UntypedActionCreator0<R extends object> = () => R;
@@ -38,8 +38,14 @@ export type ErrorData = {
 export type ErrorAction = ErrorData & Action;
 export type ErrorActionCreator = ActionCreator1<string | Error, ErrorAction>;
 
-export type UserInputData = {
-  userInp: UserInput
+export type UserRegInputData = {
+  userInp: UserRegInput
 }
-export type UserInputAction = UserInputData & Action;
-export type UserInputActionCreator = ActionCreator1<UserInput, UserInputAction>
+export type UserRegInputAction = UserRegInputData & Action;
+export type UserRegInputActionCreator = ActionCreator1<UserRegInput, UserRegInputAction>
+
+export type UserLogInputData = {
+  userInp: UserLogInput
+}
+export type UserLogInputAction = UserLogInputData & Action;
+export type UserLogInputActionCreator = ActionCreator1<UserRegInput, UserRegInputAction>
