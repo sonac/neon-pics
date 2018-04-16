@@ -33,6 +33,21 @@ input {
   margin-bottom: 5px;
   border-radius: 10px;
 }
-.formInput {
-
+.errLog {
+  color: red;
+}
+.errLogHidden {
+  display: none;
+}
+.errEmail {
+  color: red;
+}
+.errEmailHidden {
+  display: none;
+}
+.errPwd {
+  color: red;
+}
+.errPwdHidden {
+  display: none;
 }

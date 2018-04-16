@@ -12,6 +12,7 @@ const styles = require('./styles.css');
 interface Data {
   regFormPlaceholder: UserRegInput;
   userInput: UserRegInput;
+  error: null | string | Error;
 }
 
 interface Actions {
@@ -42,23 +43,34 @@ class Registration extends Component<Props, State> {
   }
 
   render() {
-    console.log(this.props.data.userInput)
     return (
       <div className={styles.registration}>
         <h2>Oh hi, Mark!</h2>
         <div className={styles.wrapper}>
             <input type="text" 
               placeholder={this.props.data.regFormPlaceholder.login} 
-              onChange={(e) => {this.handleChange(e, "login")}} />
+              onChange={(e) => {this.handleChange(e, "login")}} /> 
+              <div className={
+                this.props.data.error !== null && this.props.data.error.toString().indexOf("login") != -1 ? styles.errLog : styles.errLogHidden
+                }> {this.props.data.error} 
+              </div>
             <input type="email" 
               placeholder={this.props.data.regFormPlaceholder.eMail}
-              onChange={(e) => {this.handleChange(e, "email")}}/>
+              onChange={(e) => {this.handleChange(e, "email")}}/> 
+              <div className={
+                this.props.data.error !== null && this.props.data.error.toString().indexOf("email") != -1 ? styles.errEmail : styles.errEmailHidden
+                }> {this.props.data.error} 
+              </div>
             <input type="password" 
               placeholder={this.props.data.regFormPlaceholder.password}
               onChange={(e) => {this.handleChange(e, "password")}}/>
             <input type="password" 
               placeholder={this.props.data.regFormPlaceholder.confirmedPassword}
               onChange={(e) => {this.handleChange(e, "confirmedPassword")}}/>
+              <div className={
+                this.props.data.error !== null && this.props.data.error.toString().indexOf("password missmatch") != -1 ? styles.errPwd : styles.errPwdHidden
+                }> {this.props.data.error} 
+              </div>
             <br/>
             <Button size="large" color="success" hollow onClick={this.handleClick}>Register</Button>
         </div>
@@ -70,7 +82,8 @@ class Registration extends Component<Props, State> {
 
 const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
   regFormPlaceholder: state.comparison.regFormPlaceholder,
-  userInput: state.comparison.userRegInput
+  userInput: state.comparison.userRegInput,
+  error: state.comparison.error
 });
 
 const mapDispatchToProps = {

@@ -34,6 +34,12 @@ class UserController @Inject() (ucc: UserControllerComponents, conf: Configurati
         case JsSuccess(usr: UserResource, path: JsPath) =>
           ucc.userResourceHandler.create(usr).map { u =>
             Created(Json.toJson(u))
+          }.recover {
+            case err => {
+              if (err.getMessage.contains("login"))  BadRequest("User with such login exists " + err)
+              else if (err.getMessage.contains("email")) BadRequest("User with such email exists " + err)
+              else BadRequest("woopsie dupsie " + err)
+            }
           }
         case e: JsError => Future(BadRequest("Detected error:"+ JsError.toJson(e)))
       }
@@ -48,9 +54,11 @@ class UserController @Inject() (ucc: UserControllerComponents, conf: Configurati
           ucc.userResourceHandler.get(usrLog.login).map(storedUser => {
             if (storedUser.password == usrLog.password) {
               val token = Jwt.encode(Json.toJson(storedUser).toString, secretKey, JwtAlgorithm.HS256)
-              Ok("oh").withHeaders(("auth-token", token))
+              Ok(Json.toJson(storedUser)).withHeaders(/*("Content-Type", "application/json"),
+                ("Accept", "application/json"),*/
+                ("auth-token", token))
             }
-            else Unauthorized("hi")
+            else Unauthorized("You've entered wrong password")
           }).recover {
             case err => BadRequest("wopsie " + err)
           }

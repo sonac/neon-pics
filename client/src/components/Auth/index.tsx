@@ -3,19 +3,20 @@ import { Component } from 'react';
 import { Button } from 'react-foundation-components/lib/button';
 import { connect } from 'react-redux';
 import { values } from 'ramda';
-import { updateCurrentUserInput, login } from '../../state/comparison/actions';
-import { User, UserRegInput, State as ComparisonState } from 'state/comparison/types';
-import { BasicActionCreator, UserRegInputActionCreator } from 'state/types';
+import { updateCurrentLoginInput, login } from '../../state/comparison/actions';
+import { User, UserLogInput, State as ComparisonState } from 'state/comparison/types';
+import { BasicActionCreator, UserLogInputActionCreator } from 'state/types';
 
 const styles = require('./styles.css');
 
 interface Data {
-  regFormPlaceholder: UserRegInput;
-  userInput: UserRegInput;
+  regFormPlaceholder: UserLogInput;
+  loginInput: UserLogInput;
+  error: null | string | Error;
 }
 
 interface Actions {
-  updateCurrentUserInput: UserRegInputActionCreator;
+  updateCurrentLoginInput: UserLogInputActionCreator;
   login: BasicActionCreator;
 }
 
@@ -39,16 +40,13 @@ class Auth extends Component<Props, State> {
   }
 
   handleChange = (e, inp) => {
-    let userInp = this.props.data.userInput
+    let userInp = this.props.data.loginInput
     if (inp === "login") { userInp = {...userInp, login: e.target.value} }
-    else if (inp === "email") { userInp = {...userInp, eMail: e.target.value} }
     else if (inp === "password") { userInp = {...userInp, password: e.target.value} }
-    else if (inp === "confirmedPassword") { userInp = {...userInp, confirmedPassword: e.target.value} }
-    this.props.actions.updateCurrentUserInput(userInp)
+    this.props.actions.updateCurrentLoginInput(userInp)
   }
 
   render() {
-    console.log(this.props.data.userInput)
     return (
       <div className={styles.login}>
         <h2>Login window</h2>
@@ -59,7 +57,11 @@ class Auth extends Component<Props, State> {
             <input type="password" 
               placeholder={this.props.data.regFormPlaceholder.password}
               onKeyPress={(e) => this.handleEnter(e)}
-              onChange={(e) => {this.handleChange(e, "password")}}/>
+              onChange={(e) => {this.handleChange(e, "password")}}/> 
+              <div className={
+                this.props.data.error !== null && this.props.data.error.toString().indexOf("Wrong password") != -1 ? styles.errPwd : styles.errpwdHidden
+                }> {this.props.data.error} 
+              </div>
             <br/>
             <Button size="large" color="success" hollow onClick={this.handleClick}>Login</Button>
         </div>
@@ -71,11 +73,12 @@ class Auth extends Component<Props, State> {
 
 const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
   regFormPlaceholder: state.comparison.regFormPlaceholder,
-  userInput: state.comparison.userRegInput
+  loginInput: state.comparison.userLogInput,
+  error: state.comparison.error
 });
 
 const mapDispatchToProps = {
-  updateCurrentUserInput,
+  updateCurrentLoginInput,
   login
 };
 

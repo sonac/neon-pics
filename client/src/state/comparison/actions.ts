@@ -1,6 +1,6 @@
 import * as utils from 'state/utils';
-import { FetchComparisonSuccessData, User, UserRegInput } from './types';
-import { IdData, ErrorData, UserRegInputData } from 'state/types';
+import { FetchComparisonSuccessData, User, UserRegInput, UserLogInput } from './types';
+import { IdData, ErrorData, UserRegInputData, UserLogInputData } from 'state/types';
 
 export const fetchComparison = utils.createActionCreator('FETCH_COMPARISON', id => ({
   id
@@ -25,6 +25,11 @@ export const postComparison = utils.createActionCreator('POST_COMPARISON');
 export const updateCurrentUserInput = utils.createActionCreator('UPDATE_CURRENT_USER_INPUT', 
                                                                 (userInp: UserRegInput): UserRegInputData => ({
   userInp
+}));
+
+export const updateCurrentLoginInput = utils.createActionCreator('UPDATE_CURRENT_LOGIN_INPUT',
+                                                                (loginInp: UserLogInput): UserLogInputData => ({
+  loginInp
 }));
 
 export const postUser = utils.createActionCreator('POST_USER');

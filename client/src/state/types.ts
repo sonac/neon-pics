@@ -45,7 +45,7 @@ export type UserRegInputAction = UserRegInputData & Action;
 export type UserRegInputActionCreator = ActionCreator1<UserRegInput, UserRegInputAction>
 
 export type UserLogInputData = {
-  userInp: UserLogInput
+  loginInp: UserLogInput
 }
 export type UserLogInputAction = UserLogInputData & Action;
-export type UserLogInputActionCreator = ActionCreator1<UserRegInput, UserRegInputAction>
+export type UserLogInputActionCreator = ActionCreator1<UserLogInput, UserLogInputAction>

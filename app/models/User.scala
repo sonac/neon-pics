@@ -12,7 +12,7 @@ class UserTable(tag: Tag) extends Table[User](tag, "user") {
 
   def login = column[String]("login", O.Unique)
 
-  def password = column[String]("password")
+  def password = column[String]("password", O.Unique)
 
   def eMail = column[String]("email")
 

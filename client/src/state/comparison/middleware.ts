@@ -4,7 +4,8 @@ import { fetchComparison,
   pictureClick, 
   postComparison, 
   postUser,
-  login } from './actions';
+  login, 
+  loginSwitcher} from './actions';
 import { values } from 'ramda';
 import { User, UserRegInput, UserLogInput } from './types';
 
@@ -68,18 +69,42 @@ export default ({ getState, dispatch }) => next => action => {
     const userInp: UserRegInput = state.comparison.userRegInput;
     const user: User = {login: userInp.login, password: userInp.password, eMail: userInp.eMail}
 
-    fetch('/user', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user)
-    })
-      .then(response =>
-        fetch(`/user/${user.login}`)
-          .then(resonse => console.log(response.json()))
-      );
+    if (userInp.password !== userInp.confirmedPassword) {
+      dispatch(fetchError("Confirmed password mismatch"))
+    }
+    else {
+      fetch('/user', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user)
+      })
+        .then(response => {
+          if (response.status === 400) {
+            response.text().then(
+              resp => {
+                if (resp.indexOf("login") != -1) {
+                  dispatch(fetchError("User with such login exists"))
+                }
+                else if (resp.indexOf("email") != -1) {
+                  dispatch(fetchError("User with such email exists"))
+                }
+                else {
+                  dispatch(fetchError(resp))
+                }
+              }
+            )
+          }
+          else {
+            console.log(response.json())
+          }
+        })
+        .catch(err =>
+          console.error(err)
+        );
+    }
   }
 
   if (action.type === login.type) {
@@ -94,8 +119,17 @@ export default ({ getState, dispatch }) => next => action => {
       },
       body: JSON.stringify(userInp)
     })
-      .then(response => console.log(response.json())
-    )
+      .then(response => {
+        if (response.status === 401) {
+          dispatch(fetchError("Wrong password"))
+        }
+        else {
+          const kek = response.headers.get('auth-token')
+          console.log(kek);
+          dispatch(loginSwitcher())
+        }
+      })
+     
   }
 
   return next(action);

@@ -10,12 +10,13 @@ import {
   updateCurrentUserInput,
   postUser,
   loginSwitcher,
-  login
+  login,
+  updateCurrentLoginInput
 } from './actions'
 import { pairwise, incrRating } from 'utils/common';
 import { processSortingStep } from 'utils/sorting';
 import { State, FetchComparisonSuccessAction } from './types';
-import { ErrorAction, IdAction, UserRegInputAction } from 'state/types';
+import { ErrorAction, IdAction, UserRegInputAction, UserLogInputAction } from 'state/types';
 
 const initState: State = {
   isLoading: true,
@@ -57,6 +58,7 @@ export default createReducerFromDescriptor({
   }),
   [postComparison.type]: (state: State, action: Action): State => ({ ...state}),
   [updateCurrentUserInput.type]: (state: State, action: UserRegInputAction): State => ({ ...state, userRegInput: action.userInp}),
+  [updateCurrentLoginInput.type]: (state: State, action: UserLogInputAction): State => ({...state, userLogInput: action.loginInp}),
   [postUser.type]: (state: State, action: Action): State => ({...state}),
   [loginSwitcher.type]: (state: State, action: Action): State => ({...state, showLogin: !state.showLogin}), 
   [login.type]: (state: State, action: Action): State => ({...state})

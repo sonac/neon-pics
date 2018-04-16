@@ -38,6 +38,9 @@ input {
   margin-bottom: 5px;
   border-radius: 10px;
 }
-.formInput {
-
+.errPwd {
+  color: red;
+}
+.errPwdHidden {
+  display: none;
 }
