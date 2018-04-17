@@ -37,6 +37,7 @@ class Auth extends Component<Props, State> {
   handleEnter = (e) => {
     if (e.key === 'Enter') {
       this.props.actions.login();
+      window.location.reload();
     }
   }
 

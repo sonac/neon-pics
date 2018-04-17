@@ -7,7 +7,8 @@ import { fetchComparison,
   pictureClick, 
   postComparison, 
   postUser,
-  login, 
+  login,
+  logout, 
   loginSwitcher,
   checkToken,
   checkTokenSuccess} from './actions';
@@ -55,7 +56,10 @@ export default ({ getState, dispatch }) => next => action => {
     const state = getState();
     const pics = values(state.comparison.pics);
     const questionId = state.comparison.questionId;
-    const data = {questionnaireId: questionId, userId: 1, pictureIdScores: pics.map(x => ({pictureId: x.id, score: x.rating}))};
+    const userName = state.comparison.currentUser.login;
+    const data = {questionnaireId: questionId, userName: userName, pictureIdScores: pics.map(x => ({pictureId: x.id, score: x.rating}))};
+
+    console.log(data);
 
     fetch('/comparison-answer/', {
       method: 'POST',
@@ -151,6 +155,11 @@ export default ({ getState, dispatch }) => next => action => {
         })
       }
     })
+  }
+
+  if (action.type === logout.type) {
+    const cookie = new Cookies();
+    cookie.remove('auth-token');
   }
 
   return next(action);

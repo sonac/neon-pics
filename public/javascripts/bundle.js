@@ -1732,6 +1732,7 @@ exports.updateCurrentLoginInput = utils.createActionCreator('UPDATE_CURRENT_LOGI
 exports.postUser = utils.createActionCreator('POST_USER');
 exports.loginSwitcher = utils.createActionCreator('LOGIN_SWITCHER');
 exports.login = utils.createActionCreator('LOGIN');
+exports.logout = utils.createActionCreator('LOGOUT');
 exports.checkToken = utils.createActionCreator('CHECK_TOKEN');
 exports.checkTokenSuccess = utils.createActionCreator('CHECK_TOKEN_SUCCESS', function (_) {
     return _;
@@ -32457,15 +32458,29 @@ var RoutingButtons = /** @class */function (_super) {
     __extends(RoutingButtons, _super);
     function RoutingButtons() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.handleClick = function () {
-            console.log(_this.props.data.showLogin);
-            _this.props.actions.loginSwitcher();
+        _this.handleClick = function (evt) {
+            if (evt === "auth") {
+                _this.props.actions.loginSwitcher();
+            } else if (evt === "out") {
+                _this.props.actions.logout();
+            } else if (evt === "home") {
+                console.log(evt);
+                window.location.reload();
+            }
         };
         return _this;
     }
     RoutingButtons.prototype.render = function () {
+        var _this = this;
         var currentUser = this.props.data.currentUser;
-        return React.createElement("div", { className: styles.routingButtons }, React.createElement("div", { className: styles.homeButton }, React.createElement(react_router_dom_1.Link, { to: "/" }, React.createElement(button_1.Button, { size: "large", color: "success", hollow: true }, "Home"))), React.createElement("div", { className: currentUser ? styles.hidden : styles.authButton }, React.createElement(react_router_dom_1.Link, { to: "/register" }, React.createElement(button_1.Button, { size: "large", hollow: true }, "Register")), React.createElement("div", { className: styles.login }, React.createElement(button_1.Button, { size: "large", hollow: true, onClick: this.handleClick }, "Login")), React.createElement(ReactModal, { isOpen: this.props.data.showLogin, contentLabel: "Male, female or its a trap?", onRequestClose: this.handleClick, className: styles.loginWindow, overlayClassName: styles.loginOverlay, ariaHideApp: false }, React.createElement(Auth_1.default, null))), React.createElement("div", { className: currentUser ? styles.welcome : styles.hidden }, React.createElement("h2", null, "Welcome, ", currentUser.login, "!")));
+        var name = currentUser ? currentUser.login : "";
+        return React.createElement("div", { className: styles.routingButtons }, React.createElement("div", { className: styles.homeButton }, React.createElement(react_router_dom_1.Link, { to: "/" }, " ", React.createElement(button_1.Button, { size: "large", color: "success", hollow: true, onClick: function onClick(evt) {
+                return _this.handleClick("home");
+            } }, "Home"))), React.createElement("div", { className: currentUser ? styles.hidden : styles.authButton }, React.createElement(react_router_dom_1.Link, { to: "/register" }, React.createElement(button_1.Button, { size: "large", hollow: true }, "Register")), React.createElement("div", { className: styles.login }, React.createElement(button_1.Button, { size: "large", hollow: true, onClick: function onClick(evt) {
+                return _this.handleClick("auth");
+            } }, "Login")), React.createElement(ReactModal, { isOpen: this.props.data.showLogin, contentLabel: "Male, female or its a trap?", onRequestClose: this.handleClick, className: styles.loginWindow, overlayClassName: styles.loginOverlay, ariaHideApp: false }, React.createElement(Auth_1.default, null))), React.createElement("div", { className: currentUser ? styles.welcome : styles.hidden }, React.createElement("h2", null, "Welcome, ", name, "!"), React.createElement("div", { className: styles.logout }, React.createElement(button_1.Button, { color: "secondary", size: "large", hollow: true, onClick: function onClick(evt) {
+                return _this.handleClick("out");
+            } }, "Logout"))));
     };
     return RoutingButtons;
 }(react_1.Component);
@@ -32476,7 +32491,8 @@ var mapStateToProps = function mapStateToProps(state) {
     };
 };
 var mapDispatchToProps = {
-    loginSwitcher: actions_1.loginSwitcher
+    loginSwitcher: actions_1.loginSwitcher,
+    logout: actions_1.logout
 };
 var mergeProps = function mergeProps(data, actions) {
     return {
@@ -35887,6 +35903,7 @@ var Auth = /** @class */function (_super) {
         _this.handleEnter = function (e) {
             if (e.key === 'Enter') {
                 _this.props.actions.login();
+                window.location.reload();
             }
         };
         _this.handleChange = function (e, inp) {
@@ -36021,7 +36038,7 @@ exports = module.exports = __webpack_require__(20)(undefined);
 
 
 // module
-exports.push([module.i, ".routingButton_36tsT{\n  height: 100%;\n}\n\n.homeButton_1u2rX {\n  position: absolute;\n  top: 10px;\n  left: 50px;\n}\n\n.authButton_1tFDs {\n  display: flex;\n  justify-content: flex-end;\n  align-content: flex-end;\n  flex-direction: row;\n  position: relative;\n  margin: auto;\n  width: 90%;\n  padding-top: 10px;\n  color: red;\n}\n\n.login_2MfM4 {\n  padding-left: 10px;\n}\n\n.loginWindow_2eq9z {\n  position: absolute;\n  top: 200px;\n  left: 400px;\n  right: 500px;\n  bottom: 100px;\n  background: linear-gradient(to right, transparent, purple, indigo, blue)\n}\n\n.loginOverlay_2ab0b {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background-color: transparent;\n}\n\n.hidden_3MP3s {\n  display: none;\n}\n\n.welcome_1vjkk {\n  position: absolute;\n  right: 50px;\n  color: rgb(144, 191, 194);\n}", ""]);
+exports.push([module.i, ".routingButton_36tsT{\n  height: 100%;\n}\n\n.homeButton_1u2rX {\n  position: absolute;\n  top: 10px;\n  left: 50px;\n}\n\n.authButton_1tFDs {\n  display: flex;\n  justify-content: flex-end;\n  align-content: flex-end;\n  flex-direction: row;\n  position: relative;\n  margin: auto;\n  width: 90%;\n  padding-top: 10px;\n  color: red;\n}\n\n.login_2MfM4 {\n  padding-left: 10px;\n}\n\n.loginWindow_2eq9z {\n  position: absolute;\n  top: 200px;\n  left: 400px;\n  right: 500px;\n  bottom: 100px;\n  background: linear-gradient(to right, transparent, purple, indigo, blue)\n}\n\n.loginOverlay_2ab0b {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background-color: transparent;\n}\n\n.hidden_3MP3s {\n  display: none;\n}\n\n.welcome_1vjkk {\n  color: rgb(130, 171, 173);\n  display: flex;\n  justify-content: flex-end;\n  align-content: flex-end;\n  flex-direction: row;\n  position: relative;\n  margin: auto;\n  left: 80px;\n  width: 80%;\n}\n\n.logout_2TgAH {\n  margin-left: 20px;\n  margin-top: 8px;\n}", ""]);
 
 // exports
 exports.locals = {
@@ -36032,7 +36049,8 @@ exports.locals = {
 	"loginWindow": "loginWindow_2eq9z",
 	"loginOverlay": "loginOverlay_2ab0b",
 	"hidden": "hidden_3MP3s",
-	"welcome": "welcome_1vjkk"
+	"welcome": "welcome_1vjkk",
+	"logout": "logout_2TgAH"
 };
 
 /***/ }),
@@ -36157,6 +36175,7 @@ var PicsPair = /** @class */function (_super) {
         if (isLoading) {
             return React.createElement("div", { className: styles.picsPair }, React.createElement("div", null, "Loading..."));
         } else if (sortState.sortedPart.length == Object.keys(pics).length) {
+            this.props.actions.postComparison();
             return React.createElement("div", { className: styles.picsPair }, React.createElement("img", { src: "https://c1.staticflickr.com/7/6095/6385016345_f19d5414a7_b.jpg" }));
         }
         var pic1 = pics[sortState.picsToCompare[0]];
@@ -36175,7 +36194,8 @@ var mapStateToProps = function mapStateToProps(state) {
 };
 var mapDispatchToProps = {
     fetchComparison: actions_1.fetchComparison,
-    pictureClick: actions_1.pictureClick
+    pictureClick: actions_1.pictureClick,
+    postComparison: actions_1.postComparison
 };
 var mergeProps = function mergeProps(data, actions) {
     return {
@@ -36659,9 +36679,11 @@ exports.default = function (_a) {
                 var state = getState();
                 var pics = ramda_1.values(state.comparison.pics);
                 var questionId = state.comparison.questionId;
-                var data = { questionnaireId: questionId, userId: 1, pictureIdScores: pics.map(function (x) {
+                var userName = state.comparison.currentUser.login;
+                var data = { questionnaireId: questionId, userName: userName, pictureIdScores: pics.map(function (x) {
                         return { pictureId: x.id, score: x.rating };
                     }) };
+                console.log(data);
                 fetch('/comparison-answer/', {
                     method: 'POST',
                     headers: {
@@ -36736,6 +36758,10 @@ exports.default = function (_a) {
                         });
                     }
                 });
+            }
+            if (action.type === actions_1.logout.type) {
+                var cookie = new Cookies();
+                cookie.remove('auth-token');
             }
             return next(action);
         };
@@ -44727,7 +44753,7 @@ var initState = {
     question: '',
     questionId: null,
     sortState: null,
-    currentUser: { login: "oh", eMail: "Mark" },
+    currentUser: null,
     regFormPlaceholder: { login: "Login:", eMail: "Email:", password: "Password:", confirmedPassword: "Password:" },
     userRegInput: null,
     userLogInput: null,
@@ -44757,6 +44783,8 @@ exports.default = utils_1.createReducerFromDescriptor((_a = {}, _a[actions_1.fet
     return __assign({}, state, { showLogin: !state.showLogin });
 }, _a[actions_1.login.type] = function (state, action) {
     return __assign({}, state);
+}, _a[actions_1.logout.type] = function (state, action) {
+    return __assign({}, state, { currentUser: null });
 }, _a[actions_1.checkToken.type] = function (state, action) {
     return __assign({}, state);
 }, _a[actions_1.checkTokenSuccess.type] = function (state, action) {

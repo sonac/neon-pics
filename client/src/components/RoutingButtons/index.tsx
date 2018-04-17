@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as ReactModal from 'react-modal';
 import { User, State as ComparisonState } from 'state/comparison/types';
-import { loginSwitcher } from 'state/comparison/actions';
+import { loginSwitcher, logout } from 'state/comparison/actions';
 import { BasicActionCreator } from 'state/types';
 import Auth from 'components/Auth';
 
@@ -28,7 +28,8 @@ interface Data {
 }
 
 interface Actions {
-  loginSwitcher: BasicActionCreator
+  loginSwitcher: BasicActionCreator,
+  logout: BasicActionCreator
 }
 
 interface Props {
@@ -40,22 +41,42 @@ type State = {}
 
 class RoutingButtons extends Component<Props, State> {
 
-  handleClick = () => {
-    console.log(this.props.data.showLogin);
-    this.props.actions.loginSwitcher();
+  handleClick = (evt) => {
+    if (evt === "auth") {
+      this.props.actions.loginSwitcher();
+    }
+    else if (evt === "out") {
+      this.props.actions.logout();
+    }
+    else if (evt === "home") {
+      console.log(evt);
+      window.location.reload();
+    }
   }
 
   render() {
     const currentUser = this.props.data.currentUser;
+    const name = currentUser ? currentUser.login : "";
 
     return (
       <div className={styles.routingButtons}>
         <div className={styles.homeButton}>
-          <Link to="/"><Button size="large" color="success" hollow>Home</Button></Link>
+          <Link to="/"> <Button size="large" 
+                                color="success" 
+                                hollow
+                                onClick={(evt) => this.handleClick("home")}>
+                                  Home
+                        </Button>
+          </Link>
         </div>
         <div className={currentUser ? styles.hidden :  styles.authButton}>
           <Link to="/register"><Button size="large" hollow>Register</Button></Link>
-          <div className={styles.login}><Button size="large" hollow onClick={this.handleClick}>Login</Button></div>
+          <div className={styles.login}><Button size="large" 
+                                                hollow 
+                                                onClick={(evt) => this.handleClick("auth")}>
+                                          Login
+                                        </Button>
+          </div>
           <ReactModal
           isOpen={this.props.data.showLogin}
           contentLabel="Male, female or its a trap?"
@@ -67,7 +88,16 @@ class RoutingButtons extends Component<Props, State> {
             <Auth />
           </ReactModal>
         </div>
-        <div className={currentUser ? styles.welcome : styles.hidden}><h2>Welcome, {currentUser.login}!</h2></div>
+        <div className={currentUser ? styles.welcome : styles.hidden}>
+          <h2>Welcome, {name}!</h2>
+          <div className={styles.logout}><Button color="secondary" 
+                                                 size="large" 
+                                                 hollow 
+                                                 onClick={(evt) => this.handleClick("out")}>
+                                           Logout
+                                         </Button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -79,7 +109,8 @@ const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
 });
 
 const mapDispatchToProps: Actions = {
-  loginSwitcher
+  loginSwitcher,
+  logout
 };
 
 const mergeProps = (data: Data, actions: Actions): Props => ({

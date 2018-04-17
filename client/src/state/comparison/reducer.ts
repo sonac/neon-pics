@@ -11,6 +11,7 @@ import {
   postUser,
   loginSwitcher,
   login,
+  logout,
   updateCurrentLoginInput,
   checkToken,
   checkTokenSuccess
@@ -27,7 +28,7 @@ const initState: State = {
   question: '',
   questionId: null,
   sortState: null,
-  currentUser: {login: "oh", eMail: "Mark"},
+  currentUser: null,
   regFormPlaceholder: {login: "Login:", eMail: "Email:", password: "Password:", confirmedPassword: "Password:"},
   userRegInput: null,
   userLogInput: null,
@@ -64,6 +65,7 @@ export default createReducerFromDescriptor({
   [postUser.type]: (state: State, action: Action): State => ({...state}),
   [loginSwitcher.type]: (state: State, action: Action): State => ({...state, showLogin: !state.showLogin}), 
   [login.type]: (state: State, action: Action): State => ({...state}),
+  [logout.type]: (state: State, action: Action): State => ({...state, currentUser: null}),
   [checkToken.type]: (state: State, action: Action): State => ({...state}),
   [checkTokenSuccess.type]: (state: State, action: FetchUserAction): State => (
     console.log("hi " + action.currentUser),

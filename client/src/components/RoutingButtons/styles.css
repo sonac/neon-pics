@@ -47,7 +47,18 @@
 }
 
 .welcome {
-  position: absolute;
-  right: 50px;
-  color: rgb(144, 191, 194);
+  color: rgb(130, 171, 173);
+  display: flex;
+  justify-content: flex-end;
+  align-content: flex-end;
+  flex-direction: row;
+  position: relative;
+  margin: auto;
+  left: 80px;
+  width: 80%;
+}
+
+.logout {
+  margin-left: 20px;
+  margin-top: 8px;
 }

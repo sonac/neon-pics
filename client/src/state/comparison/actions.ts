@@ -38,6 +38,8 @@ export const loginSwitcher = utils.createActionCreator('LOGIN_SWITCHER');
 
 export const login = utils.createActionCreator('LOGIN');
 
+export const logout = utils.createActionCreator('LOGOUT');
+
 export const checkToken = utils.createActionCreator('CHECK_TOKEN');
 
 export const checkTokenSuccess = utils.createActionCreator('CHECK_TOKEN_SUCCESS', (_: FetchUserData) => _);

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { values } from 'ramda';
-import { fetchComparison, pictureClick } from '../../state/comparison/actions';
+import { fetchComparison, pictureClick, postComparison } from '../../state/comparison/actions';
 import { PicturesMap, SortState, State as ComparisonState } from 'state/comparison/types';
 import { IdActionCreator, BasicActionCreator } from 'state/types';
 
@@ -20,6 +20,7 @@ interface Data {
 interface Actions {
   fetchComparison: IdActionCreator;
   pictureClick: IdActionCreator;
+  postComparison: BasicActionCreator;
 }
 
 interface Props {
@@ -52,6 +53,7 @@ class PicsPair extends Component<Props, State> {
       return <div className={styles.picsPair}><div>Loading...</div></div>;
     }
     else if (sortState.sortedPart.length == Object.keys(pics).length) {
+      this.props.actions.postComparison();
       return <div className={styles.picsPair}>
                <img src="https://c1.staticflickr.com/7/6095/6385016345_f19d5414a7_b.jpg" />
              </div>;
@@ -91,7 +93,8 @@ const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
 
 const mapDispatchToProps = {
   fetchComparison,
-  pictureClick
+  pictureClick,
+  postComparison
 };
 
 const mergeProps = (data: Data, actions: Actions): Props => ({
