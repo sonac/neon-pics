@@ -41,18 +41,4 @@ class UserRepositoryTest extends PlaySpec with GuiceOneAppPerTest with Injecting
     }
   }
 
-  "getMaxId" should {
-    "return int" in {
-      val userRepository = inject[UserRepository]
-      import userRepository._
-
-      val maxId: Int = Await.result(getMaxId, 5.seconds)
-
-      assert(maxId > 0)
-
-      println(maxId)
-
-    }
-  }
-
 }

@@ -1,4 +1,4 @@
-package services.comparison
+package models.daos
 
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
@@ -16,7 +16,7 @@ class QuestionnaireRepositoryTest extends PlaySpec with GuiceOneAppPerTest with 
 
       val f = for {
         _ <- addQuestionnaire(text = "Which neon is the best?", List(3, 4))
-        qs <- getAllQuestionnaires
+        qs <- getQuestionnaireAll
       } yield qs
 
       val qs = Await.result(f, 5.seconds)

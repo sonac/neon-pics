@@ -15,7 +15,7 @@ mappings in Universal ++= directory(baseDirectory.value / "public")
 libraryDependencies ++= Seq(
   guice,
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
-  "com.typesafe.play" %% "play-slick" % "3.0.0",
+  "com.typesafe.play" %% "play-slick" % "3.0.1",
   "org.postgresql" % "postgresql" % "9.4-1206-jdbc41",
   "com.h2database" % "h2" % "1.4.196" % Test,
   "net.codingwell" %% "scala-guice" % "4.1.1",
@@ -27,8 +27,4 @@ packageName in Docker := "neon-pics/production"
 
 dockerUpdateLatest := true
 
-// Adds additional packages into Twirl
-//TwirlKeys.templateImports += "sonac.controllers._"
-
-// Adds additional packages into conf/routes
-// play.sbt.routes.RoutesKeys.routesImport += "sonac.binders._"
+javaOptions in Test += "-Dconfig.file=conf/application.test.conf"
