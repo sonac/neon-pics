@@ -1,6 +1,7 @@
 package services
 
 import com.google.inject.Singleton
+import slick.jdbc
 import slick.jdbc.PostgresProfile.api._
 import slick.jdbc.{H2Profile, PostgresProfile, SQLActionBuilder}
 
@@ -13,7 +14,7 @@ trait DbService {
 
 @Singleton
 class DbServicePostgresProduction extends DbService {
-  val db: PostgresProfile.backend.Database = PostgresProfile.api.Database.forConfig("productionDb")
+  val db: PostgresProfile.backend.Database = PostgresProfile.api.Database.forConfig("db")
 }
 
 @Singleton
@@ -21,7 +22,7 @@ class DbServiceH2 extends DbService {
   val db = init()
 
   def init(): Database = {
-    val db = H2Profile.api.Database.forURL("jdbc:h2:mem:test1;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1", driver = "org.h2.Driver")
+    val db: jdbc.H2Profile.backend.Database = H2Profile.api.Database.forConfig("db")
 
     val sql: SQLActionBuilder =
       sql"""

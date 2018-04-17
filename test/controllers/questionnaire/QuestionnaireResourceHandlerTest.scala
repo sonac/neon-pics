@@ -1,4 +1,4 @@
-package services.comparison
+package controllers.questionnaire
 
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
@@ -7,11 +7,11 @@ import play.api.test.Injecting
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-class ComparisonResourceHandlerTest extends PlaySpec with GuiceOneAppPerTest with Injecting {
+class QuestionnaireResourceHandlerTest extends PlaySpec with GuiceOneAppPerTest with Injecting {
 
   "ComparisonResourceHandler.get" should {
     "return questionnaire" in {
-      val comparisonResourceHandler = inject[ComparisonResourceHandler]
+      val comparisonResourceHandler = inject[QuestionnaireResourceHandler]
       import comparisonResourceHandler._
 
       val f = get(1)
