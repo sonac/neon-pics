@@ -33,6 +33,13 @@ class Registration extends Component<Props, State> {
     this.props.actions.postUser();
   }
 
+
+  handleEnter = (e) => {
+    if (e.key === 'Enter') {
+      this.props.actions.postUser();
+    }
+  }
+
   handleChange = (e, inp) => {
     let userInp = this.props.data.userInput
     if (inp === "login") { userInp = {...userInp, login: e.target.value} }
@@ -66,6 +73,7 @@ class Registration extends Component<Props, State> {
               onChange={(e) => {this.handleChange(e, "password")}}/>
             <input type="password" 
               placeholder={this.props.data.regFormPlaceholder.confirmedPassword}
+              onKeyPress={(e) => this.handleEnter(e)}
               onChange={(e) => {this.handleChange(e, "confirmedPassword")}}/>
               <div className={
                 this.props.data.error !== null && this.props.data.error.toString().indexOf("password missmatch") != -1 ? styles.errPwd : styles.errPwdHidden

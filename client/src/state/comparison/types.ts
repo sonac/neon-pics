@@ -19,7 +19,6 @@ export type SortState = {
 
 export type User = {
   login: string;
-  password: string;
   eMail: string;
 }
 
@@ -58,3 +57,9 @@ export type FetchComparisonSuccessData = {
 }
 export type FetchComparisonSuccessAction = FetchComparisonSuccessData & Action;
 export type FetchComparisonSuccessCreator = ActionCreator1<FetchComparisonSuccessData, FetchComparisonSuccessAction>;
+
+export type FetchUserData = {
+  currentUser: User
+}
+export type FetchUserAction = FetchUserData & Action;
+export type FetchUserCreator = ActionCreator1<FetchUserData, FetchUserAction>;

@@ -11,11 +11,13 @@ import {
   postUser,
   loginSwitcher,
   login,
-  updateCurrentLoginInput
+  updateCurrentLoginInput,
+  checkToken,
+  checkTokenSuccess
 } from './actions'
 import { pairwise, incrRating } from 'utils/common';
 import { processSortingStep } from 'utils/sorting';
-import { State, FetchComparisonSuccessAction } from './types';
+import { State, FetchComparisonSuccessAction, FetchUserAction } from './types';
 import { ErrorAction, IdAction, UserRegInputAction, UserLogInputAction } from 'state/types';
 
 const initState: State = {
@@ -25,7 +27,7 @@ const initState: State = {
   question: '',
   questionId: null,
   sortState: null,
-  currentUser: {login: "oh", password: "hi", eMail: "Mark"},
+  currentUser: {login: "oh", eMail: "Mark"},
   regFormPlaceholder: {login: "Login:", eMail: "Email:", password: "Password:", confirmedPassword: "Password:"},
   userRegInput: null,
   userLogInput: null,
@@ -61,5 +63,9 @@ export default createReducerFromDescriptor({
   [updateCurrentLoginInput.type]: (state: State, action: UserLogInputAction): State => ({...state, userLogInput: action.loginInp}),
   [postUser.type]: (state: State, action: Action): State => ({...state}),
   [loginSwitcher.type]: (state: State, action: Action): State => ({...state, showLogin: !state.showLogin}), 
-  [login.type]: (state: State, action: Action): State => ({...state})
+  [login.type]: (state: State, action: Action): State => ({...state}),
+  [checkToken.type]: (state: State, action: Action): State => ({...state}),
+  [checkTokenSuccess.type]: (state: State, action: FetchUserAction): State => (
+    console.log("hi " + action.currentUser),
+    {...state, currentUser: action.currentUser})
 }, initState);

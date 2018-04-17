@@ -1,4 +1,5 @@
-.routingButtons {
+.routingButton{
+  height: 100%;
 }
 
 .homeButton {
@@ -8,9 +9,19 @@
 }
 
 .authButton {
-  position: absolute;
-  top: 10px;
-  right: 50px;
+  display: flex;
+  justify-content: flex-end;
+  align-content: flex-end;
+  flex-direction: row;
+  position: relative;
+  margin: auto;
+  width: 90%;
+  padding-top: 10px;
+  color: red;
+}
+
+.login {
+  padding-left: 10px;
 }
 
 .loginWindow {
@@ -29,4 +40,14 @@
   right: 0;
   bottom: 0;
   background-color: transparent;
+}
+
+.hidden {
+  display: none;
+}
+
+.welcome {
+  position: absolute;
+  right: 50px;
+  color: rgb(144, 191, 194);
 }

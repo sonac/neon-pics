@@ -56,6 +56,28 @@ object UserLoginResource {
 
 }
 
+case class UserDataResource(login: String, eMail: String)
+
+object UserDataResource {
+
+  implicit val implicitWrites: Writes[UserDataResource] {
+    def writes(userData: UserDataResource): JsValue
+  } = new Writes[UserDataResource] {
+    def writes(userData: UserDataResource): JsValue = {
+      Json.obj(
+        "login" -> userData.login,
+        "eMail" -> userData.eMail
+      )
+    }
+  }
+
+  implicit val implicitReads: Reads[UserDataResource] = (
+    (__ \ "login").read[String] and
+      (__ \ "eMail").read[String]
+  )(UserDataResource.apply _)
+
+}
+
 class UserResourceHandler @Inject()(userRepository: UserRepository)(implicit ec: ExecutionContext) {
 
   def create(user: UserResource): Future[UserResource] = {

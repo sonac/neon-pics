@@ -2,7 +2,6 @@ package services.user
 
 import com.google.inject.Inject
 import pdi.jwt.{Jwt, JwtAlgorithm}
-
 import play.api.http.FileMimeTypes
 import play.api.i18n.{Langs, MessagesApi}
 import play.api.libs.json._
@@ -10,7 +9,7 @@ import play.api.mvc._
 import play.api.Configuration
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Success, Failure}
+import scala.util.{Try, Success, Failure}
 
 class UserController @Inject() (ucc: UserControllerComponents, conf: Configuration)
                                (implicit ec: ExecutionContext)
@@ -54,9 +53,7 @@ class UserController @Inject() (ucc: UserControllerComponents, conf: Configurati
           ucc.userResourceHandler.get(usrLog.login).map(storedUser => {
             if (storedUser.password == usrLog.password) {
               val token = Jwt.encode(Json.toJson(storedUser).toString, secretKey, JwtAlgorithm.HS256)
-              Ok(Json.toJson(storedUser)).withHeaders(/*("Content-Type", "application/json"),
-                ("Accept", "application/json"),*/
-                ("auth-token", token))
+              Ok(Json.toJson(storedUser)).withHeaders(("auth-token", token))
             }
             else Unauthorized("You've entered wrong password")
           }).recover {
@@ -66,6 +63,25 @@ class UserController @Inject() (ucc: UserControllerComponents, conf: Configurati
         case e: JsError => Future(BadRequest("Detected error:"+ JsError.toJson(e)))
       }
     }
+  }
+
+  def validate(): Action[AnyContent] = Action.async { implicit request =>
+    val cookie: Cookies = request.cookies
+    var ss = Ok("asd")
+    Future(cookie.get("auth-token") match {
+      case Some(token) => {
+        Jwt.decodeRaw(token.value, secretKey, Seq(JwtAlgorithm.HS256)) match {
+          case Success(usr) => {
+            Json.parse(usr).validate[UserResource] match {
+              case JsSuccess(jsUsr: UserResource, path: JsPath) => Ok(Json.toJson(UserDataResource(jsUsr.login, jsUsr.eMail)))
+              case e: JsError => Unauthorized("token for invalid user")
+            }
+          }
+          case Failure(err) => Unauthorized("auth token is invalid" + err)
+        }
+      }
+      case None => Unauthorized("auth token is absent")
+    })
   }
 
 }
@@ -86,30 +102,3 @@ class UserBaseController @Inject() (ucc: UserControllerComponents) extends BaseC
   override protected def controllerComponents: ControllerComponents = ucc
 
 }
-
-/*
-
-
-case class QuestionnaireFormInput(text: String, pictureIds: Seq[Int] = Seq())
-
-class ComparisonController @Inject()(ccc: ComparisonControllerComponents)(implicit ec: ExecutionContext) extends ComparisonBaseController(ccc) {
-
-  def addQuestionnaire(): Action[AnyContent] = {
-
-    def failure(badForm: Form[QuestionnaireFormInput])(implicit request: ComparisonRequest[AnyContent]) = {
-      Future.successful(BadRequest(badForm.errorsAsJson))
-    }
-
-    def success(input: QuestionnaireFormInput) = {
-      ccc.comparisonResourceHandler.create(input).map { q =>
-        Created(Json.toJson(q))
-      }
-    }
-
-    ComparisonActionBuilder.async { implicit request: ComparisonRequest[AnyContent] =>
-      questionnaireFormInput.bindFromRequest().fold(failure, success)
-    }
-  }
-
-}
- */

@@ -57,22 +57,3 @@ class UserControllerTest extends PlaySpec with GuiceOneAppPerTest with Injecting
     }
   }
 }
-
-/*
-
-  "ComparisonController GET" should {
-
-    "return the resource" in {
-      val controller = inject[ComparisonController]
-      val response = controller.getQuestionnaire(1).apply(FakeRequest(GET, "/"))
-
-      status(response) mustBe OK
-      contentType(response) mustBe Some("application/json")
-      contentAsString(response) must include("\"pictures\"")
-      //      println(contentAsString(response))
-
-    }
-  }
-}
-
- */

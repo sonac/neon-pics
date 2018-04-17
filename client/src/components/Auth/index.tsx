@@ -3,6 +3,7 @@ import { Component } from 'react';
 import { Button } from 'react-foundation-components/lib/button';
 import { connect } from 'react-redux';
 import { values } from 'ramda';
+import * as Cookie from 'universal-cookie';
 import { updateCurrentLoginInput, login } from '../../state/comparison/actions';
 import { User, UserLogInput, State as ComparisonState } from 'state/comparison/types';
 import { BasicActionCreator, UserLogInputActionCreator } from 'state/types';
@@ -35,7 +36,7 @@ class Auth extends Component<Props, State> {
 
   handleEnter = (e) => {
     if (e.key === 'Enter') {
-      console.log('heres enter')
+      this.props.actions.login();
     }
   }
 

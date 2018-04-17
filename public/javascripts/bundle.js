@@ -1732,6 +1732,10 @@ exports.updateCurrentLoginInput = utils.createActionCreator('UPDATE_CURRENT_LOGI
 exports.postUser = utils.createActionCreator('POST_USER');
 exports.loginSwitcher = utils.createActionCreator('LOGIN_SWITCHER');
 exports.login = utils.createActionCreator('LOGIN');
+exports.checkToken = utils.createActionCreator('CHECK_TOKEN');
+exports.checkTokenSuccess = utils.createActionCreator('CHECK_TOKEN_SUCCESS', function (_) {
+    return _;
+});
 
 /***/ }),
 /* 27 */
@@ -29983,16 +29987,57 @@ function verifySubselectors(mapStateToProps, mapDispatchToProps, mergeProps, dis
 "use strict";
 
 
+var __extends = undefined && undefined.__extends || function () {
+    var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+    } || function (d, b) {
+        for (var p in b) {
+            if (b.hasOwnProperty(p)) d[p] = b[p];
+        }
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+}();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(3);
+var react_1 = __webpack_require__(3);
 var react_router_dom_1 = __webpack_require__(130);
+var react_redux_1 = __webpack_require__(27);
 var index_1 = __webpack_require__(279);
 var index_2 = __webpack_require__(369);
+var actions_1 = __webpack_require__(26);
 var styles = __webpack_require__(382);
-function App() {
-    return React.createElement(react_router_dom_1.BrowserRouter, null, React.createElement("div", { className: styles.app }, React.createElement(index_1.default, null), React.createElement(index_2.default, null)));
-}
-exports.default = App;
+var App = /** @class */function (_super) {
+    __extends(App, _super);
+    function App() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    App.prototype.componentDidMount = function () {
+        this.props.actions.checkToken();
+    };
+    App.prototype.render = function () {
+        return React.createElement(react_router_dom_1.BrowserRouter, null, React.createElement("div", { className: styles.app }, React.createElement(index_1.default, null), React.createElement(index_2.default, null)));
+    };
+    return App;
+}(react_1.Component);
+var mapStateToProps = function mapStateToProps() {
+    return {};
+};
+var mapDispatchToProps = {
+    checkToken: actions_1.checkToken
+};
+var mergeProps = function mergeProps(data, actions) {
+    return {
+        data: data,
+        actions: actions
+    };
+};
+exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps, mergeProps)(App);
 
 /***/ }),
 /* 260 */
@@ -32419,13 +32464,15 @@ var RoutingButtons = /** @class */function (_super) {
         return _this;
     }
     RoutingButtons.prototype.render = function () {
-        return React.createElement("div", { className: styles.routingButtons }, React.createElement("div", { className: styles.homeButton }, React.createElement(react_router_dom_1.Link, { to: "/" }, React.createElement(button_1.Button, { size: "large", color: "success", hollow: true }, "Home"))), React.createElement("div", { className: styles.authButton }, React.createElement(react_router_dom_1.Link, { to: "/register" }, React.createElement(button_1.Button, { size: "large", hollow: true }, "Register")), "/", React.createElement(button_1.Button, { size: "large", hollow: true, onClick: this.handleClick }, "Login"), React.createElement(ReactModal, { isOpen: this.props.data.showLogin, contentLabel: "Male, female or its a trap?", onRequestClose: this.handleClick, className: styles.loginWindow, overlayClassName: styles.loginOverlay }, React.createElement(Auth_1.default, null))));
+        var currentUser = this.props.data.currentUser;
+        return React.createElement("div", { className: styles.routingButtons }, React.createElement("div", { className: styles.homeButton }, React.createElement(react_router_dom_1.Link, { to: "/" }, React.createElement(button_1.Button, { size: "large", color: "success", hollow: true }, "Home"))), React.createElement("div", { className: currentUser ? styles.hidden : styles.authButton }, React.createElement(react_router_dom_1.Link, { to: "/register" }, React.createElement(button_1.Button, { size: "large", hollow: true }, "Register")), React.createElement("div", { className: styles.login }, React.createElement(button_1.Button, { size: "large", hollow: true, onClick: this.handleClick }, "Login")), React.createElement(ReactModal, { isOpen: this.props.data.showLogin, contentLabel: "Male, female or its a trap?", onRequestClose: this.handleClick, className: styles.loginWindow, overlayClassName: styles.loginOverlay, ariaHideApp: false }, React.createElement(Auth_1.default, null))), React.createElement("div", { className: currentUser ? styles.welcome : styles.hidden }, React.createElement("h2", null, "Welcome, ", currentUser.login, "!")));
     };
     return RoutingButtons;
 }(react_1.Component);
 var mapStateToProps = function mapStateToProps(state) {
     return {
-        showLogin: state.comparison.showLogin
+        showLogin: state.comparison.showLogin,
+        currentUser: state.comparison.currentUser
     };
 };
 var mapDispatchToProps = {
@@ -35839,7 +35886,7 @@ var Auth = /** @class */function (_super) {
         };
         _this.handleEnter = function (e) {
             if (e.key === 'Enter') {
-                console.log('heres enter');
+                _this.props.actions.login();
             }
         };
         _this.handleChange = function (e, inp) {
@@ -35974,15 +36021,18 @@ exports = module.exports = __webpack_require__(20)(undefined);
 
 
 // module
-exports.push([module.i, ".routingButtons_H_GgB {\n}\n\n.homeButton_1u2rX {\n  position: absolute;\n  top: 10px;\n  left: 50px;\n}\n\n.authButton_1tFDs {\n  position: absolute;\n  top: 10px;\n  right: 50px;\n}\n\n.loginWindow_2eq9z {\n  position: absolute;\n  top: 200px;\n  left: 400px;\n  right: 500px;\n  bottom: 100px;\n  background: linear-gradient(to right, transparent, purple, indigo, blue)\n}\n\n.loginOverlay_2ab0b {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background-color: transparent;\n}", ""]);
+exports.push([module.i, ".routingButton_36tsT{\n  height: 100%;\n}\n\n.homeButton_1u2rX {\n  position: absolute;\n  top: 10px;\n  left: 50px;\n}\n\n.authButton_1tFDs {\n  display: flex;\n  justify-content: flex-end;\n  align-content: flex-end;\n  flex-direction: row;\n  position: relative;\n  margin: auto;\n  width: 90%;\n  padding-top: 10px;\n  color: red;\n}\n\n.login_2MfM4 {\n  padding-left: 10px;\n}\n\n.loginWindow_2eq9z {\n  position: absolute;\n  top: 200px;\n  left: 400px;\n  right: 500px;\n  bottom: 100px;\n  background: linear-gradient(to right, transparent, purple, indigo, blue)\n}\n\n.loginOverlay_2ab0b {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background-color: transparent;\n}\n\n.hidden_3MP3s {\n  display: none;\n}\n\n.welcome_1vjkk {\n  position: absolute;\n  right: 50px;\n  color: rgb(144, 191, 194);\n}", ""]);
 
 // exports
 exports.locals = {
-	"routingButtons": "routingButtons_H_GgB",
+	"routingButton": "routingButton_36tsT",
 	"homeButton": "homeButton_1u2rX",
 	"authButton": "authButton_1tFDs",
+	"login": "login_2MfM4",
 	"loginWindow": "loginWindow_2eq9z",
-	"loginOverlay": "loginOverlay_2ab0b"
+	"loginOverlay": "loginOverlay_2ab0b",
+	"hidden": "hidden_3MP3s",
+	"welcome": "welcome_1vjkk"
 };
 
 /***/ }),
@@ -36335,6 +36385,11 @@ var Registration = /** @class */function (_super) {
         _this.handleClick = function () {
             _this.props.actions.postUser();
         };
+        _this.handleEnter = function (e) {
+            if (e.key === 'Enter') {
+                _this.props.actions.postUser();
+            }
+        };
         _this.handleChange = function (e, inp) {
             var userInp = _this.props.data.userInput;
             if (inp === "login") {
@@ -36358,7 +36413,9 @@ var Registration = /** @class */function (_super) {
                 _this.handleChange(e, "email");
             } }), React.createElement("div", { className: this.props.data.error !== null && this.props.data.error.toString().indexOf("email") != -1 ? styles.errEmail : styles.errEmailHidden }, " ", this.props.data.error), React.createElement("input", { type: "password", placeholder: this.props.data.regFormPlaceholder.password, onChange: function onChange(e) {
                 _this.handleChange(e, "password");
-            } }), React.createElement("input", { type: "password", placeholder: this.props.data.regFormPlaceholder.confirmedPassword, onChange: function onChange(e) {
+            } }), React.createElement("input", { type: "password", placeholder: this.props.data.regFormPlaceholder.confirmedPassword, onKeyPress: function onKeyPress(e) {
+                return _this.handleEnter(e);
+            }, onChange: function onChange(e) {
                 _this.handleChange(e, "confirmedPassword");
             } }), React.createElement("div", { className: this.props.data.error !== null && this.props.data.error.toString().indexOf("password missmatch") != -1 ? styles.errPwd : styles.errPwdHidden }, " ", this.props.data.error), React.createElement("br", null), React.createElement(button_1.Button, { size: "large", color: "success", hollow: true, onClick: this.handleClick }, "Register")));
     };
@@ -36557,15 +36614,18 @@ exports.default = store;
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var actions_1 = __webpack_require__(26);
 var ramda_1 = __webpack_require__(166);
+var Cookies = __webpack_require__(590);
+var actions_1 = __webpack_require__(26);
 exports.default = function (_a) {
     var getState = _a.getState,
         dispatch = _a.dispatch;
     return function (next) {
         return function (action) {
             if (action.type === actions_1.fetchComparison.type) {
-                fetch("comparison/" + action.id).then(function (response) {
+                fetch("comparison/" + action.id, {
+                    credentials: "include"
+                }).then(function (response) {
                     return response.json();
                 }).then(function (data) {
                     var pics = data.pictures.map(function (pic) {
@@ -36614,7 +36674,7 @@ exports.default = function (_a) {
             if (action.type === actions_1.postUser.type) {
                 var state = getState();
                 var userInp = state.comparison.userRegInput;
-                var user = { login: userInp.login, password: userInp.password, eMail: userInp.eMail };
+                var userClean = { login: userInp.login, password: userInp.password, eMail: userInp.eMail };
                 if (userInp.password !== userInp.confirmedPassword) {
                     dispatch(actions_1.fetchError("Confirmed password mismatch"));
                 } else {
@@ -36624,7 +36684,7 @@ exports.default = function (_a) {
                             'Accept': 'application/json',
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(user)
+                        body: JSON.stringify(userClean)
                     }).then(function (response) {
                         if (response.status === 400) {
                             response.text().then(function (resp) {
@@ -36658,9 +36718,22 @@ exports.default = function (_a) {
                     if (response.status === 401) {
                         dispatch(actions_1.fetchError("Wrong password"));
                     } else {
-                        var kek = response.headers.get('auth-token');
-                        console.log(kek);
+                        var token = response.headers.get('auth-token');
+                        var cookies = new Cookies();
+                        cookies.set('auth-token', token, { path: '/' });
                         dispatch(actions_1.loginSwitcher());
+                    }
+                });
+            }
+            if (action.type === actions_1.checkToken.type) {
+                fetch("/validate", {
+                    credentials: "include"
+                }).then(function (response) {
+                    if (response.status === 200) {
+                        response.json().then(function (data) {
+                            var usr = data;
+                            dispatch(actions_1.checkTokenSuccess({ currentUser: usr }));
+                        });
                     }
                 });
             }
@@ -44654,7 +44727,7 @@ var initState = {
     question: '',
     questionId: null,
     sortState: null,
-    currentUser: { login: "oh", password: "hi", eMail: "Mark" },
+    currentUser: { login: "oh", eMail: "Mark" },
     regFormPlaceholder: { login: "Login:", eMail: "Email:", password: "Password:", confirmedPassword: "Password:" },
     userRegInput: null,
     userLogInput: null,
@@ -44684,6 +44757,10 @@ exports.default = utils_1.createReducerFromDescriptor((_a = {}, _a[actions_1.fet
     return __assign({}, state, { showLogin: !state.showLogin });
 }, _a[actions_1.login.type] = function (state, action) {
     return __assign({}, state);
+}, _a[actions_1.checkToken.type] = function (state, action) {
+    return __assign({}, state);
+}, _a[actions_1.checkTokenSuccess.type] = function (state, action) {
+    return console.log("hi " + action.currentUser), __assign({}, state, { currentUser: action.currentUser });
 }, _a), initState);
 var _a;
 
@@ -44814,6 +44891,404 @@ exports.push([module.i, "html, body {\n    height: 100%;\n}\n\nbody {\n    font-
 
 // exports
 
+
+/***/ }),
+/* 590 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Cookies = __webpack_require__(591);
+
+var _Cookies2 = _interopRequireDefault(_Cookies);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _Cookies2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 591 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _cookie = __webpack_require__(592);
+
+var _cookie2 = _interopRequireDefault(_cookie);
+
+var _objectAssign = __webpack_require__(32);
+
+var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+var _utils = __webpack_require__(593);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Cookies = function () {
+  function Cookies(cookies, hooks) {
+    _classCallCheck(this, Cookies);
+
+    this.cookies = parseCookies(cookies);
+    this.hooks = hooks;
+    this.HAS_DOCUMENT_COOKIE = (0, _utils.hasDocumentCookie)();
+  }
+
+  _createClass(Cookies, [{
+    key: '_updateBrowserValues',
+    value: function _updateBrowserValues() {
+      if (!this.HAS_DOCUMENT_COOKIE) {
+        return;
+      }
+
+      this.cookies = _cookie2.default.parse(document.cookie);
+    }
+  }, {
+    key: 'get',
+    value: function get(name) {
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+      this._updateBrowserValues();
+      return readCookie(this.cookies[name], options);
+    }
+  }, {
+    key: 'getAll',
+    value: function getAll() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      this._updateBrowserValues();
+      var result = {};
+
+      for (var name in this.cookies) {
+        result[name] = readCookie(this.cookies[name], options);
+      }
+
+      return result;
+    }
+  }, {
+    key: 'set',
+    value: function set(name, value, options) {
+      if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+        value = JSON.stringify(value);
+      }
+
+      if (this.hooks && this.hooks.onSet) {
+        this.hooks.onSet(name, value, options);
+      }
+
+      this.cookies[name] = value;
+
+      if (this.HAS_DOCUMENT_COOKIE) {
+        document.cookie = _cookie2.default.serialize(name, value, options);
+      }
+    }
+  }, {
+    key: 'remove',
+    value: function remove(name, options) {
+      var finalOptions = options = (0, _objectAssign2.default)({}, options, {
+        expires: new Date(1970, 1, 1, 0, 0, 1),
+        maxAge: 0
+      });
+
+      if (this.hooks && this.hooks.onRemove) {
+        this.hooks.onRemove(name, finalOptions);
+      }
+
+      delete this.cookies[name];
+
+      if (this.HAS_DOCUMENT_COOKIE) {
+        document.cookie = _cookie2.default.serialize(name, '', finalOptions);
+      }
+    }
+  }]);
+
+  return Cookies;
+}();
+
+exports.default = Cookies;
+
+
+function parseCookies(cookies) {
+  if (typeof cookies === 'string') {
+    return _cookie2.default.parse(cookies);
+  } else if ((typeof cookies === 'undefined' ? 'undefined' : _typeof(cookies)) === 'object' && cookies !== null) {
+    return cookies;
+  } else {
+    return {};
+  }
+}
+
+function isParsingCookie(value, doNotParse) {
+  if (typeof doNotParse === 'undefined') {
+    // We guess if the cookie start with { or [, it has been serialized
+    doNotParse = !value || value[0] !== '{' && value[0] !== '[' && value[0] !== '"';
+  }
+
+  return !doNotParse;
+}
+
+function readCookie(value) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  if (isParsingCookie(value, options.doNotParse)) {
+    try {
+      return JSON.parse(value);
+    } catch (e) {
+      // At least we tried
+    }
+  }
+
+  return value;
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 592 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*!
+ * cookie
+ * Copyright(c) 2012-2014 Roman Shtylman
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+
+
+/**
+ * Module exports.
+ * @public
+ */
+
+exports.parse = parse;
+exports.serialize = serialize;
+
+/**
+ * Module variables.
+ * @private
+ */
+
+var decode = decodeURIComponent;
+var encode = encodeURIComponent;
+var pairSplitRegExp = /; */;
+
+/**
+ * RegExp to match field-content in RFC 7230 sec 3.2
+ *
+ * field-content = field-vchar [ 1*( SP / HTAB ) field-vchar ]
+ * field-vchar   = VCHAR / obs-text
+ * obs-text      = %x80-FF
+ */
+
+var fieldContentRegExp = /^[\u0009\u0020-\u007e\u0080-\u00ff]+$/;
+
+/**
+ * Parse a cookie header.
+ *
+ * Parse the given cookie header string into an object
+ * The object has the various cookies as keys(names) => values
+ *
+ * @param {string} str
+ * @param {object} [options]
+ * @return {object}
+ * @public
+ */
+
+function parse(str, options) {
+  if (typeof str !== 'string') {
+    throw new TypeError('argument str must be a string');
+  }
+
+  var obj = {}
+  var opt = options || {};
+  var pairs = str.split(pairSplitRegExp);
+  var dec = opt.decode || decode;
+
+  for (var i = 0; i < pairs.length; i++) {
+    var pair = pairs[i];
+    var eq_idx = pair.indexOf('=');
+
+    // skip things that don't look like key=value
+    if (eq_idx < 0) {
+      continue;
+    }
+
+    var key = pair.substr(0, eq_idx).trim()
+    var val = pair.substr(++eq_idx, pair.length).trim();
+
+    // quoted values
+    if ('"' == val[0]) {
+      val = val.slice(1, -1);
+    }
+
+    // only assign once
+    if (undefined == obj[key]) {
+      obj[key] = tryDecode(val, dec);
+    }
+  }
+
+  return obj;
+}
+
+/**
+ * Serialize data into a cookie header.
+ *
+ * Serialize the a name value pair into a cookie string suitable for
+ * http headers. An optional options object specified cookie parameters.
+ *
+ * serialize('foo', 'bar', { httpOnly: true })
+ *   => "foo=bar; httpOnly"
+ *
+ * @param {string} name
+ * @param {string} val
+ * @param {object} [options]
+ * @return {string}
+ * @public
+ */
+
+function serialize(name, val, options) {
+  var opt = options || {};
+  var enc = opt.encode || encode;
+
+  if (typeof enc !== 'function') {
+    throw new TypeError('option encode is invalid');
+  }
+
+  if (!fieldContentRegExp.test(name)) {
+    throw new TypeError('argument name is invalid');
+  }
+
+  var value = enc(val);
+
+  if (value && !fieldContentRegExp.test(value)) {
+    throw new TypeError('argument val is invalid');
+  }
+
+  var str = name + '=' + value;
+
+  if (null != opt.maxAge) {
+    var maxAge = opt.maxAge - 0;
+    if (isNaN(maxAge)) throw new Error('maxAge should be a Number');
+    str += '; Max-Age=' + Math.floor(maxAge);
+  }
+
+  if (opt.domain) {
+    if (!fieldContentRegExp.test(opt.domain)) {
+      throw new TypeError('option domain is invalid');
+    }
+
+    str += '; Domain=' + opt.domain;
+  }
+
+  if (opt.path) {
+    if (!fieldContentRegExp.test(opt.path)) {
+      throw new TypeError('option path is invalid');
+    }
+
+    str += '; Path=' + opt.path;
+  }
+
+  if (opt.expires) {
+    if (typeof opt.expires.toUTCString !== 'function') {
+      throw new TypeError('option expires is invalid');
+    }
+
+    str += '; Expires=' + opt.expires.toUTCString();
+  }
+
+  if (opt.httpOnly) {
+    str += '; HttpOnly';
+  }
+
+  if (opt.secure) {
+    str += '; Secure';
+  }
+
+  if (opt.sameSite) {
+    var sameSite = typeof opt.sameSite === 'string'
+      ? opt.sameSite.toLowerCase() : opt.sameSite;
+
+    switch (sameSite) {
+      case true:
+        str += '; SameSite=Strict';
+        break;
+      case 'lax':
+        str += '; SameSite=Lax';
+        break;
+      case 'strict':
+        str += '; SameSite=Strict';
+        break;
+      default:
+        throw new TypeError('option sameSite is invalid');
+    }
+  }
+
+  return str;
+}
+
+/**
+ * Try decoding a string using a decoding function.
+ *
+ * @param {string} str
+ * @param {function} decode
+ * @private
+ */
+
+function tryDecode(str, decode) {
+  try {
+    return decode(str);
+  } catch (e) {
+    return str;
+  }
+}
+
+
+/***/ }),
+/* 593 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.hasDocumentCookie = hasDocumentCookie;
+exports.cleanCookies = cleanCookies;
+// Can we get/set cookies on document.cookie?
+
+function hasDocumentCookie() {
+  return (typeof document === 'undefined' ? 'undefined' : _typeof(document)) === 'object' && typeof document.cookie === 'string';
+}
+
+//backwards compatibility
+var HAS_DOCUMENT_COOKIE = exports.HAS_DOCUMENT_COOKIE = hasDocumentCookie();
+
+function cleanCookies() {
+  document.cookie.split(';').forEach(function (c) {
+    document.cookie = c.replace(/^ +/, '').replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
+  });
+}
 
 /***/ })
 /******/ ]);

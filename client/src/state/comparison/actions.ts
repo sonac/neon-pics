@@ -1,5 +1,5 @@
 import * as utils from 'state/utils';
-import { FetchComparisonSuccessData, User, UserRegInput, UserLogInput } from './types';
+import { FetchComparisonSuccessData, User, UserRegInput, UserLogInput, FetchUserData } from './types';
 import { IdData, ErrorData, UserRegInputData, UserLogInputData } from 'state/types';
 
 export const fetchComparison = utils.createActionCreator('FETCH_COMPARISON', id => ({
@@ -37,3 +37,7 @@ export const postUser = utils.createActionCreator('POST_USER');
 export const loginSwitcher = utils.createActionCreator('LOGIN_SWITCHER');
 
 export const login = utils.createActionCreator('LOGIN');
+
+export const checkToken = utils.createActionCreator('CHECK_TOKEN');
+
+export const checkTokenSuccess = utils.createActionCreator('CHECK_TOKEN_SUCCESS', (_: FetchUserData) => _);
