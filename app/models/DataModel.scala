@@ -17,6 +17,8 @@ case class QuestionnaireScore(questId: Int, userId: Int, picId: Int, score: Doub
 
 case class PictureIdScore(id: Int, score: Double)
 
+case class User(id: Int, login: String, password: String, eMail: String)
+
 object PictureIdScore {
   implicit val implicitWrites: Writes[PictureIdScore] {
     def writes(o: PictureIdScore): JsValue

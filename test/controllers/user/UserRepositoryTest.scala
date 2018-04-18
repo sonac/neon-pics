@@ -1,6 +1,7 @@
-package services.user
+package controllers.user
 
 import models.User
+import models.daos.UserRepository
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.test.Injecting

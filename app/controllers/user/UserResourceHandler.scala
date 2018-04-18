@@ -1,14 +1,13 @@
-package services.user
+package controllers.user
 
 import com.google.inject.Inject
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
-
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
-
 import models.User
+import models.daos.UserRepository
 
 case class UserResource(login: String, password: String, eMail: String)
 

@@ -1,4 +1,4 @@
-package services.user
+package controllers.user
 
 import com.google.inject.Inject
 import play.api.i18n.MessagesApi

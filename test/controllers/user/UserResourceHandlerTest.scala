@@ -1,4 +1,4 @@
-package services.user
+package controllers.user
 
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest

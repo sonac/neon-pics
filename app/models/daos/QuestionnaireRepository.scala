@@ -3,6 +3,7 @@ package models.daos
 import com.google.inject.{Inject, Singleton}
 import models._
 import play.api.db.slick.DatabaseConfigProvider
+import play.db.NamedDatabase
 
 import scala.collection.immutable
 import scala.concurrent.{ExecutionContext, Future}
@@ -22,7 +23,7 @@ trait QuestionnaireAnswerRepository {
 }
 
 @Singleton
-class QuestionnaireRepositoryImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
+class QuestionnaireRepositoryImpl @Inject()(@NamedDatabase("dev") protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
   extends QuestionnaireRepository
     with QuestionnaireAnswerRepository
     with DAOSlick {

@@ -25,14 +25,14 @@ GET         /comparison/:questionnaireId                controllers.questionnair
 POST        /comparison-answer/                         controllers.questionnaireAnswer.QuestionnaireAnswerController.addQuestionnaireAnswer
 
 # Get user by login
-GET         /user/:login                                services.user.UserController.getUser(login: String)
+GET         /user/:login                                controllers.user.UserController.getUser(login: String)
 
 # Ads new user
-POST        /user                                       services.user.UserController.addUser
+POST        /user                                       controllers.user.UserController.addUser
 
 # Login request
-POST        /login                                      services.user.UserController.login
+POST        /login                                      controllers.user.UserController.login
 
 # Check token
-GET         /validate                                   services.user.UserController.validate
+GET         /validate                                   controllers.user.UserController.validate
 
