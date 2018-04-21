@@ -7,6 +7,7 @@ import play.db.NamedDatabase
 
 import scala.collection.immutable
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Success, Failure}
 
 trait QuestionnaireRepository {
   def addQuestionnaire(text: String, pictureIds: Seq[Int] = List()): Future[Int]
@@ -17,13 +18,16 @@ trait QuestionnaireRepository {
 }
 
 trait QuestionnaireAnswerRepository {
-  def addQuestionnaireAnswer(questId: Int, userId: Int, pictureIdScores: Seq[PictureIdScore]): Future[Unit.type]
+  def addQuestionnaireAnswer(questId: Int, userName: String, pictureIdScores: Seq[PictureIdScore]): Future[Option[Unit]]
 
   def getQuestionnaireAnswer(questId: Int, userId: Int): Future[Option[QuestionnaireScores]]
+
+  def getAllAnswers: Future[Seq[QuestionnaireScoreWithUser]]
 }
 
 @Singleton
-class QuestionnaireRepositoryImpl @Inject()(@NamedDatabase("dev") protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
+class QuestionnaireRepositoryImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider,
+                                            userRepository: UserRepository)(implicit ec: ExecutionContext)
   extends QuestionnaireRepository
     with QuestionnaireAnswerRepository
     with DAOSlick {
@@ -72,13 +76,18 @@ class QuestionnaireRepositoryImpl @Inject()(@NamedDatabase("dev") protected val 
     } yield ans.toSeq
   }
 
-  def addQuestionnaireAnswer(questId: Int, userId: Int, pictureIdScores: Seq[PictureIdScore]): Future[Unit.type] = {
-    val qss = pictureIdScores.map { case PictureIdScore(pid, s) =>
-      QuestionnaireScore(questId, userId, pid, s)
-    }
-    for {
-      _ <- db.run(questionnaireScoreTable ++= qss)
-    } yield Unit
+  def addQuestionnaireAnswer(questId: Int, userName: String, pictureIdScores: Seq[PictureIdScore]): Future[Option[Unit]] = {
+    /*for {
+     usr <- userRepository.getUserByLogin(userName)
+     pId <- pictureIdScores
+     _ <- db.run(questionnaireScoreTable += QuestionnaireScore(questId, usr.get.id, pId.id, pId.score))
+    } yield questId*/
+    val usr = userRepository.getUserByLogin(userName)
+    usr.foreach(println(_))
+    usr.map(ou => ou.map( uid => {
+      pictureIdScores.map(pId =>
+        db.run(questionnaireScoreTable += QuestionnaireScore(questId, uid.id, pId.id, pId.score)))
+    }))
   }
 
   def getQuestionnaireAnswer(questId: Int, userId: Int): Future[Option[QuestionnaireScores]] = {
@@ -95,6 +104,25 @@ class QuestionnaireRepositoryImpl @Inject()(@NamedDatabase("dev") protected val 
     } yield {
       oqwp.map(QuestionnaireScores(_, userId, pis))
     }
+
+  }
+
+  def getAllAnswers: Future[Seq[QuestionnaireScoreWithUser]] = {
+    val q = questionnaireScoreTable
+      .join(userTable)
+      .on(_.userId === _.id)
+
+    val t: Future[Seq[(QuestionnaireScore, User)]] = db.run(q.result)
+    for {
+      x <- t
+      ans = x.groupBy {
+      _._1
+    }.map { case (q1, s) =>
+        val z = (q1.questId, q1.userId)
+      val picScores: Seq[PictureIdScore] = s.collect { case (q, _) => PictureIdScore(q.picId, q.score)}
+      QuestionnaireScoreWithUser(q1.questId, s.head._2.login, picScores)
+    }
+    } yield ans.toSeq
 
   }
 

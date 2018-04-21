@@ -14,7 +14,7 @@ object PictureIdScoreFormInput {
   }
 }
 
-case class QuestionnaireAnswerFormInput(questionnaireId: Int, userId: Int, pictureIdScores: Seq[PictureIdScoreFormInput])
+case class QuestionnaireAnswerFormInput(questionnaireId: Int, userName: String, pictureIdScores: Seq[PictureIdScoreFormInput])
 
 object QuestionnaireAnswerFormInput {
   val form: Form[QuestionnaireAnswerFormInput] = {
@@ -23,7 +23,7 @@ object QuestionnaireAnswerFormInput {
     Form(
       mapping(
         "questionnaireId" -> number,
-        "userId" -> number,
+        "userName" -> text,
         "pictureIdScores" -> seq(PictureIdScoreFormInput.mapping)
       )
       (QuestionnaireAnswerFormInput.apply)(QuestionnaireAnswerFormInput.unapply)

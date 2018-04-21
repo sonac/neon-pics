@@ -26,6 +26,7 @@ object QuestionnaireResource {
 }
 
 class QuestionnaireResourceHandler @Inject()(questionnaireRepository: QuestionnaireRepository)(implicit ec: ExecutionContext) {
+
   def create(questionnaire: QuestionnaireFormInput): Future[QuestionnaireResource] = {
     questionnaireRepository.addQuestionnaire(questionnaire.text, questionnaire.pictureIds).flatMap(get)
   }

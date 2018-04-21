@@ -136,6 +136,7 @@ export default ({ getState, dispatch }) => next => action => {
           const token = response.headers.get('auth-token')
           const cookies = new Cookies();
           cookies.set('auth-token', token, { path: '/' });
+          window.location.reload();
           dispatch(loginSwitcher())
         }
       })

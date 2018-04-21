@@ -3,6 +3,7 @@ package controllers.questionnaireAnswer
 import com.google.inject.Inject
 import controllers.{ControllerComponentsDefault, ControllerDefault, RequestAugmented}
 import play.api.data.Form
+import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -25,4 +26,11 @@ class QuestionnaireAnswerController @Inject()(ccc: ControllerComponentsDefault, 
       QuestionnaireAnswerFormInput.form.bindFromRequest().fold(failure, success)
     }
   }
+
+  def getAllQuestionnaireAnswers: Action[AnyContent] = {
+    ccc.actionBuilder.async { implicit request: RequestAugmented[AnyContent] =>
+      carh.getAll.map(x => Ok(Json.toJson(x)))
+    }
+  }
+
 }

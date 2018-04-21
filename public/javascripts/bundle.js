@@ -35903,7 +35903,6 @@ var Auth = /** @class */function (_super) {
         _this.handleEnter = function (e) {
             if (e.key === 'Enter') {
                 _this.props.actions.login();
-                window.location.reload();
             }
         };
         _this.handleChange = function (e, inp) {
@@ -36743,6 +36742,7 @@ exports.default = function (_a) {
                         var token = response.headers.get('auth-token');
                         var cookies = new Cookies();
                         cookies.set('auth-token', token, { path: '/' });
+                        window.location.reload();
                         dispatch(actions_1.loginSwitcher());
                     }
                 });

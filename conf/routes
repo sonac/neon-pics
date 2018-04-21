@@ -24,6 +24,9 @@ GET         /comparison/:questionnaireId                controllers.questionnair
 # Ads an answer including all evaluated things
 POST        /comparison-answer/                         controllers.questionnaireAnswer.QuestionnaireAnswerController.addQuestionnaireAnswer
 
+# Get all answers
+GET         /comparison-answer/all                      controllers.questionnaireAnswer.QuestionnaireAnswerController.getAllQuestionnaireAnswers
+
 # Get user by login
 GET         /user/:login                                controllers.user.UserController.getUser(login: String)
 

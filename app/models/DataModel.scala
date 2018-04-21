@@ -34,4 +34,6 @@ object PictureIdScore {
 
 case class QuestionnaireScores(questionnaire: QuestionnaireWithPictures, userId: Int, pictureIdScores: Seq[PictureIdScore])
 
+case class QuestionnaireScoreWithUser(questId: Int, userName: String, pictureIdScores: Seq[PictureIdScore])
+
 case class QuestionnaireWithPictures(base: Questionnaire, pictures: Seq[Picture] = Seq())

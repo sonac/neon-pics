@@ -9,12 +9,12 @@ import slick.jdbc.PostgresProfile.api._
 import scala.concurrent.Future
 
 @Singleton
-class UserRepository @Inject()(@NamedDatabase("dev") protected val dbConfigProvider: DatabaseConfigProvider) extends DAOSlick {
+class UserRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends DAOSlick {
 
-  val inserUserTable = userTable returning userTable.map(_.id) into ((u, id) => u.copy(id = id))
+  val insertUserTable = userTable returning userTable.map(_.id) into ((u, id) => u.copy(id = id))
 
   def addUser(id: Int = 0, login: String, password: String, eMail: String): Future[User] = {
-    db.run(inserUserTable += User(id, login, password, eMail))
+    db.run(insertUserTable += User(id, login, password, eMail))
   }
 
   def getUserByLogin(userLogin: String): Future[Option[User]] = {
