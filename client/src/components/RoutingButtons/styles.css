@@ -1,0 +1,64 @@
+.routingButton{
+  height: 100%;
+}
+
+.homeButton {
+  position: absolute;
+  top: 10px;
+  left: 50px;
+}
+
+.authButton {
+  display: flex;
+  justify-content: flex-end;
+  align-content: flex-end;
+  flex-direction: row;
+  position: relative;
+  margin: auto;
+  width: 90%;
+  padding-top: 10px;
+  color: red;
+}
+
+.login {
+  padding-left: 10px;
+}
+
+.loginWindow {
+  position: absolute;
+  top: 200px;
+  left: 400px;
+  right: 500px;
+  bottom: 100px;
+  background: linear-gradient(to right, transparent, purple, indigo, blue)
+}
+
+.loginOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent;
+}
+
+.hidden {
+  display: none;
+}
+
+.welcome {
+  color: rgb(130, 171, 173);
+  display: flex;
+  justify-content: flex-end;
+  align-content: flex-end;
+  flex-direction: row;
+  position: relative;
+  margin: auto;
+  left: 80px;
+  width: 80%;
+}
+
+.logout {
+  margin-left: 20px;
+  margin-top: 8px;
+}

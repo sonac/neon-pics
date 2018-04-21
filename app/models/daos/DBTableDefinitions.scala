@@ -1,6 +1,6 @@
 package models.daos
 
-import models.{Picture, Questionnaire, QuestionnairePicture, QuestionnaireScore}
+import models._
 import slick.jdbc.JdbcProfile
 
 trait DBTableDefinitions{
@@ -46,10 +46,26 @@ trait DBTableDefinitions{
     def score = column[Double]("score")
   }
 
+  class UserTable(tag: Tag) extends Table[User](tag, "user") {
+
+    def * = (id, login, password, eMail) <> (User.tupled, User.unapply)
+
+    def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+
+    def login = column[String]("login", O.Unique)
+
+    def password = column[String]("password", O.Unique)
+
+    def eMail = column[String]("email")
+
+  }
+
+
   val pictureTable: TableQuery[PictureTable] = TableQuery[PictureTable]
   val questionnaireTable: TableQuery[QuestionnaireTable] = TableQuery[QuestionnaireTable]
   val questionnairePictureTable: TableQuery[QuestionnairePictureTable] = TableQuery[QuestionnairePictureTable]
   val questionnaireScoreTable: TableQuery[QuestionnaireScoreTable] = TableQuery[QuestionnaireScoreTable]
+  val userTable: TableQuery[UserTable] = TableQuery[UserTable]
   val insertQuestionnaireTable: driver.IntoInsertActionComposer[Questionnaire, Questionnaire] = questionnaireTable returning questionnaireTable.map(_.id) into ((q, id) => q.copy(id = id))
 
   val schema: driver.DDL = pictureTable.schema ++ questionnaireTable.schema ++ questionnairePictureTable.schema ++ questionnaireScoreTable.schema

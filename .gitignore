@@ -11,3 +11,4 @@ target
 /client/package
 /client/pg.js
 credentials.tar.gz
+build

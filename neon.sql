@@ -39,6 +39,15 @@ CREATE TABLE questionnaire_score (
   PRIMARY KEY (quest_id, user_id, pic_id)
 );
 
+DROP TABLE IF EXISTS "user";
+CREATE TABLE "user" (
+  id        SERIAL PRIMARY KEY,
+  login     VARCHAR(2000),
+  password  VARCHAR(2000),
+  email     VARCHAR(2000),
+  UNIQUE KEY user_login(login)
+);
+
 INSERT INTO pictures (id, pic_url)
 VALUES (1, 'https://i.pinimg.com/564x/c6/57/75/c65775b98acd6be835065f604af66435.jpg');
 INSERT INTO pictures (id, pic_url)
@@ -53,3 +62,6 @@ VALUES (1, 'Which neon text looks better?');
 
 INSERT INTO questionnaire_picture
 VALUES (1, 1), (1, 2), (1, 3), (1, 4);
+
+INSERT INTO "user"
+VALUES (1, 'testUser', 'testPassword', 'testEMail');

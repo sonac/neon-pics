@@ -4,14 +4,22 @@ import { createReducerFromDescriptor } from 'state/utils';
 import {
   fetchComparison,
   fetchComparisonSuccess,
-  fetchComparisonError,
+  fetchError,
   pictureClick,
-  postComparison
+  postComparison,
+  updateCurrentUserInput,
+  postUser,
+  loginSwitcher,
+  login,
+  logout,
+  updateCurrentLoginInput,
+  checkToken,
+  checkTokenSuccess
 } from './actions'
 import { pairwise, incrRating } from 'utils/common';
 import { processSortingStep } from 'utils/sorting';
-import { State, FetchComparisonSuccessAction } from './types';
-import { ErrorAction, IdAction } from 'state/types';
+import { State, FetchComparisonSuccessAction, FetchUserAction } from './types';
+import { ErrorAction, IdAction, UserRegInputAction, UserLogInputAction } from 'state/types';
 
 const initState: State = {
   isLoading: true,
@@ -20,7 +28,12 @@ const initState: State = {
   question: '',
   questionId: null,
   sortState: null,
-  mid: 0
+  currentUser: null,
+  regFormPlaceholder: {login: "Login:", eMail: "Email:", password: "Password:", confirmedPassword: "Password:"},
+  userRegInput: null,
+  userLogInput: null,
+  mid: 0,
+  showLogin: false
 };
 
 export default createReducerFromDescriptor({
@@ -28,7 +41,7 @@ export default createReducerFromDescriptor({
     ...state,
     isLoading: true
   }),
-  [fetchComparisonError.type]: (state: State, action: ErrorAction): State => ({
+  [fetchError.type]: (state: State, action: ErrorAction): State => ({
     ...state,
     error: action.error,
     isLoading: false
@@ -46,5 +59,15 @@ export default createReducerFromDescriptor({
     sortState: processSortingStep(action.id, Object.keys(state.pics), state.sortState),
     pics: incrRating(action.id, state.pics)
   }),
-  [postComparison.type]: (state: State, action: Action): State => ({ ...state})
+  [postComparison.type]: (state: State, action: Action): State => ({ ...state}),
+  [updateCurrentUserInput.type]: (state: State, action: UserRegInputAction): State => ({ ...state, userRegInput: action.userInp}),
+  [updateCurrentLoginInput.type]: (state: State, action: UserLogInputAction): State => ({...state, userLogInput: action.loginInp}),
+  [postUser.type]: (state: State, action: Action): State => ({...state}),
+  [loginSwitcher.type]: (state: State, action: Action): State => ({...state, showLogin: !state.showLogin}), 
+  [login.type]: (state: State, action: Action): State => ({...state}),
+  [logout.type]: (state: State, action: Action): State => ({...state, currentUser: null}),
+  [checkToken.type]: (state: State, action: Action): State => ({...state}),
+  [checkTokenSuccess.type]: (state: State, action: FetchUserAction): State => (
+    console.log("hi " + action.currentUser),
+    {...state, currentUser: action.currentUser})
 }, initState);

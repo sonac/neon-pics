@@ -22,9 +22,9 @@ describe('testing actions', () => {
       const error: string = 'No data found'
       const expectedAction = {
         error,
-        type: actions.fetchComparisonError.type
+        type: actions.fetchError.type
       }
-      expect(actions.fetchComparisonError(error)).to.eql(expectedAction)
+      expect(actions.fetchError(error)).to.eql(expectedAction)
     }),
     it('shoudl create an action for picture click', () => {
       const id = 1

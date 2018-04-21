@@ -19,9 +19,13 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-foundation-components": "^0.13.0",
+    "react-modal": "^3.3.2",
     "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
-    "sass-loader": "^6.0.6"
+    "sass-loader": "^6.0.6",
+    "universal-cookie": "^2.1.2"
   },
   "devDependencies": {
     "@types/chai": "^4.1.0",

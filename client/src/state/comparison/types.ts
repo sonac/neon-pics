@@ -17,6 +17,23 @@ export type SortState = {
   end: number;
 };
 
+export type User = {
+  login: string;
+  eMail: string;
+}
+
+export type UserRegInput = {
+  login: string;
+  eMail: string;
+  password: string;
+  confirmedPassword: string;
+}
+
+export type UserLogInput = {
+  login: string;
+  password: string;
+}
+
 export interface State {
   isLoading: boolean;
   error: null | string | Error;
@@ -24,7 +41,12 @@ export interface State {
   question: string;
   questionId: null | number;
   sortState: SortState | null;
+  currentUser: User | null;
+  regFormPlaceholder: UserRegInput;
+  userRegInput: UserRegInput | null;
+  userLogInput: UserLogInput | null;
   mid: number;
+  showLogin: boolean;
 }
 
 export type FetchComparisonSuccessData = {
@@ -35,3 +57,9 @@ export type FetchComparisonSuccessData = {
 }
 export type FetchComparisonSuccessAction = FetchComparisonSuccessData & Action;
 export type FetchComparisonSuccessCreator = ActionCreator1<FetchComparisonSuccessData, FetchComparisonSuccessAction>;
+
+export type FetchUserData = {
+  currentUser: User
+}
+export type FetchUserAction = FetchUserData & Action;
+export type FetchUserCreator = ActionCreator1<FetchUserData, FetchUserAction>;

@@ -5,6 +5,7 @@
 
 # Serve index page
 GET         /                                           controllers.Assets.at(path="/public", file="index.html")
+GET         /register                                   controllers.Assets.at(path="/public", file="index.html")
 
 # Serve js, it most probably going to be only one file (bundle.js)
 GET         /js/*file                                   controllers.Assets.at(path="/public/javascripts", file)
@@ -22,4 +23,19 @@ GET         /comparison/:questionnaireId                controllers.questionnair
 
 # Ads an answer including all evaluated things
 POST        /comparison-answer/                         controllers.questionnaireAnswer.QuestionnaireAnswerController.addQuestionnaireAnswer
+
+# Get all answers
+GET         /comparison-answer/all                      controllers.questionnaireAnswer.QuestionnaireAnswerController.getAllQuestionnaireAnswers
+
+# Get user by login
+GET         /user/:login                                controllers.user.UserController.getUser(login: String)
+
+# Ads new user
+POST        /user                                       controllers.user.UserController.addUser
+
+# Login request
+POST        /login                                      controllers.user.UserController.login
+
+# Check token
+GET         /validate                                   controllers.user.UserController.validate
 

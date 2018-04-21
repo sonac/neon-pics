@@ -1,21 +1,19 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Component } from 'react';
 import { Button } from 'react-foundation-components/lib/button';
 import { connect } from 'react-redux';
 import { values } from 'ramda';
-import { postComparison, nextTwo } from '../../state/comparison/actions';
+import { postComparison } from '../../state/comparison/actions';
 import { State as ComparisonState } from 'state/comparison/types';
 import { BasicActionCreator } from 'state/types';
 
 const styles = require('./styles.css');
 
 interface Data {
-  currentPicPairIndex: number;
-  currentVote: number;
 }
 
 interface Actions {
   postComparison: BasicActionCreator;
-  nextTwo: BasicActionCreator;
 }
 
 interface Props {
@@ -41,13 +39,10 @@ class NavButtons extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
-  currentPicPairIndex: state.comparison.currentPicPairIndex,
-  currentVote: state.comparison.currentVote
 });
 
 const mapDispatchToProps: Actions = {
-  postComparison,
-  nextTwo
+  postComparison
 };
 
 const mergeProps = (data: Data, actions: Actions): Props => ({

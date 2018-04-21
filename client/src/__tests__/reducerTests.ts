@@ -1,6 +1,6 @@
 import * as reducer from 'state/comparison/reducer';
 import * as actions from 'state/comparison/actions';
-import { State, FetchComparisonSuccessData } from 'state/comparison/types';
+import { State, FetchComparisonSuccessData, User } from 'state/comparison/types';
 import { expect } from 'chai';
 
 describe('testing reducer', () => {
@@ -12,7 +12,12 @@ describe('testing reducer', () => {
     question: '',
     questionId: null,
     sortState: null,
-    mid: 0
+    currentUser: null,
+    regFormPlaceholder: null,
+    userRegInput: null,
+    userLogInput: null,
+    mid: 0,
+    showLogin: false
   };
 
   const fetchedData = {"id":1,
@@ -53,7 +58,7 @@ describe('testing reducer', () => {
 
   it('should return some error when comparison failed', () => {
     const errState = {...initState, error: undefined, isLoading: false };
-    expect(reducer.default(initState, actions.fetchComparisonError)).to.eql(errState);
+    expect(reducer.default(initState, actions.fetchError)).to.eql(errState);
   })
 
   it('should return data after successful fetch', () => {

@@ -1,10 +1,14 @@
 package controllers.questionnaireAnswer
 
+import akka.http.scaladsl.model.Uri.Empty
 import org.scalatestplus.play._
 import org.scalatestplus.play.guice._
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import play.api.test._
+import play.api.libs.json._
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
   * Add your spec here.
@@ -22,7 +26,7 @@ class QuestionnaireAnswerControllerTest extends PlaySpec with GuiceOneAppPerTest
       val jsonQuestionnairePost = Json.parse(
         """{
           |"questionnaireId": 1,
-          |"userId": 1,
+          |"userName": "testUser",
           |"pictureIdScores": [{"pictureId": 3, "score": 2}, {"pictureId": 2, "score": 1}]
           |}
         """.stripMargin)
@@ -37,6 +41,14 @@ class QuestionnaireAnswerControllerTest extends PlaySpec with GuiceOneAppPerTest
 //      contentType(response) mustBe Some("application/json")
 //      contentAsString(response) mustBe """"""
       println(contentAsString(response))
+
+      val getReq = FakeRequest(GET, "/comparison-answer/all")
+
+      val getResp = controller
+        .getAllQuestionnaireAnswers
+        .apply(getReq)
+
+      contentAsString(getResp) must include("\"userName\":\"testUser\"")
 
     }
   }

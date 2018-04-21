@@ -74,6 +74,9 @@ module.exports = {
     plugins: [
         new webpack.LoaderOptionsPlugin({
             options: {
+                exclude: [
+                    path.resolve(__dirname, 'src/__test__')
+                ],
                 context: __dirname
             }
         })

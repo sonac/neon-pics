@@ -7,7 +7,7 @@ import play.api.libs.json.{JsValue, Json, Writes}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class QuestionnaireAnswerResource(questionnaireId: Int, userId: Int, scores: Seq[PictureIdScore])
+case class QuestionnaireAnswerResource(questionnaireId: Int, userName: String, scores: Seq[PictureIdScore])
 
 object QuestionnaireAnswerResource {
 
@@ -17,7 +17,7 @@ object QuestionnaireAnswerResource {
     override def writes(o: QuestionnaireAnswerResource): JsValue = {
       Json.obj(
         "questionnaireId" -> o.questionnaireId,
-        "userId" -> o.userId,
+        "userName" -> o.userName,
         "scores" -> o.scores
       )
     }
@@ -26,10 +26,19 @@ object QuestionnaireAnswerResource {
 
 class QuestionnaireAnswerResourceHandler @Inject()(questionnaireAnswerRepository: QuestionnaireAnswerRepository)(implicit ec: ExecutionContext) {
 
-  def create(questionnaireAnswer: QuestionnaireAnswerFormInput): Future[Unit.type] = {
-    val scores = questionnaireAnswer.pictureIdScores.map { case PictureIdScoreFormInput(pid, s) =>
+  def create(questionnaireAnswer: QuestionnaireAnswerFormInput): Future[Option[Unit]] = {
+    val scores: Seq[PictureIdScore] = questionnaireAnswer.pictureIdScores.map { case PictureIdScoreFormInput(pid, s) =>
       PictureIdScore(pid, s.toDouble)
     }
-    questionnaireAnswerRepository.addQuestionnaireAnswer(questionnaireAnswer.questionnaireId, questionnaireAnswer.userId, scores)
+    questionnaireAnswerRepository.addQuestionnaireAnswer(questionnaireAnswer.questionnaireId, questionnaireAnswer.userName, scores)
   }
+
+  def getAll: Future[Seq[QuestionnaireAnswerResource]] = {
+    questionnaireAnswerRepository.getAllAnswers.map(x =>
+      x.map( t =>
+        QuestionnaireAnswerResource(t.questId, t.userName, t.pictureIdScores)
+      )
+    )
+  }
+
 }
