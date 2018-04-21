@@ -6,6 +6,7 @@
 # Serve index page
 GET         /                                           controllers.Assets.at(path="/public", file="index.html")
 GET         /register                                   controllers.Assets.at(path="/public", file="index.html")
+GET         /comparison                                 controllers.Assets.at(path="/public", file="index.html")
 
 # Serve js, it most probably going to be only one file (bundle.js)
 GET         /js/*file                                   controllers.Assets.at(path="/public/javascripts", file)
@@ -38,4 +39,5 @@ POST        /login                                      controllers.user.UserCon
 
 # Check token
 GET         /validate                                   controllers.user.UserController.validate
+
 

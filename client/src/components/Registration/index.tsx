@@ -52,7 +52,7 @@ class Registration extends Component<Props, State> {
   render() {
     return (
       <div className={styles.registration}>
-        <h2>Oh hi, Mark!</h2>
+        <h2>Hello there, stranger!</h2>
         <div className={styles.wrapper}>
             <input type="text" 
               placeholder={this.props.data.regFormPlaceholder.login} 

@@ -1,6 +1,6 @@
 import * as utils from 'state/utils';
-import { FetchComparisonSuccessData, User, UserRegInput, UserLogInput, FetchUserData } from './types';
-import { IdData, ErrorData, UserRegInputData, UserLogInputData } from 'state/types';
+import { FetchComparisonSuccessData, User, UserRegInput, UserLogInput, FetchUserData, PicInput } from './types';
+import { IdData, ErrorData, UserRegInputData, UserLogInputData, PicInputData, NewQuestNameData } from 'state/types';
 
 export const fetchComparison = utils.createActionCreator('FETCH_COMPARISON', id => ({
   id
@@ -43,3 +43,17 @@ export const logout = utils.createActionCreator('LOGOUT');
 export const checkToken = utils.createActionCreator('CHECK_TOKEN');
 
 export const checkTokenSuccess = utils.createActionCreator('CHECK_TOKEN_SUCCESS', (_: FetchUserData) => _);
+
+export const addNewPictureLink = utils.createActionCreator('ADD_NEW_PIC_LINK');
+
+export const removePicutreLink = utils.createActionCreator('REMOVE_PIC_LINK', (id: number): IdData => ({
+  id
+}));
+
+export const updatePicLink = utils.createActionCreator('UPDATE_PIC_LINK', (picIdx: number, picInp: PicInput): PicInputData => ({
+  picIdx, picInp
+}));
+
+export const updateNewQuestName = utils.createActionCreator('UPDATE_NEW_QUEST_NAME', (picInpName: string): NewQuestNameData => ({
+  picInpName
+}));
