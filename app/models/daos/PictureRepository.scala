@@ -7,7 +7,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import scala.concurrent.{ExecutionContext, Future}
 
 trait PictureRepository {
-  def add(pic: Picture): Future[String]
+  def add(id: Int = 0, picUrl: String): Future[Int]
 
   def delete(id: Int): Future[Int]
 
@@ -23,10 +23,8 @@ class PictureRepositoryImpl @Inject()(protected val dbConfigProvider: DatabaseCo
 
   import profile.api._
 
-  def add(pic: Picture): Future[String] = {
-    db.run(pictureTable += pic).map(res => "Picture added to DB").recover {
-      case ex: Exception => ex.getCause.getMessage
-    }
+  def add(id: Int = 0, picUrl: String): Future[Int] = {
+    db.run(pictureTable += Picture(id, picUrl))
   }
 
   def delete(id: Int): Future[Int] = {

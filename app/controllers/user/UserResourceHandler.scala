@@ -3,10 +3,8 @@ package controllers.user
 import com.google.inject.Inject
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
-import models.User
 import models.daos.UserRepository
 
 case class UserResource(login: String, password: String, eMail: String)
@@ -37,21 +35,10 @@ case class UserLoginResource(login: String, password: String)
 
 object UserLoginResource {
 
-  implicit val implicitWrites: Writes[UserLoginResource] {
-    def writes(user: UserLoginResource): JsValue
-  } = new Writes[UserLoginResource] {
-    def writes(user: UserLoginResource): JsValue = {
-      Json.obj(
-        "login" -> user.login,
-        "password" -> user.password
-      )
-    }
-  }
-
-  implicit val implicitReads: Reads[UserLoginResource] = (
-    (__ \ "login").read[String] and
-      (__ \ "password").read[String]
-    )(UserLoginResource.apply _)
+  implicit val implicitFormat: Format[UserLoginResource] = (
+    (__ \ "login").format[String] and
+      (__ \ "password").format[String]
+    )(UserLoginResource.apply _, unlift(UserLoginResource.unapply))
 
 }
 
@@ -59,21 +46,10 @@ case class UserDataResource(login: String, eMail: String)
 
 object UserDataResource {
 
-  implicit val implicitWrites: Writes[UserDataResource] {
-    def writes(userData: UserDataResource): JsValue
-  } = new Writes[UserDataResource] {
-    def writes(userData: UserDataResource): JsValue = {
-      Json.obj(
-        "login" -> userData.login,
-        "eMail" -> userData.eMail
-      )
-    }
-  }
-
-  implicit val implicitReads: Reads[UserDataResource] = (
-    (__ \ "login").read[String] and
-      (__ \ "eMail").read[String]
-  )(UserDataResource.apply _)
+  implicit val implicitFormat: Format[UserDataResource] = (
+    (__ \ "login").format[String] and
+      (__ \ "eMail").format[String]
+  )(UserDataResource.apply _, unlift(UserDataResource.unapply))
 
 }
 

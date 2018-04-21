@@ -9,7 +9,7 @@ import play.api.mvc._
 import play.api.Configuration
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Try, Success, Failure}
+import scala.util.{Success, Failure}
 
 class UserController @Inject() (ucc: UserControllerComponents, conf: Configuration)
                                (implicit ec: ExecutionContext)
