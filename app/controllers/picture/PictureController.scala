@@ -19,9 +19,9 @@ class PictureController @Inject() (ccc: ControllerComponentsDefault, crh: Pictur
       picsFromJson match {
         case JsSuccess(pics: PictureSequenceResource, path: JsPath) => crh.create(pics).map(pSeq => Created(Json.toJson(pSeq)))
             .recover{
-              case err => BadRequest(err)
+              case err => BadRequest("Was detected " + err)
             }
-        case JsError(e) => Future(BadRequest(e))
+        case e: JsError => Future(BadRequest(JsError.toJson(e)))
       }
     }
   }

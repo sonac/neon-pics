@@ -3,7 +3,7 @@ package controllers.picture
 
 import com.google.inject.Inject
 import models._
-import models.daos.{PictureRepository, QuestionnaireRepository}
+import models.daos.PictureRepository
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 

@@ -24,7 +24,7 @@ class PictureRepositoryImpl @Inject()(protected val dbConfigProvider: DatabaseCo
   import profile.api._
 
   def add(id: Int = 0, picUrl: String): Future[Int] = {
-    db.run(pictureTable += Picture(id, picUrl))
+    db.run(pictureTable.returning(pictureTable.map(_.id)) += Picture(id, picUrl))
   }
 
   def delete(id: Int): Future[Int] = {
