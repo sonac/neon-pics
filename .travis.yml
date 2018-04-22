@@ -31,6 +31,9 @@ install:
 #- gcloud -q components update gae-python
 #- pip install -r requirements.txt -t lib/
 script:
+- cd client
+- npm test
+- cd ..
 - sbt test
 - sbt docker:publishLocal
 after_success:
