@@ -72,4 +72,9 @@ describe('testing reducer', () => {
     expect(reducer.default(expectedData, actions.pictureClick(1))).to.eql({...expectedData, sortState: stateAfterClick })
   })
 
+  it('should process post request', () => {
+    const stateAfterClick = {...expectedData.sortState}
+    expect(reducer.default(expectedData, actions.postComparison())).to.eql({...expectedData, sortState: stateAfterClick })
+  })
+
 })
