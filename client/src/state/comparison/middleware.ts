@@ -1,6 +1,6 @@
 import { values } from 'ramda';
 import * as Cookies from 'universal-cookie';
-import { User, UserRegInput, UserLogInput } from './types';
+import { User, UserRegInput, UserLogInput, Questionnaire } from './types';
 import { fetchComparison, 
   fetchComparisonSuccess, 
   fetchError, 
@@ -11,7 +11,10 @@ import { fetchComparison,
   logout, 
   loginSwitcher,
   checkToken,
-  checkTokenSuccess} from './actions';
+  checkTokenSuccess,
+  postNewQuestionnaire,
+  postNewQuestSuccess,
+  postNewQuestError} from './actions';
 
 interface FetchPicture {
   id: number;
@@ -161,6 +164,46 @@ export default ({ getState, dispatch }) => next => action => {
   if (action.type === logout.type) {
     const cookie = new Cookies();
     cookie.remove('auth-token');
+  }
+
+  if (action.type === postNewQuestionnaire.type) {
+    const state = getState();
+    const pics = {pics: state.comparison.picInputs};
+    const questName = state.comparison.picInpName;
+
+    fetch("/pictures", {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(pics)
+    })
+    .then(response => 
+        response.json())
+      .then(data => {
+        const newQuest: Questionnaire = {text: questName, pictureIds: data}
+        fetch("/comparison", {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(newQuest)
+        })
+        .then(response => {
+            if (response.status === 201) {response.json()
+              .then((_): void => {
+                dispatch(postNewQuestSuccess())
+                window.location.href = '/';
+              })
+              .catch(error => {
+                console.error(error);
+                dispatch(postNewQuestError(error))
+            })
+          } 
+        })
+      })
   }
 
   return next(action);

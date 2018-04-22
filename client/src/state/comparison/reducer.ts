@@ -18,7 +18,10 @@ import {
   addNewPictureLink,
   removePicutreLink,
   updatePicLink,
-  updateNewQuestName
+  updateNewQuestName,
+  postNewQuestionnaire,
+  postNewQuestSuccess,
+  postNewQuestError
 } from './actions'
 import { pairwise, incrRating, updateInput } from 'utils/common';
 import { processSortingStep } from 'utils/sorting';
@@ -85,5 +88,8 @@ export default createReducerFromDescriptor({
   [updateNewQuestName.type]: (state: State, action: NewQuestNameAction): State => ({
     ...state,
     picInpName: action.picInpName
-  })
+  }),
+  [postNewQuestionnaire.type]: (state: State, action: Action): State => ({...state}),
+  [postNewQuestSuccess.type]: (state: State, action: Action): State => ({...state, picInputs: [{url: ''}], picInpName: ''}),
+  [postNewQuestError.type]: (state: State, action: ErrorAction): State => ({...state, error: action.error}) 
 }, initState);

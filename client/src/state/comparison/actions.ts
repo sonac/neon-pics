@@ -57,3 +57,12 @@ export const updatePicLink = utils.createActionCreator('UPDATE_PIC_LINK', (picId
 export const updateNewQuestName = utils.createActionCreator('UPDATE_NEW_QUEST_NAME', (picInpName: string): NewQuestNameData => ({
   picInpName
 }));
+
+export const postNewQuestionnaire = utils.createActionCreator('POST_NEW_QUEST');
+
+export const postNewQuestSuccess = utils.createActionCreator('POST_NEW_QUEST_SUCCESS');
+
+export const postNewQuestError =
+  utils.createActionCreator('POST_NEW_QUEST_ERROR', (error: string | Error): ErrorData => ({
+    error
+}));

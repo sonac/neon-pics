@@ -38,6 +38,11 @@ export type UserLogInput = {
   password: string;
 }
 
+export type Questionnaire = {
+  text: string,
+  pictureIds: Array<number>
+}
+
 export interface State {
   isLoading: boolean;
   error: null | string | Error;

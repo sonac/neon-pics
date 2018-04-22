@@ -16,6 +16,7 @@ class PictureController @Inject() (ccc: ControllerComponentsDefault, crh: Pictur
   def addPictures(): Action[AnyContent] = {
     ccc.actionBuilder.async { implicit request: RequestAugmented[AnyContent] =>
       val picsFromJson: JsResult[PictureSequenceResource] = Json.fromJson[PictureSequenceResource](request.body.asJson.get)
+      println(picsFromJson)
       picsFromJson match {
         case JsSuccess(pics: PictureSequenceResource, path: JsPath) => crh.create(pics).map(pSeq => Created(Json.toJson(pSeq)))
             .recover{

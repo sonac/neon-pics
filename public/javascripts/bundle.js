@@ -1660,6 +1660,13 @@ exports.updateNewQuestName = utils.createActionCreator('UPDATE_NEW_QUEST_NAME', 
         picInpName: picInpName
     };
 });
+exports.postNewQuestionnaire = utils.createActionCreator('POST_NEW_QUEST');
+exports.postNewQuestSuccess = utils.createActionCreator('POST_NEW_QUEST_SUCCESS');
+exports.postNewQuestError = utils.createActionCreator('POST_NEW_QUEST_ERROR', function (error) {
+    return {
+        error: error
+    };
+});
 
 /***/ }),
 /* 23 */
@@ -36558,6 +36565,7 @@ var React = __webpack_require__(3);
 var react_1 = __webpack_require__(3);
 var button_1 = __webpack_require__(36);
 var react_redux_1 = __webpack_require__(24);
+var react_router_dom_1 = __webpack_require__(130);
 var actions_1 = __webpack_require__(22);
 var styles = __webpack_require__(381);
 var NewQuestionnaire = /** @class */function (_super) {
@@ -36582,7 +36590,14 @@ var NewQuestionnaire = /** @class */function (_super) {
         _this.handleAddLink = function () {
             _this.props.actions.addNewPictureLink();
         };
-        _this.handleCreateQuest = function () {};
+        _this.handleCreateQuest = function () {
+            _this.props.actions.postNewQuestionnaire();
+        };
+        _this.handleEnter = function (e) {
+            if (e.key === 'Enter') {
+                _this.props.actions.postNewQuestionnaire();
+            }
+        };
         return _this;
     }
     NewQuestionnaire.prototype.render = function () {
@@ -36592,8 +36607,10 @@ var NewQuestionnaire = /** @class */function (_super) {
             } }), this.props.data.picInputs.map(function (pic, idx) {
             return React.createElement("div", { className: styles.picInput, key: idx }, React.createElement("input", { type: "text", placeholder: "Picutre #" + (idx + 1) + " link", value: pic.url, onChange: function onChange(e) {
                     _this.handleChange(e, "link", idx);
+                }, onKeyPress: function onKeyPress(e) {
+                    return _this.handleEnter(e);
                 } }), React.createElement(button_1.Button, { color: "alert", size: "large", onClick: _this.handleRemoveLink(idx), hollow: true }, "-"));
-        }), React.createElement("div", { className: styles.buttons }, React.createElement(button_1.Button, { size: "large", onClick: this.handleAddLink, hollow: true }, "Add new picture input"), React.createElement(button_1.Button, { color: "success", size: "large", onClick: this.handleCreateQuest, hollow: true }, "Create new questionnaire"))));
+        }), React.createElement("div", { className: styles.buttons }, React.createElement(button_1.Button, { size: "large", onClick: this.handleAddLink, hollow: true }, "Add new picture input"), React.createElement(react_router_dom_1.Link, { to: "/" }, "  ", React.createElement(button_1.Button, { color: "success", size: "large", onClick: this.handleCreateQuest, hollow: true }, "Create new questionnaire")))));
     };
     return NewQuestionnaire;
 }(react_1.Component);
@@ -36607,7 +36624,8 @@ var mapDispatchToProps = {
     addNewPictureLink: actions_1.addNewPictureLink,
     removePicutreLink: actions_1.removePicutreLink,
     updatePicLink: actions_1.updatePicLink,
-    updateNewQuestName: actions_1.updateNewQuestName
+    updateNewQuestName: actions_1.updateNewQuestName,
+    postNewQuestionnaire: actions_1.postNewQuestionnaire
 };
 var mergeProps = function mergeProps(data, actions) {
     return {
@@ -36916,6 +36934,41 @@ exports.default = function (_a) {
             if (action.type === actions_1.logout.type) {
                 var cookie = new Cookies();
                 cookie.remove('auth-token');
+            }
+            if (action.type === actions_1.postNewQuestionnaire.type) {
+                var state = getState();
+                var pics = { pics: state.comparison.picInputs };
+                var questName_1 = state.comparison.picInpName;
+                fetch("/pictures", {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(pics)
+                }).then(function (response) {
+                    return response.json();
+                }).then(function (data) {
+                    var newQuest = { text: questName_1, pictureIds: data };
+                    fetch("/comparison", {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(newQuest)
+                    }).then(function (response) {
+                        if (response.status === 201) {
+                            response.json().then(function (_) {
+                                dispatch(actions_1.postNewQuestSuccess());
+                                window.location.href = '/';
+                            }).catch(function (error) {
+                                console.error(error);
+                                dispatch(actions_1.postNewQuestError(error));
+                            });
+                        }
+                    });
+                });
             }
             return next(action);
         };
@@ -45353,6 +45406,12 @@ exports.default = utils_1.createReducerFromDescriptor((_a = {}, _a[actions_1.fet
     return __assign({}, state, { picInputs: common_1.updateInput(action.picIdx, state.picInputs, action.picInp.url) });
 }, _a[actions_1.updateNewQuestName.type] = function (state, action) {
     return __assign({}, state, { picInpName: action.picInpName });
+}, _a[actions_1.postNewQuestionnaire.type] = function (state, action) {
+    return __assign({}, state);
+}, _a[actions_1.postNewQuestSuccess.type] = function (state, action) {
+    return __assign({}, state, { picInputs: [{ url: '' }], picInpName: '' });
+}, _a[actions_1.postNewQuestError.type] = function (state, action) {
+    return __assign({}, state, { error: action.error });
 }, _a), initState);
 var _a;
 

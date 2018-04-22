@@ -2,9 +2,10 @@ import * as React from 'react';
 import { Component } from 'react';
 import { Button } from 'react-foundation-components/lib/button';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { BasicActionCreator, IdActionCreator, PicInputActionCreator, NewQuestNameActionCreator } from 'state/types';
 import { PicInput, State as ComparisonState } from 'state/comparison/types';
-import { addNewPictureLink, removePicutreLink, updatePicLink, updateNewQuestName } from 'state/comparison/actions';
+import { addNewPictureLink, removePicutreLink, updatePicLink, updateNewQuestName, postNewQuestionnaire } from 'state/comparison/actions';
 
 const styles = require('./styles.css');
 
@@ -18,6 +19,7 @@ interface Actions {
   removePicutreLink: IdActionCreator;
   updatePicLink: PicInputActionCreator;
   updateNewQuestName: NewQuestNameActionCreator;
+  postNewQuestionnaire: BasicActionCreator;
 }
 
 interface Props {
@@ -51,8 +53,14 @@ class NewQuestionnaire extends Component<Props, State> {
   }
 
   handleCreateQuest = () => {
-
+    this.props.actions.postNewQuestionnaire();
   }
+
+  handleEnter = (e) => {
+    if (e.key === 'Enter') {
+      this.props.actions.postNewQuestionnaire();
+    }
+  } 
 
   render() {
     return (
@@ -68,13 +76,18 @@ class NewQuestionnaire extends Component<Props, State> {
               <input type="text" 
                     placeholder={`Picutre #${idx + 1} link`}
                     value={pic.url}
-                    onChange={(e) => {this.handleChange(e, "link", idx)}} /> 
+                    onChange={(e) => {this.handleChange(e, "link", idx)}} 
+                    onKeyPress={(e) => this.handleEnter(e)}/> 
               <Button color ="alert" size="large" onClick={this.handleRemoveLink(idx)} hollow>-</Button>
             </div>
           ))}
           <div className={styles.buttons}>
             <Button size="large" onClick={this.handleAddLink} hollow>Add new picture input</Button>
-            <Button color="success" size="large" onClick={this.handleCreateQuest} hollow>Create new questionnaire</Button>  
+            <Link to="/">  <Button color="success" 
+                              size="large" 
+                              onClick={this.handleCreateQuest} 
+                              hollow>Create new questionnaire</Button>  
+            </Link>
           </div>      
         </div>
       </div>
@@ -91,7 +104,8 @@ const mapDispatchToProps = {
   addNewPictureLink,
   removePicutreLink,
   updatePicLink,
-  updateNewQuestName
+  updateNewQuestName,
+  postNewQuestionnaire
 };
 
 const mergeProps = (data: Data, actions: Actions): Props => ({

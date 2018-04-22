@@ -40,4 +40,6 @@ POST        /login                                      controllers.user.UserCon
 # Check token
 GET         /validate                                   controllers.user.UserController.validate
 
+# Post pictures
+POST        /pictures                                   controllers.picture.PictureController.addPictures
 
