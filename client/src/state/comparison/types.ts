@@ -7,6 +7,10 @@ export type Picture = {
   rating: number;
 }
 
+export type PicInput = {
+  url: string;
+}
+
 export type PicturesMap = Record<string, Picture>
 
 export type SortState = {
@@ -34,6 +38,11 @@ export type UserLogInput = {
   password: string;
 }
 
+export type Questionnaire = {
+  text: string,
+  pictureIds: Array<number>
+}
+
 export interface State {
   isLoading: boolean;
   error: null | string | Error;
@@ -47,6 +56,8 @@ export interface State {
   userLogInput: UserLogInput | null;
   mid: number;
   showLogin: boolean;
+  picInputs: Array<PicInput>;
+  picInpName: string | null;
 }
 
 export type FetchComparisonSuccessData = {

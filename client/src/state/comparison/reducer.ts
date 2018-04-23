@@ -1,6 +1,6 @@
 import { inc, evolve } from 'ramda';
 import { Action } from 'redux';
-import { createReducerFromDescriptor } from 'state/utils';
+import { createReducerFromDescriptor } from '../utils';
 import {
   fetchComparison,
   fetchComparisonSuccess,
@@ -14,12 +14,19 @@ import {
   logout,
   updateCurrentLoginInput,
   checkToken,
-  checkTokenSuccess
+  checkTokenSuccess,
+  addNewPictureLink,
+  removePicutreLink,
+  updatePicLink,
+  updateNewQuestName,
+  postNewQuestionnaire,
+  postNewQuestSuccess,
+  postNewQuestError
 } from './actions'
-import { pairwise, incrRating } from 'utils/common';
-import { processSortingStep } from 'utils/sorting';
+import { pairwise, incrRating, updateInput } from '../../utils/common';
+import { processSortingStep } from '../../utils/sorting';
 import { State, FetchComparisonSuccessAction, FetchUserAction } from './types';
-import { ErrorAction, IdAction, UserRegInputAction, UserLogInputAction } from 'state/types';
+import { ErrorAction, IdAction, UserRegInputAction, UserLogInputAction, PicInputAction, NewQuestNameAction } from 'state/types';
 
 const initState: State = {
   isLoading: true,
@@ -33,7 +40,9 @@ const initState: State = {
   userRegInput: null,
   userLogInput: null,
   mid: 0,
-  showLogin: false
+  showLogin: false,
+  picInputs: [{url: ''}],
+  picInpName: ''
 };
 
 export default createReducerFromDescriptor({
@@ -67,7 +76,20 @@ export default createReducerFromDescriptor({
   [login.type]: (state: State, action: Action): State => ({...state}),
   [logout.type]: (state: State, action: Action): State => ({...state, currentUser: null}),
   [checkToken.type]: (state: State, action: Action): State => ({...state}),
-  [checkTokenSuccess.type]: (state: State, action: FetchUserAction): State => (
-    console.log("hi " + action.currentUser),
-    {...state, currentUser: action.currentUser})
+  [checkTokenSuccess.type]: (state: State, action: FetchUserAction): State => ({
+    ...state, currentUser: action.currentUser}),
+  [addNewPictureLink.type]: (state: State, action: Action): State => ({...state, picInputs: state.picInputs.concat({url: ''})}),
+  [removePicutreLink.type]: (state: State, action: IdAction): State => ({
+    ...state, 
+    picInputs: state.picInputs.filter((p, pidx) => pidx !== action.id)}),
+  [updatePicLink.type]: (state: State, action: PicInputAction): State => ({
+    ...state,
+    picInputs: updateInput(action.picIdx, state.picInputs, action.picInp.url) }),
+  [updateNewQuestName.type]: (state: State, action: NewQuestNameAction): State => ({
+    ...state,
+    picInpName: action.picInpName
+  }),
+  [postNewQuestionnaire.type]: (state: State, action: Action): State => ({...state}),
+  [postNewQuestSuccess.type]: (state: State, action: Action): State => ({...state, picInputs: [{url: ''}], picInpName: ''}),
+  [postNewQuestError.type]: (state: State, action: ErrorAction): State => ({...state, error: action.error}) 
 }, initState);

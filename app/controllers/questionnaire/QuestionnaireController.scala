@@ -8,7 +8,8 @@ import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class QuestionnaireController @Inject()(ccc: ControllerComponentsDefault, crh: QuestionnaireResourceHandler)(implicit ec: ExecutionContext) extends ControllerDefault(ccc) {
+class QuestionnaireController @Inject()(ccc: ControllerComponentsDefault, crh: QuestionnaireResourceHandler)
+                                       (implicit ec: ExecutionContext) extends ControllerDefault(ccc) {
 
   def getQuestionnaire(questionnaireId: Int): Action[AnyContent] = {
     ccc.actionBuilder.async { implicit request: RequestAugmented[AnyContent] =>

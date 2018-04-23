@@ -49,7 +49,6 @@ class RoutingButtons extends Component<Props, State> {
       this.props.actions.logout();
     }
     else if (evt === "home") {
-      console.log(evt);
       window.location.reload();
     }
   }
@@ -66,6 +65,13 @@ class RoutingButtons extends Component<Props, State> {
                                 hollow
                                 onClick={(evt) => this.handleClick("home")}>
                                   Home
+                        </Button>
+          </Link>
+        </div>
+        <div className={styles.addButton}>
+          <Link to="/comparison"> <Button size="large" 
+                                hollow>
+                                  Add Questionnaire
                         </Button>
           </Link>
         </div>

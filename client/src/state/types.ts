@@ -1,5 +1,5 @@
 import { ReducersMapObject, Reducer, Action } from 'redux';
-import { User, UserRegInput, UserLogInput } from 'state/comparison/types'
+import { User, UserRegInput, UserLogInput, PicInput } from 'state/comparison/types'
 import { ActionCreator } from 'react-redux';
 
 export type UntypedActionCreator0<R extends object> = () => R;
@@ -49,3 +49,16 @@ export type UserLogInputData = {
 }
 export type UserLogInputAction = UserLogInputData & Action;
 export type UserLogInputActionCreator = ActionCreator1<UserLogInput, UserLogInputAction>
+
+export type PicInputData = {
+  picIdx: number,
+  picInp: PicInput
+}
+export type PicInputAction = PicInputData & Action;
+export type PicInputActionCreator = ActionCreator2<number, PicInput, PicInputAction>
+
+export type NewQuestNameData = {
+  picInpName: string
+}
+export type NewQuestNameAction = NewQuestNameData & Action
+export type NewQuestNameActionCreator = ActionCreator1<string, NewQuestNameAction>
