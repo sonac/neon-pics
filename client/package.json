@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "env NODE_PATH=$NODE_PATH:$PWD/src mocha -r ts-node/register src/__tests__/*.ts* --require ignore-styles",
+    "test": "mocha -r ts-node/register src/__tests__/*.ts",
     "watch": "webpack --watch",
     "build": "webpack",
     "start": "webpack-dev-server"
