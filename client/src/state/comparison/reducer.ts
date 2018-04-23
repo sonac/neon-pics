@@ -1,6 +1,6 @@
 import { inc, evolve } from 'ramda';
 import { Action } from 'redux';
-import { createReducerFromDescriptor } from 'state/utils';
+import { createReducerFromDescriptor } from '../utils';
 import {
   fetchComparison,
   fetchComparisonSuccess,
@@ -23,8 +23,8 @@ import {
   postNewQuestSuccess,
   postNewQuestError
 } from './actions'
-import { pairwise, incrRating, updateInput } from 'utils/common';
-import { processSortingStep } from 'utils/sorting';
+import { pairwise, incrRating, updateInput } from '../../utils/common';
+import { processSortingStep } from '../../utils/sorting';
 import { State, FetchComparisonSuccessAction, FetchUserAction } from './types';
 import { ErrorAction, IdAction, UserRegInputAction, UserLogInputAction, PicInputAction, NewQuestNameAction } from 'state/types';
 

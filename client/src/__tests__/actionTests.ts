@@ -1,4 +1,4 @@
-import * as actions from 'state/comparison/actions';
+import * as actions from '../state/comparison/actions';
 import { FetchComparisonSuccessData, UserRegInput, UserLogInput, FetchUserData, PicInput } from 'state/comparison/types';
 import { expect } from 'chai';
 

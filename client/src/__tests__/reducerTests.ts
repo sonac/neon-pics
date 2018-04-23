@@ -1,5 +1,5 @@
-import * as reducer from 'state/comparison/reducer';
-import * as actions from 'state/comparison/actions';
+import * as reducer from '../state/comparison/reducer';
+import * as actions from '../state/comparison/actions';
 import { State, FetchComparisonSuccessData, User, UserRegInput, UserLogInput, FetchUserData } from 'state/comparison/types';
 import { expect } from 'chai';
 

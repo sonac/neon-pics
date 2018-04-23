@@ -1,4 +1,4 @@
-import * as utils from 'state/utils';
+import * as utils from '../utils';
 import { FetchComparisonSuccessData, User, UserRegInput, UserLogInput, FetchUserData, PicInput } from './types';
 import { IdData, ErrorData, UserRegInputData, UserLogInputData, PicInputData, NewQuestNameData } from 'state/types';
 
