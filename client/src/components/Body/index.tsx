@@ -3,15 +3,17 @@ import { Router, Route, browserHistory, withRouter } from 'react-router';
 import PicPair from 'components/PicsPair';
 import Registration from 'components/Registration';
 import NewQuestionnaire from 'components/NewQuestionnaire';
+import AllQuests from 'components/AllQuests';
 
 const styles = require('./styles.css') 
 
 export default function Body() {
   return (
     <div className={styles.body}>
-      <Route exact path="/" component={PicPair} />
+      <Route exact path="/" component={AllQuests} />
       <Route path="/register" component={Registration} />
       <Route path="/comparison" component={NewQuestionnaire} />
+      <Route path="/questionnaire" component={PicPair} />
     </div>
   );
 }

@@ -21,11 +21,13 @@ import {
   updateNewQuestName,
   postNewQuestionnaire,
   postNewQuestSuccess,
-  postNewQuestError
+  postNewQuestError,
+  fetchAllQuestionnaires,
+  fetchAllQuestionnairesSuccess
 } from './actions'
 import { pairwise, incrRating, updateInput } from '../../utils/common';
 import { processSortingStep } from '../../utils/sorting';
-import { State, FetchComparisonSuccessAction, FetchUserAction } from './types';
+import { State, FetchComparisonSuccessAction, FetchUserAction, FetchAllQuestsSuccessAction } from './types';
 import { ErrorAction, IdAction, UserRegInputAction, UserLogInputAction, PicInputAction, NewQuestNameAction } from 'state/types';
 
 const initState: State = {
@@ -42,11 +44,12 @@ const initState: State = {
   mid: 0,
   showLogin: false,
   picInputs: [{url: ''}],
-  picInpName: ''
+  picInpName: '',
+  questionnaires: null
 };
 
 export default createReducerFromDescriptor({
-  [fetchComparison.type]: (state: State): State => ({
+  [fetchComparison.type]: (state: State, action: IdAction): State => ({
     ...state,
     isLoading: true
   }),
@@ -91,5 +94,7 @@ export default createReducerFromDescriptor({
   }),
   [postNewQuestionnaire.type]: (state: State, action: Action): State => ({...state}),
   [postNewQuestSuccess.type]: (state: State, action: Action): State => ({...state, picInputs: [{url: ''}], picInpName: ''}),
-  [postNewQuestError.type]: (state: State, action: ErrorAction): State => ({...state, error: action.error}) 
+  [postNewQuestError.type]: (state: State, action: ErrorAction): State => ({...state, error: action.error}),
+  [fetchAllQuestionnaires.type]: (state: State, action: Action): State => ({...state, isLoading: true}),
+  [fetchAllQuestionnairesSuccess.type]: (state: State, action: FetchAllQuestsSuccessAction): State => ({...state, questionnaires: action.quests, isLoading: false})
 }, initState);

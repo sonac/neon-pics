@@ -19,7 +19,8 @@ describe('testing reducer', () => {
     mid: 0,
     showLogin: false,
     picInputs: [{url:''}],
-    picInpName: ''
+    picInpName: '',
+    questionnaires: null
   };
 
   const fetchedData = {"id":1,

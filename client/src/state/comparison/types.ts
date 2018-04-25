@@ -43,10 +43,18 @@ export type Questionnaire = {
   pictureIds: Array<number>
 }
 
+export type EnhancedQuestionnaire = {
+  id: number,
+  question: string,
+  pics: Array<Picture>
+}
+
+export type QuestionnaireSeq = Array<EnhancedQuestionnaire>
+
 export interface State {
   isLoading: boolean;
   error: null | string | Error;
-  pics: Record<string, Picture>;
+  pics: PicturesMap;
   question: string;
   questionId: null | number;
   sortState: SortState | null;
@@ -58,6 +66,7 @@ export interface State {
   showLogin: boolean;
   picInputs: Array<PicInput>;
   picInpName: string | null;
+  questionnaires: QuestionnaireSeq | null;
 }
 
 export type FetchComparisonSuccessData = {
@@ -74,3 +83,9 @@ export type FetchUserData = {
 }
 export type FetchUserAction = FetchUserData & Action;
 export type FetchUserCreator = ActionCreator1<FetchUserData, FetchUserAction>;
+
+export type FetchAllQuestsSuccessData = {
+  quests: QuestionnaireSeq
+}
+export type  FetchAllQuestsSuccessAction = FetchAllQuestsSuccessData & Action;
+export type FetchAllQuestsSuccessCreator = ActionCreator1<FetchAllQuestsSuccessData, FetchAllQuestsSuccessAction>;

@@ -31,3 +31,8 @@
     height: 400px;
     width: 400px;
 }
+
+.picsPair img:hover {
+    height: 400px;
+    width: 400px;
+}

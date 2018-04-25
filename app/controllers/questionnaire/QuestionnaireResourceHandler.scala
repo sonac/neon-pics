@@ -37,4 +37,10 @@ class QuestionnaireResourceHandler @Inject()(questionnaireRepository: Questionna
       q = maybeQuest.get
     } yield QuestionnaireResource(q.base.id, q.base.text, q.pictures)
   }
+
+  def getAll: Future[Seq[QuestionnaireResource]] = {
+    questionnaireRepository.getQuestionnaireAll.map(sq =>
+      sq.map(q =>
+      QuestionnaireResource(q.base.id, q.base.text, q.pictures)))
+  }
 }

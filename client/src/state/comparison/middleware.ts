@@ -1,6 +1,6 @@
 import { values } from 'ramda';
 import * as Cookies from 'universal-cookie';
-import { User, UserRegInput, UserLogInput, Questionnaire } from './types';
+import { User, UserRegInput, UserLogInput, Questionnaire, QuestionnaireSeq, EnhancedQuestionnaire, Picture } from './types';
 import { fetchComparison, 
   fetchComparisonSuccess, 
   fetchError, 
@@ -14,7 +14,9 @@ import { fetchComparison,
   checkTokenSuccess,
   postNewQuestionnaire,
   postNewQuestSuccess,
-  postNewQuestError} from './actions';
+  postNewQuestError,
+  fetchAllQuestionnaires,
+  fetchAllQuestionnairesSuccess} from './actions';
 
 interface FetchPicture {
   id: number;
@@ -204,6 +206,30 @@ export default ({ getState, dispatch }) => next => action => {
           } 
         })
       })
+  }
+
+  if (action.type === fetchAllQuestionnaires.type) {
+    fetch('/comparison-all', {
+      credentials: "include"
+    })
+    .then(response => 
+      response.json())
+      .then(data => {
+        console.log(data);
+        const quests: QuestionnaireSeq = data.map(q => {
+          const t: EnhancedQuestionnaire = {id: q.id, question: q.text, pics: q.pictures.map(p => {
+            const pic: Picture = {id: p.id, url: p.picUrl, rating: 0}
+            return pic
+          })
+        }
+        return t
+      })
+      dispatch(fetchAllQuestionnairesSuccess({quests}))
+    })
+    .catch(error => {
+      console.error(error);
+      dispatch(fetchError(error))
+    })
   }
 
   return next(action);
