@@ -7,6 +7,7 @@
 GET         /                                           controllers.Assets.at(path="/public", file="index.html")
 GET         /register                                   controllers.Assets.at(path="/public", file="index.html")
 GET         /comparison                                 controllers.Assets.at(path="/public", file="index.html")
+GET         /questionnaire                              controllers.Assets.at(path="/public", file="index.html")
 
 # Serve js, it most probably going to be only one file (bundle.js)
 GET         /js/*file                                   controllers.Assets.at(path="/public/javascripts", file)
@@ -21,6 +22,9 @@ POST        /comparison                                 controllers.questionnair
 
 # Gets a questionnaire with pics
 GET         /comparison/:questionnaireId                controllers.questionnaire.QuestionnaireController.getQuestionnaire(questionnaireId: Int)
+
+# Get all questionnaires
+GET         /comparison-all                             controllers.questionnaire.QuestionnaireController.getQuestionnaireAll
 
 # Ads an answer including all evaluated things
 POST        /comparison-answer/                         controllers.questionnaireAnswer.QuestionnaireAnswerController.addQuestionnaireAnswer

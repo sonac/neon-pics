@@ -1,5 +1,5 @@
 import * as utils from '../utils';
-import { FetchComparisonSuccessData, User, UserRegInput, UserLogInput, FetchUserData, PicInput } from './types';
+import { FetchComparisonSuccessData, User, UserRegInput, UserLogInput, FetchUserData, PicInput, FetchAllQuestsSuccessData } from './types';
 import { IdData, ErrorData, UserRegInputData, UserLogInputData, PicInputData, NewQuestNameData } from 'state/types';
 
 export const fetchComparison = utils.createActionCreator('FETCH_COMPARISON', id => ({
@@ -66,3 +66,7 @@ export const postNewQuestError =
   utils.createActionCreator('POST_NEW_QUEST_ERROR', (error: string | Error): ErrorData => ({
     error
 }));
+
+export const fetchAllQuestionnaires = utils.createActionCreator('FETCH_ALL_QUESTS');
+
+export const fetchAllQuestionnairesSuccess = utils.createActionCreator('FETCH_ALL_QUESTS_SUCCESS', (_: FetchAllQuestsSuccessData) => _);

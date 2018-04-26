@@ -31,10 +31,6 @@ interface Props {
 type State = {}
 
 class PicsPair extends Component<Props, State> {
-  componentDidMount() {
-    // TODO: remove hardcoded id
-    this.props.actions.fetchComparison(1);
-  }
 
   picClick = id => () => { 
     const { sortState, pics } = this.props.data;
@@ -55,7 +51,7 @@ class PicsPair extends Component<Props, State> {
     else if (sortState.sortedPart.length == Object.keys(pics).length) {
       this.props.actions.postComparison();
       return <div className={styles.picsPair}>
-               <img src="https://c1.staticflickr.com/7/6095/6385016345_f19d5414a7_b.jpg" />
+               <h2>Thanks for participation in our questionnaire!</h2>
              </div>;
     }
 

@@ -47,4 +47,18 @@ class QuestionnaireControllerTest extends PlaySpec with GuiceOneAppPerTest with 
 
     }
   }
+
+  "ComparisonController GET all" should {
+
+    "return the resources" in {
+      val controller = inject[QuestionnaireController]
+      val response = controller.getQuestionnaireAll().apply(FakeRequest(GET, "/"))
+
+      status(response) mustBe OK
+      contentType(response) mustBe Some("application/json")
+      contentAsString(response) must include("\"pictures\"")
+      //      println(contentAsString(response))
+
+    }
+  }
 }

@@ -36,6 +36,14 @@ class QuestionnaireController @Inject()(ccc: ControllerComponentsDefault, crh: Q
     }
   }
 
+  def getQuestionnaireAll(): Action[AnyContent] = {
+    ccc.actionBuilder.async { implicit request: RequestAugmented[AnyContent] =>
+      crh.getAll.map(sq =>
+        Ok(Json.toJson(sq)))
+    }
+  }
+
+
 }
 
 

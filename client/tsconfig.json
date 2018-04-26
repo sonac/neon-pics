@@ -2,7 +2,7 @@
     "compilerOptions": {
         "module": "commonjs",
         "moduleResolution": "node",
-        "target": "es5",
+        "target": "ES6",
         "allowSyntheticDefaultImports": true,
         "baseUrl": "src",
         "sourceMap": true,
