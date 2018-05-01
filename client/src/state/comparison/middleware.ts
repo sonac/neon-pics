@@ -16,7 +16,8 @@ import { fetchComparison,
   postNewQuestSuccess,
   postNewQuestError,
   fetchAllQuestionnaires,
-  fetchAllQuestionnairesSuccess} from './actions';
+  fetchAllQuestionnairesSuccess,
+  updateCurrentLoginInput} from './actions';
 
 interface FetchPicture {
   id: number;
@@ -31,7 +32,7 @@ interface FetchComparisonResponse {
 
 export default ({ getState, dispatch }) => next => action => {
   if (action.type === fetchComparison.type) {
-    fetch(`comparison/${action.id}`, {
+    fetch(`/comparison/${action.id}`, {
       credentials: "include"
     })
       .then(response => response.json())
@@ -61,8 +62,7 @@ export default ({ getState, dispatch }) => next => action => {
     const state = getState();
     const pics = values(state.comparison.pics);
     const questionId = state.comparison.questionId;
-    const userName = state.comparison.currentUser.login;
-    const data = {questionnaireId: questionId, userName: userName, pictureIdScores: pics.map(x => ({pictureId: x.id, score: x.rating}))};
+    const data = {questionnaireId: questionId, pictureIdScores: pics.map(x => ({pictureId: x.id, score: x.rating}))};
 
     console.log(data);
 
@@ -112,7 +112,10 @@ export default ({ getState, dispatch }) => next => action => {
             )
           }
           else {
-            console.log(response.json())
+            const loginInput: UserLogInput = {login: userInp.login, password: userInp.password} 
+            dispatch(updateCurrentLoginInput(loginInput))
+            //dispatch(login())
+            //window.location.href = '/';
           }
         })
         .catch(err =>

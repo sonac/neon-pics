@@ -75,6 +75,13 @@ class RoutingButtons extends Component<Props, State> {
                         </Button>
           </Link>
         </div>
+        <div className={styles.addButton}>
+          <Link to="/comparison"> <Button size="large" 
+                                hollow>
+                                  Check results
+                        </Button>
+          </Link>
+        </div>
         <div className={currentUser ? styles.hidden :  styles.authButton}>
           <Link to="/register"><Button size="large" hollow>Register</Button></Link>
           <div className={styles.login}><Button size="large" 

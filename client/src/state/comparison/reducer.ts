@@ -23,11 +23,14 @@ import {
   postNewQuestSuccess,
   postNewQuestError,
   fetchAllQuestionnaires,
-  fetchAllQuestionnairesSuccess
+  fetchAllQuestionnairesSuccess,
+  chooseComparison,
+  fetchAnsweredQuestions,
+  fetchAnsweredQuestionsSuccess
 } from './actions'
 import { pairwise, incrRating, updateInput } from '../../utils/common';
 import { processSortingStep } from '../../utils/sorting';
-import { State, FetchComparisonSuccessAction, FetchUserAction, FetchAllQuestsSuccessAction } from './types';
+import { State, FetchComparisonSuccessAction, FetchUserAction, FetchAllQuestsSuccessAction, FetchAnsweredQuestionSuccessAction } from './types';
 import { ErrorAction, IdAction, UserRegInputAction, UserLogInputAction, PicInputAction, NewQuestNameAction } from 'state/types';
 
 const initState: State = {
@@ -45,7 +48,11 @@ const initState: State = {
   showLogin: false,
   picInputs: [{url: ''}],
   picInpName: '',
-  questionnaires: null
+  questionnaires: null,
+  isSent: false,
+  comparisonToFetch: null,
+  answeredQuestions: null,
+  questionnaireResult: null
 };
 
 export default createReducerFromDescriptor({
@@ -64,14 +71,15 @@ export default createReducerFromDescriptor({
     question: action.question,
     questionId: action.questionId,
     pics: action.pictures.reduce((acc, pic) => ({...acc, [pic.id]: {...pic, rating: 0} }), {}),
-    sortState: action.initSortState
+    sortState: action.initSortState,
+    isSent: false
   }),
   [pictureClick.type]: (state: State, action: IdAction): State => ({
     ...state,
     sortState: processSortingStep(action.id, Object.keys(state.pics), state.sortState),
     pics: incrRating(action.id, state.pics)
   }),
-  [postComparison.type]: (state: State, action: Action): State => ({ ...state}),
+  [postComparison.type]: (state: State, action: Action): State => ({ ...state, isSent: true}),
   [updateCurrentUserInput.type]: (state: State, action: UserRegInputAction): State => ({ ...state, userRegInput: action.userInp}),
   [updateCurrentLoginInput.type]: (state: State, action: UserLogInputAction): State => ({...state, userLogInput: action.loginInp}),
   [postUser.type]: (state: State, action: Action): State => ({...state}),
@@ -96,5 +104,11 @@ export default createReducerFromDescriptor({
   [postNewQuestSuccess.type]: (state: State, action: Action): State => ({...state, picInputs: [{url: ''}], picInpName: ''}),
   [postNewQuestError.type]: (state: State, action: ErrorAction): State => ({...state, error: action.error}),
   [fetchAllQuestionnaires.type]: (state: State, action: Action): State => ({...state, isLoading: true}),
-  [fetchAllQuestionnairesSuccess.type]: (state: State, action: FetchAllQuestsSuccessAction): State => ({...state, questionnaires: action.quests, isLoading: false})
+  [fetchAllQuestionnairesSuccess.type]: (state: State, action: FetchAllQuestsSuccessAction): State => ({...state, questionnaires: action.quests, isLoading: false}),
+  [chooseComparison.type]: (state: State, action: IdAction): State => ({...state, comparisonToFetch: action.id, isLoading: true}),
+  [fetchAnsweredQuestions.type]: (state: State, action: Action): State => ({...state, isLoading: true}),
+  [fetchAnsweredQuestionsSuccess.type]: (state: State, action: FetchAnsweredQuestionSuccessAction): State => ({
+    ...state,
+    answeredQuestions: action.questions
+  })
 }, initState);

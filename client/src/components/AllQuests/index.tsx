@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { QuestionnaireSeq, State as ComparisonState } from 'state/comparison/types';
-import { fetchAllQuestionnaires, fetchComparison } from '../../state/comparison/actions';
+import { fetchAllQuestionnaires, chooseComparison } from '../../state/comparison/actions';
 import { BasicActionCreator, IdActionCreator } from 'state/types';
 
 const styles = require('./styles.css');
@@ -15,7 +15,7 @@ interface Data {
 
 interface Actions {
   fetchAllQuestionnaires: BasicActionCreator;
-  fetchComparison: IdActionCreator;
+  chooseComparison: IdActionCreator;
 }
 
 interface Props {
@@ -32,7 +32,7 @@ class AllQuests extends Component<Props, State> {
   }
 
   handleClick = id => () => {
-    this.props.actions.fetchComparison(id);
+    this.props.actions.chooseComparison(id);
   }
 
   render() {
@@ -48,7 +48,7 @@ class AllQuests extends Component<Props, State> {
               q.pics[0].url.endsWith(".jpg") ||
               q.pics[0].url.endsWith(".png"))).map((quest, idx) => (
               <div key={idx} className={styles.quests}>
-                <Link to="/questionnaire"><img src={quest.pics[0].url} onClick={this.handleClick(quest.id)}/></Link>
+                <Link to={`/questionnaire/${quest.id}`}><img src={quest.pics[0].url} onClick={this.handleClick(quest.id)}/></Link>
                 {quest.question}
               </div>)    
             )}
@@ -66,7 +66,7 @@ const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
 
 const mapDispatchToProps = {
   fetchAllQuestionnaires,
-  fetchComparison
+  chooseComparison
 };
 
 const mergeProps = (data: Data, actions: Actions): Props => ({
