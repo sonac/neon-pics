@@ -67,7 +67,6 @@ class UserController @Inject() (ucc: UserControllerComponents, conf: Configurati
 
   def validate(): Action[AnyContent] = Action.async { implicit request =>
     val cookie: Cookies = request.cookies
-    var ss = Ok("asd")
     Future(cookie.get("auth-token") match {
       case Some(token) => {
         Jwt.decodeRaw(token.value, secretKey, Seq(JwtAlgorithm.HS256)) match {

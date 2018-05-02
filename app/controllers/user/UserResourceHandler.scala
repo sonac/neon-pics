@@ -1,5 +1,8 @@
 package controllers.user
 
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
 import com.google.inject.Inject
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,7 +41,7 @@ object UserLoginResource {
   implicit val implicitFormat: Format[UserLoginResource] = (
     (__ \ "login").format[String] and
       (__ \ "password").format[String]
-    )(UserLoginResource.apply _, unlift(UserLoginResource.unapply))
+    )(UserLoginResource.apply, unlift(UserLoginResource.unapply))
 
 }
 
@@ -49,7 +52,7 @@ object UserDataResource {
   implicit val implicitFormat: Format[UserDataResource] = (
     (__ \ "login").format[String] and
       (__ \ "eMail").format[String]
-  )(UserDataResource.apply _, unlift(UserDataResource.unapply))
+  )(UserDataResource.apply, unlift(UserDataResource.unapply))
 
 }
 
@@ -65,6 +68,14 @@ class UserResourceHandler @Inject()(userRepository: UserRepository)(implicit ec:
       optUser <- userRepository.getUserByLogin(userLogin)
       usr = optUser.get
     } yield UserResource(usr.login, usr.password, usr.eMail)
+  }
+
+  def createAnonymousUser(): Future[String] = {
+    val ts = LocalDateTime.now.format(DateTimeFormatter.ofPattern("YYYYMMdd_HHmmss"))
+    println(ts)
+    val login = "Anonym_" + ts
+    userRepository.addUser(login = login, password = "default", eMail = login + "@default.com")
+      .map(_.login)
   }
 
 }

@@ -3,14 +3,15 @@ package controllers.questionnaire
 import com.google.inject.Inject
 import models._
 import models.daos.QuestionnaireRepository
-import play.api.libs.json.{JsValue, Json, Writes}
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 case class QuestionnaireResource(id: Int, text: String, pictures: Seq[Picture])
 
 object QuestionnaireResource {
-
+  /*
   implicit val implicitWrites: Writes[QuestionnaireResource] {
     def writes(qr: QuestionnaireResource): JsValue
   } = new Writes[QuestionnaireResource] {
@@ -21,13 +22,29 @@ object QuestionnaireResource {
         "pictures" -> qr.pictures
       )
     }
-  }
+  }*/
+
+  implicit val implicitFormat: Format[QuestionnaireResource] = (
+    (__ \ "id").format[Int] and
+      (__ \ "text").format[String] and
+      (__ \ "pictures").format[Seq[Picture]]
+  )(QuestionnaireResource.apply, unlift(QuestionnaireResource.unapply))
 
 }
 
+case class QuestionnaireResourceSimplified(text: String, pictureIds: Seq[Int])
+
+object QuestionnaireResourceSimplified {
+  implicit val implicitFormat: Format[QuestionnaireResourceSimplified] = (
+    (__ \ "text").format[String] and
+      (__ \ "pictureIds").format[Seq[Int]]
+  )(QuestionnaireResourceSimplified.apply, unlift(QuestionnaireResourceSimplified.unapply))
+}
+
+
 class QuestionnaireResourceHandler @Inject()(questionnaireRepository: QuestionnaireRepository)(implicit ec: ExecutionContext) {
 
-  def create(questionnaire: QuestionnaireFormInput): Future[QuestionnaireResource] = {
+  def create(questionnaire: QuestionnaireResourceSimplified): Future[QuestionnaireResource] = {
     questionnaireRepository.addQuestionnaire(questionnaire.text, questionnaire.pictureIds).flatMap(get)
   }
 

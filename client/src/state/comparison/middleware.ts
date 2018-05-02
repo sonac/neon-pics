@@ -78,7 +78,7 @@ export default ({ getState, dispatch }) => next => action => {
     console.log(data);
 
     fetch('/comparison-answer/', {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',

@@ -1,17 +1,19 @@
 package controllers.picture
 
 import com.google.inject.Inject
-import controllers.{ControllerComponentsDefault, ControllerDefault, RequestAugmented}
+import controllers.{Assets, ControllerComponentsDefault, ControllerDefault, RequestAugmented}
 import play.api.data.Form
 import play.api.libs.json._
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Success, Failure}
+import scala.util.{Failure, Success}
 
 
-class PictureController @Inject() (ccc: ControllerComponentsDefault, crh: PictureResourceHandler)
-                                  (implicit ec: ExecutionContext) extends ControllerDefault(ccc) {
+class PictureController @Inject() (ccc: ControllerComponentsDefault,
+                                   crh: PictureResourceHandler,
+                                   assets: Assets)
+                                  (implicit ec: ExecutionContext) extends ControllerDefault(ccc, assets) {
 
   def addPictures(): Action[AnyContent] = {
     ccc.actionBuilder.async { implicit request: RequestAugmented[AnyContent] =>

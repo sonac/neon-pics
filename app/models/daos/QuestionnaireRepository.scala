@@ -20,7 +20,11 @@ trait QuestionnaireRepository {
 trait QuestionnaireAnswerRepository {
   def addQuestionnaireAnswer(questId: Int, userName: String, pictureIdScores: Seq[PictureIdScore]): Future[Option[Unit]]
 
-  def getQuestionnaireAnswer(questId: Int, userId: Int): Future[Option[QuestionnaireScores]]
+  def getQuestionnaireUserAnswer(questId: Int, userId: Int): Future[Option[QuestionnaireScores]]
+
+  def getQuestionnaireAnswer(qId: Int): Future[Option[QuestionnairePictureScores]]
+
+  def getAllAnsweredQuests: Future[Seq[Questionnaire]]
 
   def getAllAnswers: Future[Seq[QuestionnaireScoreWithUser]]
 }
@@ -77,20 +81,14 @@ class QuestionnaireRepositoryImpl @Inject()(protected val dbConfigProvider: Data
   }
 
   def addQuestionnaireAnswer(questId: Int, userName: String, pictureIdScores: Seq[PictureIdScore]): Future[Option[Unit]] = {
-    /*for {
-     usr <- userRepository.getUserByLogin(userName)
-     pId <- pictureIdScores
-     _ <- db.run(questionnaireScoreTable += QuestionnaireScore(questId, usr.get.id, pId.id, pId.score))
-    } yield questId*/
     val usr = userRepository.getUserByLogin(userName)
-    usr.foreach(println(_))
     usr.map(ou => ou.map( uid => {
       pictureIdScores.map(pId =>
         db.run(questionnaireScoreTable += QuestionnaireScore(questId, uid.id, pId.id, pId.score)))
     }))
   }
 
-  def getQuestionnaireAnswer(questId: Int, userId: Int): Future[Option[QuestionnaireScores]] = {
+  def getQuestionnaireUserAnswer(questId: Int, userId: Int): Future[Option[QuestionnaireScores]] = {
     val questWithPics: Future[Option[QuestionnaireWithPictures]] = getQuestionnaireById(questId)
     val qPicIdScores = questionnaireScoreTable
       .filter(_.questId === questId)
@@ -104,7 +102,24 @@ class QuestionnaireRepositoryImpl @Inject()(protected val dbConfigProvider: Data
     } yield {
       oqwp.map(QuestionnaireScores(_, userId, pis))
     }
+  }
 
+  def getQuestionnaireAnswer(qId: Int): Future[Option[QuestionnairePictureScores]] = {
+    val q = questionnaireScoreTable
+      .join(pictureTable)
+      .on(_.picId === _.id)
+    val res: Future[Seq[(QuestionnaireScore, Picture)]] = db.run(q.filter(_._1.questId === qId).result)
+    res.map(f => {
+      Option(QuestionnairePictureScores(f.head._1.questId, f.map(x => PictureScore(x._2.id, x._2.picUrl, x._1.score))))
+    })
+  }
+
+  def getAllAnsweredQuests: Future[Seq[Questionnaire]] = {
+    val q = questionnaireScoreTable
+      .join(questionnaireTable)
+      .on(_.questId === _.id)
+    val res = db.run(q.map(x => (x._2.id, x._2.text)).distinct.result)
+    res.map(fq => fq.map(qj => Questionnaire(qj._1, qj._2)))
   }
 
   def getAllAnswers: Future[Seq[QuestionnaireScoreWithUser]] = {
@@ -123,7 +138,6 @@ class QuestionnaireRepositoryImpl @Inject()(protected val dbConfigProvider: Data
       QuestionnaireScoreWithUser(q1.questId, s.head._2.login, picScores)
     }
     } yield ans.toSeq
-
   }
 
 }
