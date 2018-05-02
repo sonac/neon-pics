@@ -38,7 +38,7 @@ class AllQuests extends Component<Props, State> {
   render() {
     const { isLoading, quests } = this.props.data
     if (isLoading) {
-      return <div className={styles.picsPair}><div>Loading...</div></div>;
+      return <div className={styles.header}><div>Loading...</div></div>;
     }
     else {
       return(

@@ -1,6 +1,13 @@
 import { values } from 'ramda';
 import * as Cookies from 'universal-cookie';
-import { User, UserRegInput, UserLogInput, Questionnaire, QuestionnaireSeq, EnhancedQuestionnaire, Picture } from './types';
+import { User, 
+  UserRegInput, 
+  UserLogInput, 
+  Questionnaire, 
+  QuestionnaireSeq, 
+  EnhancedQuestionnaire, 
+  Picture,
+  Question } from './types';
 import { fetchComparison, 
   fetchComparisonSuccess, 
   fetchError, 
@@ -17,7 +24,11 @@ import { fetchComparison,
   postNewQuestError,
   fetchAllQuestionnaires,
   fetchAllQuestionnairesSuccess,
-  updateCurrentLoginInput} from './actions';
+  updateCurrentLoginInput,
+  fetchAnsweredQuestions,
+  fetchAnsweredQuestionsSuccess,
+  fetchAnswerResult,
+  fetchAnswerResultSuccess} from './actions';
 
 interface FetchPicture {
   id: number;
@@ -218,7 +229,6 @@ export default ({ getState, dispatch }) => next => action => {
     .then(response => 
       response.json())
       .then(data => {
-        console.log(data);
         const quests: QuestionnaireSeq = data.map(q => {
           const t: EnhancedQuestionnaire = {id: q.id, question: q.text, pics: q.pictures.map(p => {
             const pic: Picture = {id: p.id, url: p.picUrl, rating: 0}
@@ -233,6 +243,40 @@ export default ({ getState, dispatch }) => next => action => {
       console.error(error);
       dispatch(fetchError(error))
     })
+  }
+
+  if (action.type === fetchAnsweredQuestions.type) {
+    fetch('/comparison-questions', {
+      credentials: "include"
+    })
+    .then(response => 
+      response.json())
+      .then(data => {
+        const questions: Array<Question> = data.map(q => ({id: q.id, text: q.text}))
+        console.log(questions)
+        dispatch(fetchAnsweredQuestionsSuccess({questions}))
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch(fetchError(err))
+      })
+  }
+
+  if (action.type === fetchAnswerResult.type) {
+    fetch(`/comparison-answer/${action.id}`, {
+      credentials: "include"
+    })
+    .then(resp => 
+      resp.json())
+      .then(data => {
+        console.log(data);
+        const pics: Array<Picture> = data.pictureScores.map(p => ({id: p.id, url: p.picUrl, rating: p.score}))
+        dispatch(fetchAnswerResultSuccess({results: pics}))
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch(fetchError(err))
+      })
   }
 
   return next(action);

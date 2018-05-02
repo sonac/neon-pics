@@ -1,5 +1,13 @@
 import * as utils from '../utils';
-import { FetchComparisonSuccessData, User, UserRegInput, UserLogInput, FetchUserData, PicInput, FetchAllQuestsSuccessData } from './types';
+import { FetchComparisonSuccessData, 
+  User, 
+  UserRegInput, 
+  UserLogInput, 
+  FetchUserData, 
+  PicInput, 
+  FetchAllQuestsSuccessData,
+  FetchAnsweredQuestionSuccessData,
+  FetchAnswerResultSuccessData } from './types';
 import { IdData, ErrorData, UserRegInputData, UserLogInputData, PicInputData, NewQuestNameData } from 'state/types';
 
 export const fetchComparison = utils.createActionCreator('FETCH_COMPARISON', id => ({
@@ -69,7 +77,8 @@ export const postNewQuestError =
 
 export const fetchAllQuestionnaires = utils.createActionCreator('FETCH_ALL_QUESTS');
 
-export const fetchAllQuestionnairesSuccess = utils.createActionCreator('FETCH_ALL_QUESTS_SUCCESS', (_: FetchAllQuestsSuccessData) => _);
+export const fetchAllQuestionnairesSuccess = utils.createActionCreator('FETCH_ALL_QUESTS_SUCCESS', 
+  (_: FetchAllQuestsSuccessData) => _);
 
 export const chooseComparison = utils.createActionCreator('CHOOSE_COMPARISON', (id: number): IdData => ({
   id
@@ -77,4 +86,12 @@ export const chooseComparison = utils.createActionCreator('CHOOSE_COMPARISON', (
 
 export const fetchAnsweredQuestions = utils.createActionCreator('FETCH_ANSWERED_QUESTIONS');
 
-export const fetchAnsweredQuestionsSuccess = utils.createActionCreator('FETCH_ANSWERED_QUESTIONS_SUCCESS');
+export const fetchAnsweredQuestionsSuccess = utils.createActionCreator('FETCH_ANSWERED_QUESTIONS_SUCCESS', 
+  (_: FetchAnsweredQuestionSuccessData) => _);
+
+export const fetchAnswerResult = utils.createActionCreator('FETCH_ANSWER_RESULT', id => ({
+  id
+}));
+
+export const fetchAnswerResultSuccess = utils.createActionCreator('FETCH_ANSWER_RESULT_SUCCESS',
+  (_: FetchAnswerResultSuccessData) => _);

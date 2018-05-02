@@ -26,11 +26,13 @@ import {
   fetchAllQuestionnairesSuccess,
   chooseComparison,
   fetchAnsweredQuestions,
-  fetchAnsweredQuestionsSuccess
+  fetchAnsweredQuestionsSuccess,
+  fetchAnswerResult,
+  fetchAnswerResultSuccess
 } from './actions'
 import { pairwise, incrRating, updateInput } from '../../utils/common';
 import { processSortingStep } from '../../utils/sorting';
-import { State, FetchComparisonSuccessAction, FetchUserAction, FetchAllQuestsSuccessAction, FetchAnsweredQuestionSuccessAction } from './types';
+import { State, FetchComparisonSuccessAction, FetchUserAction, FetchAllQuestsSuccessAction, FetchAnsweredQuestionSuccessAction, FetchAnswerResultSuccessAction } from './types';
 import { ErrorAction, IdAction, UserRegInputAction, UserLogInputAction, PicInputAction, NewQuestNameAction } from 'state/types';
 
 const initState: State = {
@@ -109,6 +111,13 @@ export default createReducerFromDescriptor({
   [fetchAnsweredQuestions.type]: (state: State, action: Action): State => ({...state, isLoading: true}),
   [fetchAnsweredQuestionsSuccess.type]: (state: State, action: FetchAnsweredQuestionSuccessAction): State => ({
     ...state,
+    isLoading: false,
     answeredQuestions: action.questions
+  }),
+  [fetchAnswerResult.type]: (state: State, action: IdAction): State => ({...state, isLoading: true}),
+  [fetchAnswerResultSuccess.type]: (state: State, action: FetchAnswerResultSuccessAction): State => ({
+    ...state,
+    isLoading: false,
+    questionnaireResult: action.results
   })
 }, initState);

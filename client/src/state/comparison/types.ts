@@ -105,3 +105,10 @@ export type FetchAnsweredQuestionSuccessData = {
 export type FetchAnsweredQuestionSuccessAction = FetchAnsweredQuestionSuccessData & Action;
 export type FetchAnsweredQuestionSuccessCreator = ActionCreator1<FetchAnsweredQuestionSuccessData
 , FetchAnsweredQuestionSuccessAction>;
+
+export type FetchAnswerResultSuccessData = {
+  results: Array<Picture>
+} 
+export type FetchAnswerResultSuccessAction = FetchAnswerResultSuccessData & Action;
+export type FetchAnswerResultSuccessCreator = ActionCreator1<FetchAnswerResultSuccessData
+, FetchAnswerResultSuccessAction>;
