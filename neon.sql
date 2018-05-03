@@ -60,6 +60,9 @@ VALUES (4, 'https://i.pinimg.com/564x/56/6e/51/566e514696c5a967625bf4c8e416d4fb.
 INSERT INTO questionnaire
 VALUES (1, 'Which neon text looks better?');
 
+INSERT INTO questionnaire_score
+VALUES (1, 1, 1, 1);
+
 INSERT INTO questionnaire_picture
 VALUES (1, 1), (1, 2), (1, 3), (1, 4);
 

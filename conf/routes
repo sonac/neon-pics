@@ -5,9 +5,13 @@
 
 # Serve index page
 GET         /                                           controllers.Assets.at(path="/public", file="index.html")
-GET         /register                                   controllers.Assets.at(path="/public", file="index.html")
+GET         /register                                   controllers.Default.redirect(to="/")
 GET         /comparison                                 controllers.Assets.at(path="/public", file="index.html")
 GET         /questionnaire                              controllers.Assets.at(path="/public", file="index.html")
+GET         /questionnaire/:id                          controllers.ControllerDefault.loadIndex(id: Int)
+GET         /answer/:id                                 controllers.ControllerDefault.loadIndex(id: Int)
+GET         /results                                    controllers.Assets.at(path="/public", file="index.html")
+#TODO dynamic for id generated pages
 
 # Serve js, it most probably going to be only one file (bundle.js)
 GET         /js/*file                                   controllers.Assets.at(path="/public/javascripts", file)
@@ -27,10 +31,16 @@ GET         /comparison/:questionnaireId                controllers.questionnair
 GET         /comparison-all                             controllers.questionnaire.QuestionnaireController.getQuestionnaireAll
 
 # Ads an answer including all evaluated things
-POST        /comparison-answer/                         controllers.questionnaireAnswer.QuestionnaireAnswerController.addQuestionnaireAnswer
+PUT         /comparison-answer/                         controllers.questionnaireAnswer.QuestionnaireAnswerController.addQuestionnaireAnswer
 
 # Get all answers
 GET         /comparison-answer/all                      controllers.questionnaireAnswer.QuestionnaireAnswerController.getAllQuestionnaireAnswers
+
+# Get concrete answer
+GET         /comparison-answer/:questionnaireId         controllers.questionnaireAnswer.QuestionnaireAnswerController.getQuestAnswer(questionnaireId: Int)
+
+# Get all answered questions
+GET         /comparison-questions                       controllers.questionnaireAnswer.QuestionnaireAnswerController.getAnsweredQuestions
 
 # Get user by login
 GET         /user/:login                                controllers.user.UserController.getUser(login: String)

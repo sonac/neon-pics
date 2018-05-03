@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as ReactModal from 'react-modal';
 import { User, State as ComparisonState } from 'state/comparison/types';
-import { loginSwitcher, logout } from 'state/comparison/actions';
+import { loginSwitcher, logout, fetchAnsweredQuestions } from 'state/comparison/actions';
 import { BasicActionCreator } from 'state/types';
 import Auth from 'components/Auth';
 
@@ -29,7 +29,8 @@ interface Data {
 
 interface Actions {
   loginSwitcher: BasicActionCreator,
-  logout: BasicActionCreator
+  logout: BasicActionCreator,
+  fetchAnsweredQuestions: BasicActionCreator
 }
 
 interface Props {
@@ -50,6 +51,9 @@ class RoutingButtons extends Component<Props, State> {
     }
     else if (evt === "home") {
       window.location.reload();
+    }
+    else if (evt === "results") {
+      this.props.actions.fetchAnsweredQuestions();
     }
   }
 
@@ -72,6 +76,14 @@ class RoutingButtons extends Component<Props, State> {
           <Link to="/comparison"> <Button size="large" 
                                 hollow>
                                   Add Questionnaire
+                        </Button>
+          </Link>
+        </div>
+        <div className={styles.addButton}>
+          <Link to="/results"> <Button size="large" 
+                                hollow
+                                onClick={(evt) => this.handleClick("results")}>
+                                  Check results
                         </Button>
           </Link>
         </div>
@@ -116,7 +128,8 @@ const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
 
 const mapDispatchToProps: Actions = {
   loginSwitcher,
-  logout
+  logout,
+  fetchAnsweredQuestions
 };
 
 const mergeProps = (data: Data, actions: Actions): Props => ({

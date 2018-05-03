@@ -1,15 +1,20 @@
 package controllers.questionnaire
 
 import com.google.inject.Inject
-import controllers.{ControllerComponentsDefault, ControllerDefault, RequestAugmented}
-import play.api.data.Form
-import play.api.libs.json.Json
+import controllers.{Assets, ControllerComponentsDefault, ControllerDefault, RequestAugmented}
+import play.api.Configuration
+import play.api.libs.json._
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class QuestionnaireController @Inject()(ccc: ControllerComponentsDefault, crh: QuestionnaireResourceHandler)
-                                       (implicit ec: ExecutionContext) extends ControllerDefault(ccc) {
+class QuestionnaireController @Inject()(ccc: ControllerComponentsDefault,
+                                        crh: QuestionnaireResourceHandler,
+                                        conf: Configuration,
+                                        assets: Assets)
+                                       (implicit ec: ExecutionContext) extends ControllerDefault(ccc, assets) {
+
+  private val secretKey = conf.get[String]("play.http.secret.key")
 
   def getQuestionnaire(questionnaireId: Int): Action[AnyContent] = {
     ccc.actionBuilder.async { implicit request: RequestAugmented[AnyContent] =>
@@ -21,18 +26,15 @@ class QuestionnaireController @Inject()(ccc: ControllerComponentsDefault, crh: Q
 
   def addQuestionnaire(): Action[AnyContent] = {
 
-    def failure(badForm: Form[QuestionnaireFormInput])(implicit request: RequestAugmented[AnyContent]) = {
-      Future.successful(BadRequest(badForm.errorsAsJson))
-    }
-
-    def success(input: QuestionnaireFormInput) = {
-      crh.create(input).map { q =>
-        Created(Json.toJson(q))
-      }
-    }
-
     ccc.actionBuilder.async { implicit request: RequestAugmented[AnyContent] =>
-      QuestionnaireFormInput.form.bindFromRequest().fold(failure, success)
+      val cookies: Cookies = request.cookies
+      checkAuth(cookies, secretKey) match {
+        case Some(_) => Json.fromJson[QuestionnaireResourceSimplified](request.body.asJson.get) match {
+          case JsSuccess(q: QuestionnaireResourceSimplified, _: JsPath) => crh.create(q).map(x => Created(Json.toJson(x.text)))
+          case e: JsError => Future(BadRequest("Wrong input " + e))
+        }
+        case None => Future(Unauthorized("You must be logged in"))
+      }
     }
   }
 

@@ -20,7 +20,11 @@ describe('testing reducer', () => {
     showLogin: false,
     picInputs: [{url:''}],
     picInpName: '',
-    questionnaires: null
+    questionnaires: null,
+    isSent: false,
+    comparisonToFetch: null,
+    answeredQuestions: null,
+    questionnaireResult: null
   };
 
   const fetchedData = {"id":1,
@@ -75,7 +79,7 @@ describe('testing reducer', () => {
 
   it('should process post request', () => {
     const stateAfterClick = {...expectedData.sortState}
-    expect(reducer.default(expectedData, actions.postComparison())).to.eql({...expectedData, sortState: stateAfterClick })
+    expect(reducer.default(expectedData, actions.postComparison())).to.eql({...expectedData, sortState: stateAfterClick, isSent: true })
   })
 
   it('should process updating input in reg form', () => {

@@ -9,7 +9,7 @@ import scala.concurrent.duration._
 
 class QuestionnaireResourceHandlerTest extends PlaySpec with GuiceOneAppPerTest with Injecting {
 
-  "ComparisonResourceHandler.get" should {
+  "Quesionnaire Resource handler get" should {
     "return questionnaire" in {
       val comparisonResourceHandler = inject[QuestionnaireResourceHandler]
       import comparisonResourceHandler._

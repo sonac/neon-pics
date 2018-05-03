@@ -43,6 +43,11 @@ export type Questionnaire = {
   pictureIds: Array<number>
 }
 
+export type Question = {
+  id: number,
+  text: string
+}
+
 export type EnhancedQuestionnaire = {
   id: number,
   question: string,
@@ -67,6 +72,10 @@ export interface State {
   picInputs: Array<PicInput>;
   picInpName: string | null;
   questionnaires: QuestionnaireSeq | null;
+  isSent: boolean;
+  comparisonToFetch: number | null;
+  answeredQuestions: Array<Question> | null;
+  questionnaireResult: Array<Picture> | null;
 }
 
 export type FetchComparisonSuccessData = {
@@ -89,3 +98,17 @@ export type FetchAllQuestsSuccessData = {
 }
 export type  FetchAllQuestsSuccessAction = FetchAllQuestsSuccessData & Action;
 export type FetchAllQuestsSuccessCreator = ActionCreator1<FetchAllQuestsSuccessData, FetchAllQuestsSuccessAction>;
+
+export type FetchAnsweredQuestionSuccessData = {
+  questions: Array<Question>
+} 
+export type FetchAnsweredQuestionSuccessAction = FetchAnsweredQuestionSuccessData & Action;
+export type FetchAnsweredQuestionSuccessCreator = ActionCreator1<FetchAnsweredQuestionSuccessData
+, FetchAnsweredQuestionSuccessAction>;
+
+export type FetchAnswerResultSuccessData = {
+  results: Array<Picture>
+} 
+export type FetchAnswerResultSuccessAction = FetchAnswerResultSuccessData & Action;
+export type FetchAnswerResultSuccessCreator = ActionCreator1<FetchAnswerResultSuccessData
+, FetchAnswerResultSuccessAction>;

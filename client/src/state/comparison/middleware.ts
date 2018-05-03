@@ -1,6 +1,13 @@
 import { values } from 'ramda';
 import * as Cookies from 'universal-cookie';
-import { User, UserRegInput, UserLogInput, Questionnaire, QuestionnaireSeq, EnhancedQuestionnaire, Picture } from './types';
+import { User, 
+  UserRegInput, 
+  UserLogInput, 
+  Questionnaire, 
+  QuestionnaireSeq, 
+  EnhancedQuestionnaire, 
+  Picture,
+  Question } from './types';
 import { fetchComparison, 
   fetchComparisonSuccess, 
   fetchError, 
@@ -16,7 +23,12 @@ import { fetchComparison,
   postNewQuestSuccess,
   postNewQuestError,
   fetchAllQuestionnaires,
-  fetchAllQuestionnairesSuccess} from './actions';
+  fetchAllQuestionnairesSuccess,
+  updateCurrentLoginInput,
+  fetchAnsweredQuestions,
+  fetchAnsweredQuestionsSuccess,
+  fetchAnswerResult,
+  fetchAnswerResultSuccess} from './actions';
 
 interface FetchPicture {
   id: number;
@@ -31,7 +43,7 @@ interface FetchComparisonResponse {
 
 export default ({ getState, dispatch }) => next => action => {
   if (action.type === fetchComparison.type) {
-    fetch(`comparison/${action.id}`, {
+    fetch(`/comparison/${action.id}`, {
       credentials: "include"
     })
       .then(response => response.json())
@@ -61,13 +73,13 @@ export default ({ getState, dispatch }) => next => action => {
     const state = getState();
     const pics = values(state.comparison.pics);
     const questionId = state.comparison.questionId;
-    const userName = state.comparison.currentUser.login;
-    const data = {questionnaireId: questionId, userName: userName, pictureIdScores: pics.map(x => ({pictureId: x.id, score: x.rating}))};
+    const data = {questionnaireId: questionId, pictureIdScores: pics.map(x => ({pictureId: x.id, score: x.rating}))};
 
     console.log(data);
 
     fetch('/comparison-answer/', {
-      method: 'POST',
+      credentials: 'include',
+      method: 'PUT',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -112,7 +124,10 @@ export default ({ getState, dispatch }) => next => action => {
             )
           }
           else {
-            console.log(response.json())
+            const loginInput: UserLogInput = {login: userInp.login, password: userInp.password} 
+            dispatch(updateCurrentLoginInput(loginInput))
+            //dispatch(login())
+            //window.location.href = '/';
           }
         })
         .catch(err =>
@@ -209,13 +224,10 @@ export default ({ getState, dispatch }) => next => action => {
   }
 
   if (action.type === fetchAllQuestionnaires.type) {
-    fetch('/comparison-all', {
-      credentials: "include"
-    })
+    fetch('/comparison-all')
     .then(response => 
       response.json())
       .then(data => {
-        console.log(data);
         const quests: QuestionnaireSeq = data.map(q => {
           const t: EnhancedQuestionnaire = {id: q.id, question: q.text, pics: q.pictures.map(p => {
             const pic: Picture = {id: p.id, url: p.picUrl, rating: 0}
@@ -230,6 +242,40 @@ export default ({ getState, dispatch }) => next => action => {
       console.error(error);
       dispatch(fetchError(error))
     })
+  }
+
+  if (action.type === fetchAnsweredQuestions.type) {
+    fetch('/comparison-questions', {
+      credentials: "include"
+    })
+    .then(response => 
+      response.json())
+      .then(data => {
+        const questions: Array<Question> = data.map(q => ({id: q.id, text: q.text}))
+        console.log(questions)
+        dispatch(fetchAnsweredQuestionsSuccess({questions}))
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch(fetchError(err))
+      })
+  }
+
+  if (action.type === fetchAnswerResult.type) {
+    fetch(`/comparison-answer/${action.id}`, {
+      credentials: "include"
+    })
+    .then(resp => 
+      resp.json())
+      .then(data => {
+        console.log(data);
+        const pics: Array<Picture> = data.pictureScores.map(p => ({id: p.id, url: p.picUrl, rating: p.score}))
+        dispatch(fetchAnswerResultSuccess({results: pics}))
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch(fetchError(err))
+      })
   }
 
   return next(action);

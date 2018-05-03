@@ -15,6 +15,8 @@ interface Data {
   pics: PicturesMap;
   question: string;
   sortState: SortState;
+  isSent: boolean;
+  comparisonToFetch: number;
 }
 
 interface Actions {
@@ -32,6 +34,10 @@ type State = {}
 
 class PicsPair extends Component<Props, State> {
 
+  componentDidMount() {
+    this.props.actions.fetchComparison(this.props.data.comparisonToFetch);
+  }
+
   picClick = id => () => { 
     const { sortState, pics } = this.props.data;
     if (sortState.sortedPart.length == Object.keys(pics).length) {
@@ -43,7 +49,13 @@ class PicsPair extends Component<Props, State> {
   };
 
   render() {
-    const { pics, isLoading, question, sortState } = this.props.data;
+    const { pics, isLoading, question, sortState, isSent } = this.props.data;
+    
+    if (isSent) {
+      return <div className={styles.picsPair}>
+               <h2>Thanks for participation in our questionnaire!</h2>
+             </div>;
+    }
 
     if (isLoading) {
       return <div className={styles.picsPair}><div>Loading...</div></div>;
@@ -84,7 +96,9 @@ const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
   isLoading: state.comparison.isLoading,
   pics: state.comparison.pics,
   question: state.comparison.question,
-  sortState: state.comparison.sortState
+  sortState: state.comparison.sortState,
+  isSent: state.comparison.isSent,
+  comparisonToFetch: state.comparison.comparisonToFetch
 });
 
 const mapDispatchToProps = {
