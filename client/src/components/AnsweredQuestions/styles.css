@@ -1,0 +1,21 @@
+.header{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  font-size: 30px;
+}
+
+.wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  text-align: left;
+  color: white;
+  font-size: 35px;
+}
+
+ol li {
+  color: white;
+}

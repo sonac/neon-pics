@@ -5,16 +5,25 @@ const babelEnvPreset = ['env', {
     }
 }];
 
+const babelLoader = {
+  loader: 'babel-loader',
+  options: {
+    presets: [babelEnvPreset, 'react'],
+    plugins: ['transform-object-rest-spread', 'transform-class-properties', "babel-root-slash-import"]
+  }
+};
+
 const webpack = require('webpack');
 
 module.exports = {
-    entry: path.resolve(__dirname, 'src/index.js'),
+    entry: path.resolve(__dirname, 'src/index.tsx'),
     output: {
         filename: 'bundle.js',
         path: path.join(__dirname, '/../public/javascripts')
     },
-    devtool    : 'source-map',
+    devtool: 'source-map',
     resolve: {
+        extensions: ['.ts', '.tsx', '.js'],
         alias: {
             constants: path.resolve(__dirname, 'src/constants'),
             state: path.resolve(__dirname, 'src/state'),
@@ -25,15 +34,15 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.tsx?$/,
+                exclude: [/node_modules/],
+                use: [babelLoader, 'ts-loader'],
+                include: path.resolve('src')
+            },
+            {
                 test: /\.jsx?$/,
                 exclude: [/node_modules/],
-                use: [{
-                    loader: 'babel-loader',
-                    options: {
-                        presets: [babelEnvPreset, 'react'],
-                        plugins: ['transform-object-rest-spread', 'transform-class-properties']
-                    },
-                }]
+                use: [babelLoader]
             },
             {
                 test: /\.css$/,
@@ -65,6 +74,9 @@ module.exports = {
     plugins: [
         new webpack.LoaderOptionsPlugin({
             options: {
+                exclude: [
+                    path.resolve(__dirname, 'src/__test__')
+                ],
                 context: __dirname
             }
         })

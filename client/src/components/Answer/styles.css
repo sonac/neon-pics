@@ -1,0 +1,37 @@
+.header{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  font-size: 30px;
+}
+
+.wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  text-align: left;
+  color: white;
+  font-size: 35px;
+}
+
+.pics{
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+.element{
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+  font-size: 40px;
+  margin-left: 50px;
+}
+
+ol li img {
+  vertical-align: middle;
+  margin: 5px;
+}

@@ -39,11 +39,32 @@ CREATE TABLE questionnaire_score (
   PRIMARY KEY (quest_id, user_id, pic_id)
 );
 
-DELETE FROM pictures
-WHERE pic_url = 'http://www.lovethispic.com/uploaded_images/22349-Neon-Lights-Coca-cola.jpg';
-DELETE FROM pictures
-WHERE pic_url = 'https://image.freepik.com/free-vector/bright-neon-signs-collection_23-2147574590.jpg';
+DROP TABLE IF EXISTS "user";
+CREATE TABLE "user" (
+  id        SERIAL PRIMARY KEY,
+  login     VARCHAR(2000),
+  password  VARCHAR(2000),
+  email     VARCHAR(2000),
+  UNIQUE KEY user_login(login)
+);
+
+INSERT INTO pictures (id, pic_url)
+VALUES (1, 'https://i.pinimg.com/564x/c6/57/75/c65775b98acd6be835065f604af66435.jpg');
+INSERT INTO pictures (id, pic_url)
+VALUES (2, 'https://i.pinimg.com/564x/20/01/83/200183f453efd290c1afcdca626db0c0.jpg');
 INSERT INTO pictures (id, pic_url)
 VALUES (3, 'http://www.lovethispic.com/uploaded_images/22349-Neon-Lights-Coca-cola.jpg');
 INSERT INTO pictures (id, pic_url)
 VALUES (4, 'https://i.pinimg.com/564x/56/6e/51/566e514696c5a967625bf4c8e416d4fb.jpg');
+
+INSERT INTO questionnaire
+VALUES (1, 'Which neon text looks better?');
+
+INSERT INTO questionnaire_score
+VALUES (1, 1, 1, 1);
+
+INSERT INTO questionnaire_picture
+VALUES (1, 1), (1, 2), (1, 3), (1, 4);
+
+INSERT INTO "user"
+VALUES (1, 'testUser', 'testPassword', 'testEMail');

@@ -5,6 +5,13 @@
 
 # Serve index page
 GET         /                                           controllers.Assets.at(path="/public", file="index.html")
+GET         /register                                   controllers.Default.redirect(to="/")
+GET         /comparison                                 controllers.Assets.at(path="/public", file="index.html")
+GET         /questionnaire                              controllers.Assets.at(path="/public", file="index.html")
+GET         /questionnaire/:id                          controllers.ControllerDefault.loadIndex(id: Int)
+GET         /answer/:id                                 controllers.ControllerDefault.loadIndex(id: Int)
+GET         /results                                    controllers.Assets.at(path="/public", file="index.html")
+#TODO dynamic for id generated pages
 
 # Serve js, it most probably going to be only one file (bundle.js)
 GET         /js/*file                                   controllers.Assets.at(path="/public/javascripts", file)
@@ -12,17 +19,41 @@ GET         /js/*file                                   controllers.Assets.at(pa
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                               controllers.Assets.versioned(path="/public", file: Asset)
 
-
-GET         /api/pictures                               controllers.PictureController.getPics
-
 # Questionnaire service
 
 # Ads a questionnaire with pics
-POST        /comparison                                 services.comparison.ComparisonController.addQuestionnaire
+POST        /comparison                                 controllers.questionnaire.QuestionnaireController.addQuestionnaire
 
 # Gets a questionnaire with pics
-GET         /comparison/:questionnaireId                services.comparison.ComparisonController.getQuestionnaire(questionnaireId: Int)
+GET         /comparison/:questionnaireId                controllers.questionnaire.QuestionnaireController.getQuestionnaire(questionnaireId: Int)
+
+# Get all questionnaires
+GET         /comparison-all                             controllers.questionnaire.QuestionnaireController.getQuestionnaireAll
 
 # Ads an answer including all evaluated things
-POST        /comparison-answer/                         services.comparison.ComparisonAnswerController.addComparisonAnswer
+PUT         /comparison-answer/                         controllers.questionnaireAnswer.QuestionnaireAnswerController.addQuestionnaireAnswer
+
+# Get all answers
+GET         /comparison-answer/all                      controllers.questionnaireAnswer.QuestionnaireAnswerController.getAllQuestionnaireAnswers
+
+# Get concrete answer
+GET         /comparison-answer/:questionnaireId         controllers.questionnaireAnswer.QuestionnaireAnswerController.getQuestAnswer(questionnaireId: Int)
+
+# Get all answered questions
+GET         /comparison-questions                       controllers.questionnaireAnswer.QuestionnaireAnswerController.getAnsweredQuestions
+
+# Get user by login
+GET         /user/:login                                controllers.user.UserController.getUser(login: String)
+
+# Ads new user
+POST        /user                                       controllers.user.UserController.addUser
+
+# Login request
+POST        /login                                      controllers.user.UserController.login
+
+# Check token
+GET         /validate                                   controllers.user.UserController.validate
+
+# Post pictures
+POST        /pictures                                   controllers.picture.PictureController.addPictures
 
