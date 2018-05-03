@@ -37989,14 +37989,13 @@ var PicsPair = function (_react_1$Component) {
                 sortState = _props$data.sortState,
                 isSent = _props$data.isSent;
 
-            console.log(this.props.data);
+            if (isSent) {
+                return React.createElement("div", { className: styles.picsPair }, React.createElement("h2", null, "Thanks for participation in our questionnaire!"));
+            }
             if (isLoading) {
                 return React.createElement("div", { className: styles.picsPair }, React.createElement("div", null, "Loading..."));
             } else if (sortState.sortedPart.length == Object.keys(pics).length) {
                 this.props.actions.postComparison();
-                return React.createElement("div", { className: styles.picsPair }, React.createElement("h2", null, "Thanks for participation in our questionnaire!"));
-            }
-            if (isSent) {
                 return React.createElement("div", { className: styles.picsPair }, React.createElement("h2", null, "Thanks for participation in our questionnaire!"));
             }
             var pic1 = pics[sortState.picsToCompare[0]];
@@ -39039,6 +39038,7 @@ exports.default = function (_ref) {
                     }) };
                 console.log(data);
                 fetch('/comparison-answer/', {
+                    credentials: 'include',
                     method: 'PUT',
                     headers: {
                         'Accept': 'application/json',
@@ -39157,9 +39157,7 @@ exports.default = function (_ref) {
                 });
             }
             if (action.type === actions_1.fetchAllQuestionnaires.type) {
-                fetch('/comparison-all', {
-                    credentials: "include"
-                }).then(function (response) {
+                fetch('/comparison-all').then(function (response) {
                     return response.json();
                 }).then(function (data) {
                     var quests = data.map(function (q) {

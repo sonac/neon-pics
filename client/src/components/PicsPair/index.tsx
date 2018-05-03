@@ -50,20 +50,18 @@ class PicsPair extends Component<Props, State> {
 
   render() {
     const { pics, isLoading, question, sortState, isSent } = this.props.data;
-
-    console.log(this.props.data);
+    
+    if (isSent) {
+      return <div className={styles.picsPair}>
+               <h2>Thanks for participation in our questionnaire!</h2>
+             </div>;
+    }
 
     if (isLoading) {
       return <div className={styles.picsPair}><div>Loading...</div></div>;
     }
     else if (sortState.sortedPart.length == Object.keys(pics).length) {
       this.props.actions.postComparison();
-      return <div className={styles.picsPair}>
-               <h2>Thanks for participation in our questionnaire!</h2>
-             </div>;
-    }
-    
-    if (isSent) {
       return <div className={styles.picsPair}>
                <h2>Thanks for participation in our questionnaire!</h2>
              </div>;

@@ -78,6 +78,7 @@ export default ({ getState, dispatch }) => next => action => {
     console.log(data);
 
     fetch('/comparison-answer/', {
+      credentials: 'include',
       method: 'PUT',
       headers: {
         'Accept': 'application/json',
@@ -223,9 +224,7 @@ export default ({ getState, dispatch }) => next => action => {
   }
 
   if (action.type === fetchAllQuestionnaires.type) {
-    fetch('/comparison-all', {
-      credentials: "include"
-    })
+    fetch('/comparison-all')
     .then(response => 
       response.json())
       .then(data => {
