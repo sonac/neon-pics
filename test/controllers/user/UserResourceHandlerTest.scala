@@ -21,4 +21,16 @@ class UserResourceHandlerTest extends PlaySpec with GuiceOneAppPerTest with Inje
     }
   }
 
+  "UserResourceHandler " should {
+    "properly create anonymous user" in {
+      val userResourceHandler = inject[UserResourceHandler]
+      import userResourceHandler._
+
+      val u = createAnonymousUser()
+      val qs = Await.result(u, 5.seconds)
+
+      qs must include("Anonym")
+    }
+  }
+
 }

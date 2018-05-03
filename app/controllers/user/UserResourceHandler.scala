@@ -71,8 +71,8 @@ class UserResourceHandler @Inject()(userRepository: UserRepository)(implicit ec:
   }
 
   def createAnonymousUser(): Future[String] = {
-    val ts = LocalDateTime.now.format(DateTimeFormatter.ofPattern("YYYYMMdd_HHmmss"))
-    println(ts)
+    val ts = LocalDateTime.now.format(DateTimeFormatter.ofPattern("YYYYMMdd_HHmmssms"))
+    Thread.sleep(1000)
     val login = "Anonym_" + ts
     userRepository.addUser(login = login, password = "default", eMail = login + "@default.com")
       .map(_.login)

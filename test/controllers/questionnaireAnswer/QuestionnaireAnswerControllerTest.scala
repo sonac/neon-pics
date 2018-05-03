@@ -36,7 +36,7 @@ class QuestionnaireAnswerControllerTest extends PlaySpec with GuiceOneAppPerTest
           |"pictureIdScores": [{"pictureId": 3, "score": 2}, {"pictureId": 2, "score": 1}]
           |}
         """.stripMargin)
-      val request = FakeRequest(POST, "/").withJsonBody(jsonQuestionnairePost)
+      val request = FakeRequest(PUT, "/").withJsonBody(jsonQuestionnairePost)
 
       val response = controller
         .addQuestionnaireAnswer()
@@ -71,7 +71,7 @@ class QuestionnaireAnswerControllerTest extends PlaySpec with GuiceOneAppPerTest
           |"pictureIdScores": [{"pictureId": 3, "score": 2}, {"pictureId": 2, "score": 1}]
           |}
         """.stripMargin)
-      val req1 = FakeRequest(POST, "/").withJsonBody(jsonQuestionnairePost1)
+      val req1 = FakeRequest(PUT, "/").withJsonBody(jsonQuestionnairePost1)
 
       val jsonQuestionnairePost2 = Json.parse(
         """{
@@ -79,18 +79,15 @@ class QuestionnaireAnswerControllerTest extends PlaySpec with GuiceOneAppPerTest
           |"pictureIdScores": [{"pictureId": 3, "score": 1}, {"pictureId": 2, "score": 2}]
           |}
         """.stripMargin)
-      val req2 = FakeRequest(POST, "/").withJsonBody(jsonQuestionnairePost2)
+      val req2 = FakeRequest(PUT, "/").withJsonBody(jsonQuestionnairePost2)
 
-      val resp1 = controller
+      lazy val resp1 = controller
         .addQuestionnaireAnswer()
         .apply(req1)
 
-      val resp2 = controller
+      lazy val resp2 = controller
         .addQuestionnaireAnswer()
         .apply(req2)
-
-      Await.result(resp1, 5.seconds)
-      Await.result(resp2, 5.seconds)
 
 
       val secretKey = conf.get[String]("play.http.secret.key")
@@ -102,13 +99,20 @@ class QuestionnaireAnswerControllerTest extends PlaySpec with GuiceOneAppPerTest
       val getReq = cookie.map(x => FakeRequest(GET, "/comparison-answer/1")
         .withCookies(x))
 
-      val getResp = getReq.map(x => controller
+      lazy val getResp = getReq.map(x => controller
         .getQuestAnswer(1)
         .apply(x))
 
-      val response = Await.result(getResp, 5.seconds)
 
-      contentAsString(response) must include("\"score\":3")
+      val response = for {
+        x1 <- resp1
+        x2 <- resp2
+        x3 <- getResp
+      } yield x3
+
+      val resp = Await.result(response, 5.seconds)
+
+      contentAsString(resp) must include("\"score\":3")
 
     }
   }

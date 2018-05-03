@@ -32,12 +32,13 @@ class QuestionnaireAnswerController @Inject()(ccc: ControllerComponentsDefault,
       val qAnswerFromJson: JsResult[QuestionnaireAnswerResource] = Json
         .fromJson[QuestionnaireAnswerResource](request.body.asJson.get)
       qAnswerFromJson match {
-        case JsSuccess(q: QuestionnaireAnswerResource, _: JsPath) =>
+        case JsSuccess(q: QuestionnaireAnswerResource, p: JsPath) =>
           uName.map(name => {
             carh.create(q, name)
             Created
           })
-        case e: JsError => Future(BadRequest("Wrong input " + e))
+        case e: JsError =>
+          Future(BadRequest("Wrong input " + e))
       }
     }
   }
