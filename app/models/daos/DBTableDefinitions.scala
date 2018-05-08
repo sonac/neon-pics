@@ -8,7 +8,7 @@ trait DBTableDefinitions{
   protected val driver: JdbcProfile
   import driver.api._
 
-  class PictureTable(tag: Tag) extends Table[Picture](tag, Some("neon"), "pictures") {
+  class PictureTable(tag: Tag) extends Table[Picture](tag, "pictures") {
 
     def * = (id, picUrl) <> ((Picture.apply _).tupled, Picture.unapply)
 
@@ -18,7 +18,7 @@ trait DBTableDefinitions{
 
   }
 
-  class QuestionnaireTable(tag: Tag) extends Table[Questionnaire](tag,  Some("neon"), "questionnaire") {
+  class QuestionnaireTable(tag: Tag) extends Table[Questionnaire](tag, "questionnaire") {
     def * = (id, text) <> (Questionnaire.tupled, Questionnaire.unapply)
 
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
@@ -26,7 +26,7 @@ trait DBTableDefinitions{
     def text = column[String]("text")
   }
 
-  class QuestionnairePictureTable(tag: Tag) extends Table[QuestionnairePicture](tag,  Some("neon"), "questionnaire_picture") {
+  class QuestionnairePictureTable(tag: Tag) extends Table[QuestionnairePicture](tag, "questionnaire_picture") {
     def * = (questId, picId) <> (QuestionnairePicture.tupled, QuestionnairePicture.unapply)
 
     def questId = column[Int]("quest_id")
@@ -34,7 +34,7 @@ trait DBTableDefinitions{
     def picId = column[Int]("pic_id")
   }
 
-  class QuestionnaireScoreTable(tag: Tag) extends Table[QuestionnaireScore](tag,  Some("neon"), "questionnaire_score") {
+  class QuestionnaireScoreTable(tag: Tag) extends Table[QuestionnaireScore](tag, "questionnaire_score") {
     def * = (questId, userId, picId, score) <> (QuestionnaireScore.tupled, QuestionnaireScore.unapply)
 
     def questId = column[Int]("quest_id")
@@ -46,7 +46,7 @@ trait DBTableDefinitions{
     def score = column[Double]("score")
   }
 
-  class UserTable(tag: Tag) extends Table[User](tag,  Some("neon"), "user") {
+  class UserTable(tag: Tag) extends Table[User](tag, "user") {
 
     def * = (id, login, password, eMail) <> (User.tupled, User.unapply)
 
