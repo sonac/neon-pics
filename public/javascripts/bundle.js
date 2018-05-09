@@ -39074,9 +39074,7 @@ exports.default = function (_ref) {
                             });
                         } else {
                             var loginInput = { login: userInp.login, password: userInp.password };
-                            dispatch(actions_1.updateCurrentLoginInput(loginInput));
-                            //dispatch(login())
-                            //window.location.href = '/';
+                            dispatch(actions_1.updateCurrentLoginInput(loginInput)).then(dispatch(actions_1.login()).then(window.location.href = '/'));
                         }
                     }).catch(function (err) {
                         return console.error(err);
@@ -39101,7 +39099,10 @@ exports.default = function (_ref) {
                         var cookies = new Cookies();
                         cookies.set('auth-token', token, { path: '/' });
                         window.location.reload();
-                        dispatch(actions_1.loginSwitcher());
+                        var logW = _state2.comparison.showLogin;
+                        if (!logW) {
+                            dispatch(actions_1.loginSwitcher());
+                        }
                     }
                 });
             }
@@ -39127,6 +39128,7 @@ exports.default = function (_ref) {
                 var questName = _state3.comparison.picInpName;
                 fetch("/pictures", {
                     method: 'POST',
+                    credentials: "include",
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
@@ -39138,6 +39140,7 @@ exports.default = function (_ref) {
                     var newQuest = { text: questName, pictureIds: data };
                     fetch("/comparison", {
                         method: 'POST',
+                        credentials: "include",
                         headers: {
                             'Accept': 'application/json',
                             'Content-Type': 'application/json'
