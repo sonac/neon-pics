@@ -125,9 +125,11 @@ export default ({ getState, dispatch }) => next => action => {
           }
           else {
             const loginInput: UserLogInput = {login: userInp.login, password: userInp.password} 
-            dispatch(updateCurrentLoginInput(loginInput))
-            //dispatch(login())
-            //window.location.href = '/';
+            dispatch(updateCurrentLoginInput(loginInput)).then(
+              dispatch(login()).then(
+                window.location.href = '/'
+              )
+            )
           }
         })
         .catch(err =>
@@ -157,7 +159,10 @@ export default ({ getState, dispatch }) => next => action => {
           const cookies = new Cookies();
           cookies.set('auth-token', token, { path: '/' });
           window.location.reload();
-          dispatch(loginSwitcher())
+          const logW = state.comparison.showLogin;
+          if (!logW) {
+            dispatch(loginSwitcher())
+          }
         }
       })
      
@@ -190,6 +195,7 @@ export default ({ getState, dispatch }) => next => action => {
 
     fetch("/pictures", {
       method: 'POST',
+      credentials: "include",
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -202,6 +208,7 @@ export default ({ getState, dispatch }) => next => action => {
         const newQuest: Questionnaire = {text: questName, pictureIds: data}
         fetch("/comparison", {
           method: 'POST',
+          credentials: "include",
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'

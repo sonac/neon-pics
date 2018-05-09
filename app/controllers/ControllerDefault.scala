@@ -14,6 +14,7 @@ import scala.util.{Failure, Success}
 class ControllerDefault @Inject()(ccc: ControllerComponentsDefault, assets: Assets) extends BaseController {
   override protected def controllerComponents: ControllerComponents = ccc
   def checkAuth(cookies: Cookies, secretKey: String): Option[UserResource] = {
+    val asd = cookies.get("auth-token")
     cookies.get("auth-token") match {
       case Some(token) => Jwt.decodeRaw(token.value, secretKey, Seq(JwtAlgorithm.HS256)) match {
           case Success(usr) => Json.parse(usr).validate[UserResource] match {
