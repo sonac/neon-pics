@@ -17,7 +17,6 @@ interface Data {
   question: string;
   sortState: SortState;
   isSent: boolean;
-  comparisonToFetch: number;
   id: number;
 }
 
@@ -53,7 +52,7 @@ class PicsPair extends Component<Props & RouteProps, State> {
   };
 
   render() {
-    const { pics, isLoading, question, sortState, isSent, id } = this.props.data;
+    const { pics, isLoading, question, sortState, isSent } = this.props.data;
     
     if (isSent) {
       return <div className={styles.picsPair}>
@@ -102,7 +101,6 @@ const mapStateToProps = (state: {comparison: ComparisonState}, ownProps: OwnProp
   question: state.comparison.question,
   sortState: state.comparison.sortState,
   isSent: state.comparison.isSent,
-  comparisonToFetch: state.comparison.comparisonToFetch,
   id: ownProps.match.params.id
 });
 

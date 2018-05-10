@@ -73,7 +73,6 @@ export interface State {
   picInpName: string | null;
   questionnaires: QuestionnaireSeq | null;
   isSent: boolean;
-  comparisonToFetch: number | null;
   answeredQuestions: Array<Question> | null;
   questionnaireResult: Array<Picture> | null;
 }
