@@ -24,7 +24,7 @@ import {
   postNewQuestError,
   fetchAllQuestionnaires,
   fetchAllQuestionnairesSuccess,
-  chooseComparison,
+  loadComparison,
   fetchAnsweredQuestions,
   fetchAnsweredQuestionsSuccess,
   fetchAnswerResult,
@@ -107,7 +107,7 @@ export default createReducerFromDescriptor({
   [postNewQuestError.type]: (state: State, action: ErrorAction): State => ({...state, error: action.error}),
   [fetchAllQuestionnaires.type]: (state: State, action: Action): State => ({...state, isLoading: true}),
   [fetchAllQuestionnairesSuccess.type]: (state: State, action: FetchAllQuestsSuccessAction): State => ({...state, questionnaires: action.quests, isLoading: false}),
-  [chooseComparison.type]: (state: State, action: IdAction): State => ({...state, comparisonToFetch: action.id, isLoading: true}),
+  [loadComparison.type]: (state: State, action: Action): State => ({...state, isLoading: true}),
   [fetchAnsweredQuestions.type]: (state: State, action: Action): State => ({...state, isLoading: true}),
   [fetchAnsweredQuestionsSuccess.type]: (state: State, action: FetchAnsweredQuestionSuccessAction): State => ({
     ...state,
