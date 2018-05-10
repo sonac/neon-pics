@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { values } from 'ramda';
+import { withRouter, RouteProps, RouteComponentProps } from 'react-router'
 import { fetchComparison, pictureClick, postComparison } from '../../state/comparison/actions';
 import { PicturesMap, SortState, State as ComparisonState } from 'state/comparison/types';
 import { IdActionCreator, BasicActionCreator } from 'state/types';
@@ -16,7 +17,7 @@ interface Data {
   question: string;
   sortState: SortState;
   isSent: boolean;
-  comparisonToFetch: number;
+  id: number;
 }
 
 interface Actions {
@@ -32,10 +33,12 @@ interface Props {
 
 type State = {}
 
-class PicsPair extends Component<Props, State> {
+type OwnProps = RouteComponentProps<{id: number}>;
+
+class PicsPair extends Component<Props & RouteProps, State> {
 
   componentDidMount() {
-    this.props.actions.fetchComparison(this.props.data.comparisonToFetch);
+    this.props.actions.fetchComparison(this.props.data.id);
   }
 
   picClick = id => () => { 
@@ -92,13 +95,13 @@ class PicsPair extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
+const mapStateToProps = (state: {comparison: ComparisonState}, ownProps: OwnProps): Data => ({
   isLoading: state.comparison.isLoading,
   pics: state.comparison.pics,
   question: state.comparison.question,
   sortState: state.comparison.sortState,
   isSent: state.comparison.isSent,
-  comparisonToFetch: state.comparison.comparisonToFetch
+  id: ownProps.match.params.id
 });
 
 const mapDispatchToProps = {
@@ -112,4 +115,4 @@ const mergeProps = (data: Data, actions: Actions): Props => ({
   actions
 });
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(PicsPair);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps, mergeProps)(PicsPair));

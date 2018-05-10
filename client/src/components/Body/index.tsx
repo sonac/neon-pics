@@ -15,7 +15,7 @@ export default function Body() {
       <Route exact path="/" component={AllQuests} />
       <Route path="/register" component={Registration} />
       <Route path="/comparison" component={NewQuestionnaire} />
-      <Route path="/questionnaire" component={PicPair} />
+      <Route exact path="/questionnaire/:id" component={PicPair} />
       <Route path="/results" component={AnsweredQuestions} />
       <Route path="/answer" component={Answer} />
     </div>
