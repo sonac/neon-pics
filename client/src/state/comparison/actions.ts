@@ -80,9 +80,7 @@ export const fetchAllQuestionnaires = utils.createActionCreator('FETCH_ALL_QUEST
 export const fetchAllQuestionnairesSuccess = utils.createActionCreator('FETCH_ALL_QUESTS_SUCCESS', 
   (_: FetchAllQuestsSuccessData) => _);
 
-export const chooseComparison = utils.createActionCreator('CHOOSE_COMPARISON', (id: number): IdData => ({
-  id
-}));
+export const loadComparison = utils.createActionCreator('CHOOSE_COMPARISON');
 
 export const fetchAnsweredQuestions = utils.createActionCreator('FETCH_ANSWERED_QUESTIONS');
 

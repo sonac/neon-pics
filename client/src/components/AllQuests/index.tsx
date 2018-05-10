@@ -3,8 +3,8 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { QuestionnaireSeq, State as ComparisonState } from 'state/comparison/types';
-import { fetchAllQuestionnaires, chooseComparison } from '../../state/comparison/actions';
-import { BasicActionCreator, IdActionCreator } from 'state/types';
+import { fetchAllQuestionnaires, loadComparison } from '../../state/comparison/actions';
+import { BasicActionCreator } from 'state/types';
 
 const styles = require('./styles.css');
 
@@ -15,7 +15,7 @@ interface Data {
 
 interface Actions {
   fetchAllQuestionnaires: BasicActionCreator;
-  chooseComparison: IdActionCreator;
+  loadComparison: BasicActionCreator;
 }
 
 interface Props {
@@ -32,7 +32,7 @@ class AllQuests extends Component<Props, State> {
   }
 
   handleClick = id => () => {
-    this.props.actions.chooseComparison(id);
+    this.props.actions.loadComparison();
   }
 
   render() {
@@ -66,7 +66,7 @@ const mapStateToProps = (state: {comparison: ComparisonState}): Data => ({
 
 const mapDispatchToProps = {
   fetchAllQuestionnaires,
-  chooseComparison
+  loadComparison
 };
 
 const mergeProps = (data: Data, actions: Actions): Props => ({

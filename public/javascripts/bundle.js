@@ -1416,11 +1416,7 @@ exports.fetchAllQuestionnaires = utils.createActionCreator('FETCH_ALL_QUESTS');
 exports.fetchAllQuestionnairesSuccess = utils.createActionCreator('FETCH_ALL_QUESTS_SUCCESS', function (_) {
     return _;
 });
-exports.chooseComparison = utils.createActionCreator('CHOOSE_COMPARISON', function (id) {
-    return {
-        id: id
-    };
-});
+exports.loadComparison = utils.createActionCreator('CHOOSE_COMPARISON');
 exports.fetchAnsweredQuestions = utils.createActionCreator('FETCH_ANSWERED_QUESTIONS');
 exports.fetchAnsweredQuestionsSuccess = utils.createActionCreator('FETCH_ANSWERED_QUESTIONS_SUCCESS', function (_) {
     return _;
@@ -37880,7 +37876,7 @@ var AnsweredQuestions_1 = __webpack_require__(396);
 var Answer_1 = __webpack_require__(399);
 var styles = __webpack_require__(402);
 function Body() {
-    return React.createElement("div", { className: styles.body }, React.createElement(react_router_1.Route, { exact: true, path: "/", component: AllQuests_1.default }), React.createElement(react_router_1.Route, { path: "/register", component: Registration_1.default }), React.createElement(react_router_1.Route, { path: "/comparison", component: NewQuestionnaire_1.default }), React.createElement(react_router_1.Route, { path: "/questionnaire", component: PicsPair_1.default }), React.createElement(react_router_1.Route, { path: "/results", component: AnsweredQuestions_1.default }), React.createElement(react_router_1.Route, { path: "/answer", component: Answer_1.default }));
+    return React.createElement("div", { className: styles.body }, React.createElement(react_router_1.Route, { exact: true, path: "/", component: AllQuests_1.default }), React.createElement(react_router_1.Route, { path: "/register", component: Registration_1.default }), React.createElement(react_router_1.Route, { path: "/comparison", component: NewQuestionnaire_1.default }), React.createElement(react_router_1.Route, { exact: true, path: "/questionnaire/:id", component: PicsPair_1.default }), React.createElement(react_router_1.Route, { path: "/results", component: AnsweredQuestions_1.default }), React.createElement(react_router_1.Route, { path: "/answer", component: Answer_1.default }));
 }
 exports.default = Body;
 
@@ -37946,6 +37942,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(3);
 var react_1 = __webpack_require__(3);
 var react_redux_1 = __webpack_require__(17);
+var react_router_1 = __webpack_require__(380);
 var actions_1 = __webpack_require__(18);
 var NavButtons_1 = __webpack_require__(382);
 var styles = __webpack_require__(385);
@@ -37977,7 +37974,7 @@ var PicsPair = function (_react_1$Component) {
     _createClass(PicsPair, [{
         key: "componentDidMount",
         value: function componentDidMount() {
-            this.props.actions.fetchComparison(this.props.data.comparisonToFetch);
+            this.props.actions.fetchComparison(this.props.data.id);
         }
     }, {
         key: "render",
@@ -37987,7 +37984,8 @@ var PicsPair = function (_react_1$Component) {
                 isLoading = _props$data.isLoading,
                 question = _props$data.question,
                 sortState = _props$data.sortState,
-                isSent = _props$data.isSent;
+                isSent = _props$data.isSent,
+                id = _props$data.id;
 
             if (isSent) {
                 return React.createElement("div", { className: styles.picsPair }, React.createElement("h2", null, "Thanks for participation in our questionnaire!"));
@@ -38007,14 +38005,15 @@ var PicsPair = function (_react_1$Component) {
     return PicsPair;
 }(react_1.Component);
 
-var mapStateToProps = function mapStateToProps(state) {
+var mapStateToProps = function mapStateToProps(state, ownProps) {
     return {
         isLoading: state.comparison.isLoading,
         pics: state.comparison.pics,
         question: state.comparison.question,
         sortState: state.comparison.sortState,
         isSent: state.comparison.isSent,
-        comparisonToFetch: state.comparison.comparisonToFetch
+        comparisonToFetch: state.comparison.comparisonToFetch,
+        id: ownProps.match.params.id
     };
 };
 var mapDispatchToProps = {
@@ -38028,7 +38027,7 @@ var mergeProps = function mergeProps(data, actions) {
         actions: actions
     };
 };
-exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps, mergeProps)(PicsPair);
+exports.default = react_router_1.withRouter(react_redux_1.connect(mapStateToProps, mapDispatchToProps, mergeProps)(PicsPair));
 
 /***/ }),
 /* 382 */
@@ -38522,7 +38521,7 @@ var AllQuests = function (_react_1$Component) {
 
         _this.handleClick = function (id) {
             return function () {
-                _this.props.actions.chooseComparison(id);
+                _this.props.actions.loadComparison();
             };
         };
         return _this;
@@ -38565,7 +38564,7 @@ var mapStateToProps = function mapStateToProps(state) {
 };
 var mapDispatchToProps = {
     fetchAllQuestionnaires: actions_1.fetchAllQuestionnaires,
-    chooseComparison: actions_1.chooseComparison
+    loadComparison: actions_1.loadComparison
 };
 var mergeProps = function mergeProps(data, actions) {
     return {
@@ -47654,8 +47653,8 @@ exports.default = utils_1.createReducerFromDescriptor((_utils_1$createReduce = {
     return Object.assign({}, state, { isLoading: true });
 }), _defineProperty(_utils_1$createReduce, actions_1.fetchAllQuestionnairesSuccess.type, function (state, action) {
     return Object.assign({}, state, { questionnaires: action.quests, isLoading: false });
-}), _defineProperty(_utils_1$createReduce, actions_1.chooseComparison.type, function (state, action) {
-    return Object.assign({}, state, { comparisonToFetch: action.id, isLoading: true });
+}), _defineProperty(_utils_1$createReduce, actions_1.loadComparison.type, function (state, action) {
+    return Object.assign({}, state, { isLoading: true });
 }), _defineProperty(_utils_1$createReduce, actions_1.fetchAnsweredQuestions.type, function (state, action) {
     return Object.assign({}, state, { isLoading: true });
 }), _defineProperty(_utils_1$createReduce, actions_1.fetchAnsweredQuestionsSuccess.type, function (state, action) {
