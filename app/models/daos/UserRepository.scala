@@ -1,10 +1,9 @@
 package models.daos
 
 import com.google.inject.{Inject, Singleton}
-import models._
 import play.api.db.slick.DatabaseConfigProvider
-import play.db.NamedDatabase
 import slick.jdbc.PostgresProfile.api._
+import models._
 
 import scala.concurrent.Future
 

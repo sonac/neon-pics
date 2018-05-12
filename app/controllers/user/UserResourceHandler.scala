@@ -1,13 +1,18 @@
 package controllers.user
 
+import scala.concurrent.{ExecutionContext, Future}
+
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 import com.google.inject.Inject
+import pdi.jwt.{Jwt, JwtAlgorithm}
 
-import scala.concurrent.{ExecutionContext, Future}
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import play.api.Configuration
+import play.api.libs.Crypto
+
 import models.daos.UserRepository
 
 case class UserResource(login: String, password: String, eMail: String)
@@ -56,10 +61,14 @@ object UserDataResource {
 
 }
 
-class UserResourceHandler @Inject()(userRepository: UserRepository)(implicit ec: ExecutionContext) {
+class UserResourceHandler @Inject()(userRepository: UserRepository,
+                                    conf: Configuration)(implicit ec: ExecutionContext) {
+
+  private val secretKey = conf.get[String]("play.http.secret.key")
 
   def create(user: UserResource): Future[UserResource] = {
-    userRepository.addUser(login = user.login, password = user.password, eMail = user.eMail)
+    val encrPw = Jwt.encode(user.password, secretKey, JwtAlgorithm.HS256)
+    userRepository.addUser(login = user.login, password = encrPw, eMail = user.eMail)
       .map(u => UserResource(u.login, u.password, u.eMail))
   }
 

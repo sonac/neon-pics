@@ -22,7 +22,6 @@ describe('testing reducer', () => {
     picInpName: '',
     questionnaires: null,
     isSent: false,
-    comparisonToFetch: null,
     answeredQuestions: null,
     questionnaireResult: null
   };
