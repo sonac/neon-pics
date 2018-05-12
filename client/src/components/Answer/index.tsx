@@ -29,7 +29,7 @@ class Answer extends Component<Props, State> {
     }
     else if (!currentUser) {
       return <div className={styles.header}>
-        Log into neon pics to see results for this questionnair
+        Log into neon pics to see results for this questionnaire
       </div>
     }
     else {

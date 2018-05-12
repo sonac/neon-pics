@@ -28,7 +28,6 @@ class UserController @Inject() (ucc: UserControllerComponents, conf: Configurati
   def addUser(): Action[AnyContent] = {
     UserActionBuilder.async { implicit request: UserRequest[AnyContent] =>
       val userFromJson: JsResult[UserResource] = Json.fromJson[UserResource](request.body.asJson.get)
-      println(request.body.asJson.get)
       userFromJson match {
         case JsSuccess(usr: UserResource, path: JsPath) =>
           ucc.userResourceHandler.create(usr).map { u =>
@@ -51,7 +50,7 @@ class UserController @Inject() (ucc: UserControllerComponents, conf: Configurati
       userFromJson match {
         case JsSuccess(usrLog: UserLoginResource, path: JsPath) => {
           ucc.userResourceHandler.get(usrLog.login).map(storedUser => {
-            if (storedUser.password == usrLog.password) {
+            if (storedUser.password == Jwt.encode(usrLog.password, secretKey, JwtAlgorithm.HS256)) {
               val token = Jwt.encode(Json.toJson(storedUser).toString, secretKey, JwtAlgorithm.HS256)
               Ok(Json.toJson(storedUser)).withHeaders(("auth-token", token))
             }

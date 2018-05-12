@@ -38792,7 +38792,7 @@ var Answer = function (_react_1$Component) {
             if (isLoading) {
                 return React.createElement("div", { className: styles.header }, React.createElement("div", null, "Loading..."));
             } else if (!currentUser) {
-                return React.createElement("div", { className: styles.header }, "Log into neon pics to see results for this questionnair");
+                return React.createElement("div", { className: styles.header }, "Log into neon pics to see results for this questionnaire");
             } else {
                 var pics = questionnaireResult.sort(function (a, b) {
                     return b.rating - a.rating;
